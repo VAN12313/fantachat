@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>판타챗 v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#000;--bg1:#030303;--bg2:#070707;--bg3:#0d0d0d;--l1:#181818;--l2:#242424;--tx:#d0d0bc;--gold:#f0e7c8;--hp:#aa2020;--mp:#2050aa;--xp:#4a7020;--human:#b07020;--elf:#507020;--dwarf:#a09020;--demon:#aa2050;--sys:#3050cc;--dodge:#20c8a0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:14px;touch-action:manipulation}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--l2)}
+input,select,button{font-size:16px!important;-webkit-appearance:none;font-family:'Share Tech Mono',monospace}
+.scr{display:none;height:100vh;flex-direction:column}.scr.on{display:flex}
+#si{align-items:center;justify-content:center;padding:2rem;overflow:hidden}
+.logo{font-family:'Noto Serif KR',serif;font-size:clamp(2.8rem,12vw,5rem);font-weight:700;color:var(--gold);letter-spacing:.3em;text-shadow:0 0 40px rgba(240,231,200,.2);animation:flk 9s infinite;display:block;text-align:center}
+@keyframes flk{0%,93%,95%,97%,100%{opacity:1}94%,96%{opacity:.7}}
+.sub{display:block;font-size:11px;color:#555;letter-spacing:.4em;margin:.5rem 0 3rem;text-align:center}
+.trm{width:100%;max-width:500px}.trm-lbl{font-size:11px;color:#555;letter-spacing:.3em;margin-bottom:.3rem}
+.trm-row{border:1px solid #222;background:var(--bg2);display:flex;align-items:center;padding:0 1rem;cursor:text}
+.ps{color:var(--gold);font-size:1.1rem;margin-right:.5rem;flex-shrink:0}
+.trm-row input{background:transparent;border:none;outline:none;color:var(--tx);font-size:16px!important;flex:1;padding:.9rem 0}
+.trm-row input::placeholder{color:#2a2a2a}
+.hints{display:flex;justify-content:space-between;margin-top:1rem;font-size:10px;color:#444;letter-spacing:.15em}
+#sc{overflow-y:auto;padding:1.5rem}.cr-inner{width:100%;max-width:800px;margin:0 auto}
+.cr-ttl{font-family:'Noto Serif KR',serif;font-size:1.4rem;color:var(--tx);letter-spacing:.2em;margin-bottom:1.5rem}
+.sec-lbl{font-size:11px;color:#666;letter-spacing:.4em;border-bottom:1px solid #181818;padding-bottom:.3rem;margin:.3rem 0 .8rem}
+.rg{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#111;border:1px solid #111;margin-bottom:.5rem}
+@media(min-width:500px){.rg{grid-template-columns:repeat(4,1fr)}}
+.rc{background:var(--bg2);padding:1rem .8rem .8rem;cursor:pointer;text-align:center;user-select:none}
+.rc.sel{background:var(--bg3);outline:1px solid #333;outline-offset:-1px}
+.rp{display:block;margin:0 auto .5rem;image-rendering:pixelated;width:48px;height:48px}
+.rn{font-size:13px;color:var(--tx);letter-spacing:.1em;display:block}
+.rl{font-size:11px;color:#888;margin-top:.3rem;line-height:1.4}.rs{font-size:10px;color:#666;margin-top:.4rem}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem}
+@media(min-width:500px){.ag{grid-template-columns:repeat(3,1fr)}}
+.ai label{font-size:11px;color:#777;letter-spacing:.2em;display:block;margin-bottom:.25rem}
+.ai select{width:100%;background:var(--bg2);border:1px solid #181818;color:var(--tx);padding:.4rem .5rem;outline:none;cursor:pointer;border-radius:0}
+.pv{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;background:var(--bg2);border:1px solid #181818;padding:1rem;margin-bottom:.8rem}
+#apc{image-rendering:pixelated;width:80px;height:80px;border:1px solid #181818}
+.ai-desc{font-size:12px;color:#aaa;line-height:1.7;min-height:3rem}
+.svp{display:flex;flex-direction:column;gap:.25rem;margin-top:.7rem}
+.svr{display:flex;align-items:center;gap:.4rem}.svl{font-size:11px;color:#777;width:2.5rem}
+.svb{flex:1;height:2px;background:#181818}.svf{height:2px;background:var(--gold);transition:width .3s}
+.svn{font-size:11px;color:#666;width:1.5rem;text-align:right}
+.nm{border:1px solid #181818;background:var(--bg2);display:flex;align-items:center;padding:0 1rem;margin-bottom:1rem}
+.nm input{background:transparent;border:none;outline:none;color:var(--tx);font-size:16px!important;flex:1;padding:.75rem 0}
+.nm input::placeholder{color:#333}
+.btn-cta{width:100%;background:transparent;border:1px solid #333;color:#888;font-size:13px;letter-spacing:.3em;padding:.85rem;cursor:pointer;transition:all .15s;margin-bottom:3rem;border-radius:0}
+.btn-cta:active{background:#111;color:var(--tx)}
+#sg{background:var(--bg1);overflow:hidden}
+.tb{height:40px;border-bottom:1px solid #181818;background:#020202;display:flex;align-items:center;padding:0 .8rem;gap:.6rem;flex-shrink:0;overflow-x:auto;overflow-y:hidden}
+.tb::-webkit-scrollbar{display:none}
+.tb-logo{font-family:'Noto Serif KR',serif;font-size:.9rem;color:var(--gold);letter-spacing:.2em;flex-shrink:0;margin-right:auto}
+.chip{font-size:11px;color:#888;border:1px solid #181818;padding:.1rem .4rem;background:var(--bg2);flex-shrink:0;white-space:nowrap}
+.chip b{color:#aaa;font-weight:normal}.chip.gold b{color:#c8a830}.chip.ins{cursor:pointer}.chip.act{cursor:pointer;border-color:#333}
+.gg{display:flex;flex-direction:column;height:calc(100vh - 40px);overflow:hidden}
+@media(min-width:768px){.gg{display:grid;grid-template-columns:200px 1fr 240px;height:calc(100vh - 40px)}.lp{display:flex!important}.rp2{display:flex!important}.mob-tabs{display:none!important}.mob-panel{display:flex!important}}
+.mob-tabs{display:flex;border-bottom:1px solid #181818;background:#020202;flex-shrink:0}
+.mob-tab{flex:1;background:transparent;border:none;border-right:1px solid #111;color:#555;font-size:11px;letter-spacing:.1em;padding:.5rem .2rem;cursor:pointer}
+.mob-tab:last-child{border-right:none}.mob-tab.on{color:var(--tx);border-bottom:2px solid var(--gold)}
+.mob-panel{display:none;flex:1;overflow:hidden;flex-direction:column}.mob-panel.on{display:flex}
+.lp{border-right:1px solid #181818;overflow-y:auto;background:#020202;display:none;flex-direction:column;flex-shrink:0}
+.ls{border-bottom:1px solid #0d0d0d;padding:.7rem}.lt{font-size:10px;color:#555;letter-spacing:.35em;margin-bottom:.5rem}
+.chr{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+#mcc{image-rendering:pixelated;width:44px;height:44px;flex-shrink:0}
+.cn{font-size:14px;color:var(--tx)}.cr2{font-size:11px;color:#777;margin-top:.1rem}
+.rr{margin-bottom:.3rem}.rlr{display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:.15rem}
+.rb{height:4px;background:#111;border-radius:2px}.rf{height:4px;border-radius:2px;transition:width .3s}
+.rf.hp{background:var(--hp)}.rf.mp{background:var(--mp)}.rf.xp{background:var(--xp)}
+.sm{display:flex;flex-direction:column;gap:.3rem}.sr{display:flex;align-items:center;gap:.35rem}
+.sl{font-size:11px;color:#777;width:2.5rem}.sb{flex:1;height:3px;background:#111}
+.sf{height:3px;background:#444;border-radius:1px}.sv{font-size:11px;color:#777;width:1.5rem;text-align:right}
+.sc2{display:flex;flex-wrap:wrap;gap:4px}
+.sch{font-size:12px;color:#999;border:1px solid #181818;padding:.3rem .5rem;cursor:pointer;transition:all .12s}
+.sch.on-cd{color:#333;border-color:#111;pointer-events:none}.sch.locked{color:#333;border-color:#0d0d0d;pointer-events:none;opacity:.4}
+.ig{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.is{aspect-ratio:1;background:#040404;border:1px solid #0d0d0d;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;position:relative;flex-direction:column;gap:1px}
+.is.has{border-color:#181818}
+.is .it-icon{font-size:1rem;line-height:1}
+.is .it-name{font-size:8px;color:#666;text-align:center;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+.is .it-eff{font-size:7px;color:#4a7a4a;text-align:center;line-height:1;padding:0 2px}
+.is.hunt-item{border-color:#3a3010}
+.ma{display:flex;flex-direction:column;overflow:hidden;flex:1}
+.mt{display:flex;border-bottom:1px solid #181818;background:#020202;flex-shrink:0}
+.mt-btn{background:transparent;border:none;border-right:1px solid #0d0d0d;color:#555;font-size:11px;letter-spacing:.12em;padding:.5rem .5rem;cursor:pointer;flex:1}
+.mt-btn.on{color:var(--tx);border-bottom:2px solid var(--gold)}
+.mc{flex:1;overflow-y:auto;padding:.8rem}.tp{display:none}.tp.on{display:block}
+.fw{background:var(--bg1);border:1px solid #181818;margin-bottom:.6rem;position:relative;overflow:hidden}
+#fc{display:block;image-rendering:pixelated;width:100%}
+.lgt{font-size:11px;color:#777;letter-spacing:.25em;margin-bottom:.3rem}
+.fl{font-size:13px;line-height:2;max-height:90px;overflow-y:auto}
+.le{display:block}
+.le.dmg{color:#d05050}.le.heal{color:#50c050}.le.loot{color:#d4b040}.le.inf{color:#6080d0}.le.sys{color:#666}.le.skill{color:#c060d0}.le.dodge{color:#20c8a0}
+.zl{font-size:11px;color:#777;letter-spacing:.25em;margin:.6rem 0 .4rem}
+.ml{display:flex;flex-direction:column;gap:4px}
+.mr{display:flex;align-items:center;gap:.6rem;padding:.55rem .6rem;background:var(--bg2);border:1px solid #0d0d0d;cursor:pointer;position:relative;overflow:hidden;user-select:none}
+.mr.d{opacity:.2;pointer-events:none}.mr.shake{animation:shk .3s ease}
+@keyframes shk{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.mi{font-size:1.3rem;width:26px;text-align:center;flex-shrink:0}.mn2{flex:1}
+.mn{font-size:13px;color:var(--tx)}.mh{height:3px;background:#0d0d0d;margin-top:4px;border-radius:1px}
+.mf{height:3px;border-radius:1px;transition:width .3s}.mlv{font-size:11px;color:#666}
+.dmg-pop{position:absolute;top:4px;right:8px;font-size:14px;font-weight:bold;animation:popfade .6s forwards;pointer-events:none;z-index:10}
+@keyframes popfade{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-22px)}}
+.dodge-anim{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.8rem;font-weight:bold;color:var(--dodge);z-index:5000;pointer-events:none;animation:dodgefly 1.2s forwards;text-shadow:0 0 20px rgba(32,200,160,.5)}
+@keyframes dodgefly{0%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}40%{opacity:1;transform:translate(-20%,-80%) scale(1.4) rotate(-15deg)}100%{opacity:0;transform:translate(10%,-110%) scale(0.7) rotate(20deg)}}
+.skill-bar{display:flex;gap:4px;padding:.5rem .7rem;background:#020202;border-top:1px solid #111;flex-shrink:0;overflow-x:auto}
+.skill-bar::-webkit-scrollbar{display:none}
+.sk-btn{background:var(--bg2);border:1px solid #222;color:#aaa;font-size:12px!important;padding:.45rem .65rem;cursor:pointer;flex-shrink:0;border-radius:0;white-space:nowrap;position:relative;overflow:hidden}
+.sk-btn:active{background:#1a1a1a}.sk-btn.cd{color:#333;border-color:#111;pointer-events:none}
+.sk-btn.locked{color:#222;border-color:#0d0d0d;pointer-events:none;opacity:.35;background:#020202}
+.sk-btn .mpc{font-size:10px;color:#4060aa;margin-left:.25rem}
+.sk-btn .cdo{position:absolute;bottom:0;left:0;height:2px;background:#444}
+.sk-btn .lk-txt{font-size:9px;color:#333;display:block;margin-top:1px}
+.qc{padding:.7rem;background:var(--bg2);border:1px solid #0d0d0d;margin-bottom:4px}
+.qn{font-size:13px;color:var(--tx);margin-bottom:.2rem}.qd{font-size:12px;color:#aaa;line-height:1.4}
+.qp{font-size:11px;color:#666;margin-top:.25rem}.qr{font-size:12px;color:#c8a830;margin-top:.3rem}
+.si2{display:flex;align-items:center;gap:.6rem;padding:.55rem .6rem;background:var(--bg2);border:1px solid #0d0d0d;margin-bottom:3px}
+.sin{flex:1}.sn{font-size:13px;color:var(--tx)}.sd2{font-size:11px;color:#aaa;margin-top:.15rem}
+.sc3{font-size:12px;color:#c8a830;flex-shrink:0}
+.bb{background:transparent;border:1px solid #222;color:#888;font-size:12px!important;padding:.35rem .55rem;cursor:pointer;border-radius:0}
+.bb:active{background:#1a1a1a;color:var(--tx)}
+.item-fx{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0a0a0a;border:1px solid #333;padding:1rem 1.5rem;z-index:3000;text-align:center;animation:ifx .9s forwards;pointer-events:none}
+@keyframes ifx{0%{opacity:0;transform:translate(-50%,-50%) scale(.9)}15%{opacity:1;transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0}}
+.ifx-name{font-size:15px;color:var(--gold);letter-spacing:.2em;margin-bottom:.3rem}
+.ifx-desc{font-size:12px;color:#aaa}.ifx-eff{font-size:11px;color:#80c080;margin-top:.3rem}
+.rp2{border-left:1px solid #181818;display:none;flex-direction:column;background:#020202}
+.ct{display:flex;border-bottom:1px solid #0d0d0d;flex-shrink:0}
+.ctb{flex:1;background:transparent;border:none;border-right:1px solid #0d0d0d;color:#555;font-size:12px!important;letter-spacing:.08em;padding:.5rem .2rem;cursor:pointer}
+.ctb:last-child{border-right:none}.ctb.on{color:var(--tx);border-bottom:2px solid var(--gold)}
+.co{padding:.35rem .6rem;border-bottom:1px solid #0d0d0d;font-size:11px;color:#666;flex-shrink:0;display:flex;align-items:center;gap:.4rem}
+.ws-dot{width:6px;height:6px;border-radius:50%;background:#222;flex-shrink:0;transition:background .4s}
+.ws-dot.live{background:#2a7a2a}
+.cm{flex:1;overflow-y:auto;padding:.5rem;display:flex;flex-direction:column;gap:.3rem}
+.msg{font-size:13px;line-height:1.5}.mn3{margin-right:.3rem}
+.mn3.human{color:var(--human)}.mn3.elf{color:var(--elf)}.mn3.dwarf{color:var(--dwarf)}.mn3.demon{color:var(--demon)}.mn3.system{color:var(--sys)}.mn3.self{color:var(--tx)}
+.mt2{color:#aaa}
+.ci{border-top:1px solid #0d0d0d;padding:.5rem;display:flex;gap:.35rem;flex-shrink:0}
+.ci input{flex:1;background:var(--bg2);border:1px solid #181818;outline:none;color:var(--tx);font-size:16px!important;padding:.45rem .55rem;border-radius:0}
+.csb{background:#181818;border:1px solid #333;color:#aaa;font-size:14px!important;padding:.45rem .8rem;cursor:pointer;border-radius:0;flex-shrink:0}
+.csb:active{background:#282828;color:var(--tx)}
+#sd{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:5000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:1.5rem;text-align:center}
+#sd.on{display:flex}
+.dt{font-family:'Noto Serif KR',serif;font-size:clamp(2.5rem,10vw,4rem);color:#aa2020;letter-spacing:.4em;animation:dp 2s ease-in-out infinite}
+@keyframes dp{0%,100%{opacity:.7}50%{opacity:1}}
+.dsub{font-size:14px;color:#666;letter-spacing:.2em}.dstat{font-size:13px;color:#555}
+.dbs{display:flex;flex-direction:column;gap:.7rem;width:100%;max-width:300px;margin-top:.5rem}
+.db{background:transparent;border:1px solid #222;color:#777;font-size:13px!important;letter-spacing:.15em;padding:.8rem 1rem;cursor:pointer;border-radius:0}
+.db:active{background:#111}.db.gv{border-color:#3a2a00;color:#a08020}
+.dn{font-size:11px;color:#333;margin-top:.3rem}
+.lvfl{position:fixed;inset:0;background:rgba(240,231,200,.05);pointer-events:none;z-index:4000;animation:lvf .6s forwards}
+@keyframes lvf{0%{opacity:1}100%{opacity:0}}
+.wann{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#0a0a06;border:1px solid #3a3010;padding:.5rem 1rem;font-size:13px;color:#d4b040;z-index:3000;animation:wann 3s forwards;pointer-events:none;white-space:nowrap}
+@keyframes wann{0%{opacity:0;transform:translateX(-50%) translateY(-10px)}10%{opacity:1;transform:translateX(-50%) translateY(0)}80%{opacity:1}100%{opacity:0}}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:6000;display:none;align-items:center;justify-content:center}
+.modal-bg.on{display:flex}
+.modal{background:#0a0a0a;border:1px solid #333;padding:1.2rem;width:90%;max-width:440px;max-height:85vh;overflow-y:auto}
+.modal-title{font-family:'Noto Serif KR',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.2em;margin-bottom:.8rem;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:transparent;border:none;color:#555;font-size:1.2rem;cursor:pointer;padding:.2rem .4rem}
+.equip-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.equip-slot{background:var(--bg2);border:1px solid #222;padding:.6rem;cursor:pointer;text-align:center;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;transition:border-color .15s}
+.equip-slot:hover{border-color:#444}
+.equip-slot .slot-label{font-size:10px;color:#555;letter-spacing:.2em}
+.equip-slot .slot-icon{font-size:1.6rem}
+.equip-slot .slot-name{font-size:11px;color:#aaa}
+.equip-slot .slot-stat{font-size:10px;color:#80c080}
+.costume-list{display:flex;flex-direction:column;gap:.4rem}
+.costume-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;background:var(--bg2);border:1px solid #0d0d0d;cursor:pointer;transition:border-color .15s}
+.costume-item:hover{border-color:#333}
+.costume-item.equipped{border-color:#c8a830;background:#0a0a06}
+.costume-icon{font-size:1.4rem;width:30px;text-align:center}
+.costume-info{flex:1}
+.costume-name{font-size:13px;color:var(--tx)}
+.costume-desc{font-size:11px;color:#888;margin-top:.1rem}
+.costume-badge{font-size:11px;color:#c8a830}
+.inv-modal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:.8rem}
+.inv-slot{aspect-ratio:1;background:#040404;border:1px solid #0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:2px;transition:border-color .15s}
+.inv-slot:hover{border-color:#444}
+.inv-slot.selected{border-color:var(--gold)}
+.inv-slot .inv-icon{font-size:1.1rem}
+.inv-slot .inv-name{font-size:7px;color:#666;text-align:center;line-height:1.1}
+.inv-detail{background:var(--bg2);border:1px solid #222;padding:.7rem;margin-bottom:.8rem;min-height:60px}
+.inv-detail-name{font-size:14px;color:var(--gold);margin-bottom:.3rem}
+.inv-detail-desc{font-size:12px;color:#aaa;line-height:1.5}
+.inv-detail-eff{font-size:11px;color:#80c080;margin-top:.3rem}
+.inv-detail-hunt{font-size:10px;color:#d4b040;margin-top:.2rem}
+.inv-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.ss-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:7000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:1rem}
+.ss-modal.on{display:flex}
+.ss-card{background:#0a0a0a;border:1px solid #333;padding:1.5rem;text-align:center;max-width:320px;width:90%}
+.ss-header{font-family:'Noto Serif KR',serif;font-size:.8rem;color:#555;letter-spacing:.3em;margin-bottom:.8rem}
+.ss-char-row{display:flex;align-items:center;gap:1rem;justify-content:center;margin-bottom:1rem}
+.ss-name{font-family:'Noto Serif KR',serif;font-size:1.3rem;color:var(--gold);text-align:left}
+.ss-sub{font-size:11px;color:#888;text-align:left;margin-top:.2rem}
+.ss-stats{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;font-size:12px;color:#aaa;margin:.8rem 0;text-align:left}
+.ss-stat{background:#111;padding:.3rem .5rem;display:flex;justify-content:space-between}
+.ss-stat b{color:var(--tx)}
+.ss-bars{margin:.5rem 0}
+.ss-bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;font-size:11px}
+.ss-bar-label{color:#777;width:2rem}
+.ss-bar-bg{flex:1;height:3px;background:#111}
+.ss-bar-fill{height:3px}
+.ss-costume{font-size:1.5rem;margin-bottom:.3rem}
+.ss-btns{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.ss-btn{background:transparent;border:1px solid #333;color:#888;font-size:12px!important;padding:.5rem .8rem;cursor:pointer;border-radius:0;transition:all .15s}
+.ss-btn:active{background:#1a1a1a}.ss-btn.primary{border-color:#555;color:#bbb}
+.save-toast{position:fixed;bottom:20px;right:20px;background:#0a0a0a;border:1px solid #333;padding:.5rem 1rem;font-size:12px;color:#80c080;z-index:8000;animation:toastfade 2.5s forwards;pointer-events:none}
+@keyframes toastfade{0%{opacity:0;transform:translateY(10px)}15%{opacity:1;transform:translateY(0)}80%{opacity:1}100%{opacity:0}}
+.hunt-badge{font-size:9px;color:#d4b040;border:1px solid #3a3010;padding:1px 3px;margin-left:.3rem;vertical-align:middle}
+.stat-note{font-size:10px;color:#80c080;margin-left:.2rem}
+.stat-note.bad{color:#d05050}
+
+</style>
+</head>
+<body>
+
+<!-- 사망 화면 -->
+<div id="sd">
+  <div class="dt">YOU DIED</div>
+  <div class="dsub">캐릭터가 소멸했습니다</div>
+  <div class="dstat" id="dstat"></div>
+  <div class="dbs">
+    <button class="db" onclick="G.respawnFree()">처음부터 재시작 (XP -30%)</button>
+    <button class="db gv" onclick="G.respawnPaid()">💛 골드 부활 (현재 위치)</button>
+  </div>
+  <div class="dn" id="dcost"></div>
+</div>
+
+<!-- 장비/코스튬 모달 -->
+<div class="modal-bg" id="equip-modal">
+  <div class="modal">
+    <div class="modal-title">장비창 <button class="modal-close" onclick="closeModal('equip-modal')">✕</button></div>
+    <div class="sec-lbl">코스튬 슬롯</div>
+    <div class="equip-grid" id="equip-slots"></div>
+    <div class="sec-lbl">보유 코스튬</div>
+    <div class="costume-list" id="costume-list"></div>
+  </div>
+</div>
+
+<!-- 인벤토리 상세 모달 -->
+<div class="modal-bg" id="inv-modal">
+  <div class="modal">
+    <div class="modal-title">인벤토리 <button class="modal-close" onclick="closeModal('inv-modal')">✕</button></div>
+    <div class="inv-modal-grid" id="inv-modal-grid"></div>
+    <div class="inv-detail" id="inv-detail">
+      <div style="color:#444;font-size:12px">아이템을 선택하세요</div>
+    </div>
+    <div class="inv-actions" id="inv-actions"></div>
+  </div>
+</div>
+
+<!-- 스크린샷 모달 -->
+<div class="ss-modal" id="ss-modal">
+  <div class="ss-card" id="ss-card">
+    <div class="ss-header">✦ FANTACHAT ✦</div>
+    <div class="ss-char-row">
+      <canvas id="ss-canvas" width="24" height="24" style="image-rendering:pixelated;width:64px;height:64px;border:1px solid #222"></canvas>
+      <div>
+        <div class="ss-name" id="ss-name">—</div>
+        <div class="ss-sub" id="ss-sub">—</div>
+        <div class="ss-costume" id="ss-costume"></div>
+      </div>
+    </div>
+    <div class="ss-bars" id="ss-bars"></div>
+    <div class="ss-stats" id="ss-stats"></div>
+  </div>
+  <div class="ss-btns">
+    <button class="ss-btn primary" onclick="SS.download()">📥 저장</button>
+    <button class="ss-btn" onclick="SS.share()">📤 공유</button>
+    <button class="ss-btn" onclick="closeModal('ss-modal')">닫기</button>
+  </div>
+</div>
+
+<!-- 시작 화면 -->
+<div id="si" class="scr on">
+  <span class="logo">판타챗</span>
+  <span class="sub">FANTACHAT ── HARDCORE FANTASY ── v1.0</span>
+  <div class="trm">
+    <div class="trm-lbl">COMMAND TERMINAL</div>
+    <div class="trm-row" onclick="document.getElementById('ii').focus()">
+      <span class="ps">›_</span>
+      <input id="ii" type="text" placeholder="당신의 캐릭터를 생성하세요..." autocomplete="off" enterkeyhint="go"/>
+    </div>
+    <div class="hints"><span>[ ENTER ] 시작</span><span>HARDCORE</span><span>실시간 멀티</span></div>
+  </div>
+</div>
+
+<!-- 캐릭터 생성 화면 -->
+<div id="sc" class="scr">
+  <div class="cr-inner">
+    <div class="cr-ttl" style="margin-top:1rem">캐릭터 창조</div>
+    <div class="sec-lbl">종족 선택</div>
+    <div class="rg" id="rg"></div>
+    <div class="sec-lbl">외형 설정</div>
+    <div class="ag">
+      <div class="ai"><label>체형</label><select id="sbuild" onchange="CR.upd()"><option>날렵한</option><option>균형</option><option>근육질</option><option>단단한</option></select></div>
+      <div class="ai"><label>분위기</label><select id="svibe" onchange="CR.upd()"><option>냉혹한</option><option>신비로운</option><option>야성적인</option><option>귀족적인</option><option>저주받은</option></select></div>
+      <div class="ai"><label>무기</label><select id="swpn" onchange="CR.upd()"><option>대검</option><option>활</option><option>마법서</option><option>도끼</option><option>쌍검</option><option>지팡이</option></select></div>
+      <div class="ai"><label>피부</label><select id="sskin"><option>밝은</option><option>중간</option><option>어두운</option><option>창백한</option></select></div>
+      <div class="ai"><label>머리</label><select id="shair"><option>검은</option><option>금발</option><option>은발</option><option>붉은</option><option>흰</option></select></div>
+      <div class="ai"><label>출신</label><select id="sbg"><option>전사 가문</option><option>마법사 길드</option><option>하층민</option><option>왕족</option><option>유랑자</option></select></div>
+    </div>
+    <div class="sec-lbl">캐릭터 미리보기</div>
+    <div class="pv">
+      <canvas id="apc" width="24" height="24"></canvas>
+      <div><div class="ai-desc" id="aidesc"></div><div class="svp" id="svp"></div></div>
+    </div>
+    <div class="sec-lbl">이름</div>
+    <div class="nm"><span class="ps">›_</span><input id="cname" type="text" placeholder="캐릭터 이름..." maxlength="12" enterkeyhint="go"/></div>
+    <button class="btn-cta" onclick="CR.enter()">▸&nbsp;&nbsp;세계에 입장하기</button>
+  </div>
+</div>
+
+<!-- 메인 게임 화면 -->
+<div id="sg" class="scr">
+  <div class="tb">
+    <div class="tb-logo">판타챗</div>
+    <div class="ws-dot" id="wsdot"></div>
+    <div class="chip">종족 <b id="hrace">—</b></div>
+    <div class="chip">Lv.<b id="hlv">1</b></div>
+    <div class="chip">위치 <b id="hzone">황야</b></div>
+    <div class="chip gold">골드 <b id="hgold">150</b>G</div>
+    <div class="chip act" onclick="openModal('equip-modal');EQ.render()">👗 장비</div>
+    <div class="chip act" onclick="SS.open()">📸 공유</div>
+    <div class="chip act" onclick="SAVE.save()">💾 저장</div>
+    <div class="chip ins" onclick="G.reviveInfo()">💀보험</div>
+  </div>
+  <div class="mob-tabs">
+    <button class="mob-tab on" onclick="mobTab('char',this)">캐릭터</button>
+    <button class="mob-tab" onclick="mobTab('game',this)">게임</button>
+    <button class="mob-tab" onclick="mobTab('chat',this)">채팅</button>
+  </div>
+  <div class="gg">
+    <!-- 왼쪽 패널: 캐릭터 -->
+    <div class="lp mob-panel on" id="mp-char">
+      <div class="ls">
+        <div class="lt">CHARACTER</div>
+        <div class="chr"><canvas id="mcc" width="24" height="24"></canvas><div><div class="cn" id="sname">—</div><div class="cr2" id="srace">—</div></div></div>
+        <div class="rr"><div class="rlr"><span>HP</span><span id="hptx">100/100</span></div><div class="rb"><div class="rf hp" id="hpb" style="width:100%"></div></div></div>
+        <div class="rr"><div class="rlr"><span>MP</span><span id="mptx">80/80</span></div><div class="rb"><div class="rf mp" id="mpb" style="width:100%"></div></div></div>
+        <div class="rr" style="margin-top:.4rem"><div class="rlr"><span>XP</span><span id="xptx">0/200</span></div><div class="rb"><div class="rf xp" id="xpb" style="width:0%"></div></div></div>
+      </div>
+      <div class="ls"><div class="lt">STATS</div><div class="sm" id="smini"></div></div>
+      <div class="ls"><div class="lt">스킬 (탭하여 사용)</div><div class="sc2" id="schips"></div></div>
+      <div class="ls">
+        <div class="lt" style="display:flex;justify-content:space-between;align-items:center">INVENTORY <span style="color:#555;cursor:pointer;font-size:10px" onclick="openInvModal()">상세보기</span></div>
+        <div class="ig" id="invg"></div>
+      </div>
+    </div>
+    <!-- 중앙: 게임 -->
+    <div class="ma mob-panel" id="mp-game">
+      <div class="mt">
+        <button class="mt-btn on" onclick="G.tab('field',this)">⚔ 사냥</button>
+        <button class="mt-btn" onclick="G.tab('quest',this)">📜 퀘스트</button>
+        <button class="mt-btn" onclick="G.tab('map',this)">🗺 지도</button>
+        <button class="mt-btn" onclick="G.tab('shop',this)">🏪 상점</button>
+      </div>
+      <div class="mc">
+        <div class="tp on" id="tp-field">
+          <div class="fw"><canvas id="fc" width="400" height="160"></canvas></div>
+          <div class="lgt">전투 로그</div>
+          <div class="fl" id="flog"></div>
+          <div class="zl">이 구역의 몬스터 (탭하여 공격)</div>
+          <div class="ml" id="mlist"></div>
+        </div>
+        <div class="tp" id="tp-quest"><div class="lgt" style="margin-bottom:.6rem">진행 중인 퀘스트</div><div id="qlist"></div></div>
+        <div class="tp" id="tp-map"><canvas id="wm" width="600" height="340" style="width:100%;border:1px solid #181818;image-rendering:pixelated"></canvas><div style="font-size:11px;color:#666;margin-top:.4rem">탭하여 이동 (레벨 제한 있음)</div></div>
+        <div class="tp" id="tp-shop"><div class="lgt" style="margin-bottom:.6rem">블랙마켓</div><div id="shoplist"></div></div>
+      </div>
+      <div class="skill-bar" id="skill-bar"></div>
+    </div>
+    <!-- 오른쪽: 채팅 -->
+    <div class="rp2 mob-panel" id="mp-chat">
+      <div class="ct">
+        <button class="ctb on" onclick="CH.sw('world',this)">[세계]</button>
+        <button class="ctb" onclick="CH.sw('nation',this)">[국가]</button>
+        <button class="ctb" onclick="CH.sw('whisper',this)">[귓말]</button>
+      </div>
+      <div class="co"><div class="ws-dot" id="wsdot2"></div><span id="conline">접속자 —명</span></div>
+      <div class="cm" id="cmsgs"></div>
+      <div class="ci">
+        <input id="cinp" type="text" placeholder="메시지..." enterkeyhint="send"/>
+        <button class="csb" onclick="CH.send()">전송</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 사운드 시스템 (Web Audio API)
+// ============================================================
+const SFX = {
+  ctx: null,
+  init() { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} },
+  play(type) {
+    if (!this.ctx) return;
+    const ac = this.ctx;
+    const g = ac.createGain();
+    g.connect(ac.destination);
+    const o = ac.createOscillator();
+    o.connect(g);
+    const now = ac.currentTime;
+    const configs = {
+      atk:    { type:'sawtooth', freq:[220,180], dur:0.12, vol:0.15 },
+      hit:    { type:'square',   freq:[80,40],   dur:0.08, vol:0.12 },
+      skill:  { type:'sine',     freq:[440,880,660], dur:0.25, vol:0.18 },
+      heal:   { type:'sine',     freq:[523,659,784], dur:0.3,  vol:0.15 },
+      loot:   { type:'triangle', freq:[660,880], dur:0.2,  vol:0.12 },
+      lvup:   { type:'sine',     freq:[523,659,784,1047], dur:0.5, vol:0.2 },
+      dodge:  { type:'sine',     freq:[880,1100,880], dur:0.2, vol:0.13 },
+      die:    { type:'sawtooth', freq:[220,110,55], dur:0.6, vol:0.2 },
+      buy:    { type:'triangle', freq:[440,550], dur:0.18, vol:0.12 },
+      equip:  { type:'sine',     freq:[660,880,1100], dur:0.25, vol:0.15 },
+    };
+    const c = configs[type] || configs.atk;
+    o.type = c.type;
+    const freqs = c.freq;
+    const step = c.dur / freqs.length;
+    freqs.forEach((f, i) => {
+      o.frequency.setValueAtTime(f, now + i * step);
+    });
+    g.gain.setValueAtTime(c.vol, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + c.dur);
+    o.start(now);
+    o.stop(now + c.dur + 0.05);
+  }
+};
+
+// ============================================================
+// 데이터: 종족
+// ============================================================
+const RACES = {
+  human: { label:'인간족', lore:'균형 스탯, 빠른 성장', base:{str:12,int:10,agi:14,def:10}, pal:{skin:'#c8a882',hair:'#6b3a1a',cloth:'#3a4a7a',armor:'#7a7a7a',acc:'#d4c840'} },
+  elf:   { label:'엘프',   lore:'고지능·마법 특화',     base:{str:7,int:20,agi:18,def:6},   pal:{skin:'#d4c8a0',hair:'#d4b83c',cloth:'#2a5a3a',armor:'#4a7a4a',acc:'#c0d8ff'} },
+  dwarf: { label:'드워프', lore:'최고 방어·HP',          base:{str:18,int:8,agi:7,def:22},   pal:{skin:'#b8886a',hair:'#8b5a1a',cloth:'#4a3318',armor:'#8a8a8a',acc:'#d4901a'} },
+  demon: { label:'마족',   lore:'암흑 마력, 고위험',     base:{str:16,int:18,agi:13,def:8},  pal:{skin:'#5a1a2a',hair:'#1a0808',cloth:'#280818',armor:'#381838',acc:'#ff4060'} },
+};
+
+// ============================================================
+// 데이터: 종족+무기별 스킬 (초반 1개, 5렙마다 해금)
+// ============================================================
+const RACE_SKILLS = {
+  human: {
+    '대검': [
+      {id:'slash',  name:'강베기',   mp:10,cd:3000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
+      {id:'shield', name:'방패막기', mp:8, cd:5000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
+      {id:'rally',  name:'전의고취', mp:15,cd:8000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
+    ],
+    '활': [
+      {id:'arrow',  name:'속사',     mp:10,cd:2500, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
+      {id:'trap',   name:'함정설치', mp:12,cd:6000, type:'stun', power:0,   fx:'🪤 함정!',      unlockLv:5},
+      {id:'eagle',  name:'독수리눈', mp:18,cd:9000, type:'buff', power:0,   fx:'👁️ 독수리눈!', unlockLv:10},
+    ],
+    '마법서': [
+      {id:'bolt',   name:'번개볼트', mp:14,cd:3500, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
+      {id:'shield', name:'방패막기', mp:8, cd:5000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
+      {id:'rally',  name:'전의고취', mp:15,cd:8000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
+    ],
+    '도끼': [
+      {id:'axe',    name:'도끼던지기',mp:10,cd:3000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
+      {id:'shield', name:'방패막기', mp:8, cd:5000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
+      {id:'rally',  name:'전의고취', mp:15,cd:8000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
+    ],
+    '쌍검': [
+      {id:'dual',   name:'연속베기', mp:12,cd:2800, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
+      {id:'evade',  name:'회피기동', mp:8, cd:4000, type:'def',  power:0,   fx:'💨 회피기동!',  unlockLv:5},
+      {id:'rally',  name:'전의고취', mp:15,cd:8000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
+    ],
+    '지팡이': [
+      {id:'bolt',   name:'번개볼트', mp:14,cd:3500, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.4,  fx:'🌿 자연치유!',  unlockLv:5},
+      {id:'rally',  name:'전의고취', mp:15,cd:8000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
+    ],
+  },
+  elf: {
+    '활': [
+      {id:'arrow',  name:'폭발화살', mp:12,cd:4000, type:'atk',  power:3.0, fx:'🏹 폭발화살!',  unlockLv:1},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
+    ],
+    '마법서': [
+      {id:'arcane', name:'비전폭발', mp:14,cd:3500, type:'atk',  power:3.2, fx:'✨ 비전폭발!',  unlockLv:1},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
+    ],
+    '지팡이': [
+      {id:'arcane', name:'비전폭발', mp:14,cd:3500, type:'atk',  power:3.2, fx:'✨ 비전폭발!',  unlockLv:1},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:5},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:10},
+    ],
+    '대검': [
+      {id:'slash',  name:'강베기',   mp:10,cd:3000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
+    ],
+    '쌍검': [
+      {id:'dual',   name:'연속베기', mp:12,cd:2800, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
+    ],
+    '도끼': [
+      {id:'axe',    name:'도끼던지기',mp:10,cd:3000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
+      {id:'root',   name:'속박',     mp:10,cd:6000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
+      {id:'mend',   name:'자연치유', mp:18,cd:7000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
+    ],
+  },
+  dwarf: {
+    '도끼': [
+      {id:'axe',    name:'대도끼',   mp:8, cd:3500, type:'atk',  power:2.8, fx:'⚒️ 대도끼!',   unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+    '대검': [
+      {id:'slash',  name:'강베기',   mp:10,cd:3000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+    '쌍검': [
+      {id:'dual',   name:'연속베기', mp:12,cd:2800, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+    '활': [
+      {id:'arrow',  name:'속사',     mp:10,cd:2500, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+    '마법서': [
+      {id:'bolt',   name:'번개볼트', mp:14,cd:3500, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+    '지팡이': [
+      {id:'bolt',   name:'번개볼트', mp:14,cd:3500, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
+      {id:'taunt',  name:'도발',     mp:5, cd:4000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
+      {id:'forge',  name:'단련',     mp:20,cd:15000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+    ],
+  },
+  demon: {
+    '마법서': [
+      {id:'dark',   name:'암흑폭발', mp:15,cd:4000, type:'atk',  power:3.2, fx:'💀 암흑폭발!',  unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+    '지팡이': [
+      {id:'dark',   name:'암흑폭발', mp:15,cd:4000, type:'atk',  power:3.2, fx:'💀 암흑폭발!',  unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+    '대검': [
+      {id:'slash',  name:'강베기',   mp:10,cd:3000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+    '쌍검': [
+      {id:'dual',   name:'연속베기', mp:12,cd:2800, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+    '도끼': [
+      {id:'axe',    name:'도끼던지기',mp:10,cd:3000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+    '활': [
+      {id:'arrow',  name:'속사',     mp:10,cd:2500, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
+      {id:'drain',  name:'생명흡수', mp:12,cd:5000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
+      {id:'fear',   name:'공포',     mp:10,cd:7000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
+    ],
+  },
+};
+
+// ============================================================
+// 데이터: 몬스터
+// ============================================================
+const MONSTERS = [
+  {id:'slime',    name:'슬라임',    icon:'🟢',lv:1, hpMax:35, atk:5,  xp:25, gold:6,  color:'#1a4a1a',region:'황야'},
+  {id:'goblin',   name:'고블린',    icon:'👺',lv:2, hpMax:65, atk:10, xp:50, gold:15, color:'#2a4a14',region:'황야'},
+  {id:'zombie',   name:'좀비',      icon:'🧟',lv:3, hpMax:90, atk:14, xp:70, gold:20, color:'#1a3a14',region:'황야'},
+  {id:'orc',      name:'오크',      icon:'👹',lv:4, hpMax:120,atk:20, xp:100,gold:35, color:'#4a2a10',region:'황야'},
+  {id:'troll',    name:'트롤',      icon:'👾',lv:5, hpMax:160,atk:25, xp:130,gold:45, color:'#1a3a10',region:'황야'},
+  {id:'skeleton', name:'스켈레톤',  icon:'💀',lv:5, hpMax:140,atk:24, xp:125,gold:38, color:'#3a3a1a',region:'동굴'},
+  {id:'wolf',     name:'늑대인간',  icon:'🐺',lv:6, hpMax:180,atk:28, xp:160,gold:50, color:'#1a1a1a',region:'동굴'},
+  {id:'mimic',    name:'미믹',      icon:'📦',lv:7, hpMax:200,atk:32, xp:200,gold:110,color:'#3a2a10',region:'동굴'},
+  {id:'vampire',  name:'뱀파이어',  icon:'🧛',lv:8, hpMax:230,atk:36, xp:220,gold:80, color:'#3a0a1a',region:'동굴'},
+  {id:'banshee',  name:'밴시',      icon:'👻',lv:9, hpMax:260,atk:40, xp:260,gold:90, color:'#0a0a2a',region:'동굴'},
+  {id:'basilisk', name:'바실리스크',icon:'🦎',lv:10,hpMax:310,atk:44, xp:310,gold:95, color:'#143a14',region:'엘프 숲'},
+  {id:'treant',   name:'트리앤트',  icon:'🌳',lv:9, hpMax:280,atk:35, xp:275,gold:85, color:'#1a3a10',region:'엘프 숲'},
+  {id:'fairy',    name:'타락요정',  icon:'🧚',lv:8, hpMax:200,atk:38, xp:240,gold:75, color:'#2a1a3a',region:'엘프 숲'},
+  {id:'golem',    name:'골렘',      icon:'🪨',lv:12,hpMax:400,atk:38, xp:340,gold:110,color:'#3a3a28',region:'드워프 산맥'},
+  {id:'rock',     name:'록자이언트',icon:'⛰️',lv:14,hpMax:480,atk:45, xp:420,gold:145,color:'#2a2a18',region:'드워프 산맥'},
+  {id:'duergar',  name:'듀어가',    icon:'⛏️',lv:13,hpMax:360,atk:40, xp:360,gold:120,color:'#3a2a18',region:'드워프 산맥'},
+  {id:'lich',     name:'리치',      icon:'💎',lv:18,hpMax:440,atk:56, xp:540,gold:200,color:'#0a0a2a',region:'마족 영토'},
+  {id:'cerberus', name:'케르베로스',icon:'🐕',lv:20,hpMax:520,atk:65, xp:660,gold:180,color:'#1a0808',region:'마족 영토'},
+  {id:'dragon',   name:'드래곤',    icon:'🐉',lv:25,hpMax:750,atk:95, xp:1100,gold:420,color:'#2a0808',region:'마족 영토'},
+  {id:'demon_lord',name:'마왕',     icon:'👿',lv:30,hpMax:1200,atk:130,xp:2000,gold:800,color:'#3a0020',region:'마족 영토'},
+];
+
+// ============================================================
+// 데이터: 아이템 (이름+설명+효과 포함)
+// ============================================================
+const ITEM_DATA = [
+  {id:'sword_frag',  icon:'🗡️', name:'검 파편',        desc:'낡은 검의 파편. 가공하면 쓸 수 있을지도.',   eff:'str',   val:1,  rarity:'common'},
+  {id:'arrow_bunch', icon:'🏹', name:'화살 묶음',       desc:'사냥꾼이 쓰던 화살. 아직 날카롭다.',         eff:'agi',   val:1,  rarity:'common'},
+  {id:'torn_page',   icon:'📖', name:'찢긴 마법서',     desc:'알 수 없는 주문이 적혀있다.',                 eff:'int',   val:2,  rarity:'uncommon'},
+  {id:'rusted_axe',  icon:'🪓', name:'녹슨 도끼',       desc:'드워프가 버린 도끼. 아직 쓸 만하다.',         eff:'str',   val:2,  rarity:'common'},
+  {id:'cracked_shield',icon:'🛡️',name:'금간 방패',      desc:'금이 갔지만 방어는 된다.',                   eff:'def',   val:2,  rarity:'common'},
+  {id:'hp_potion',   icon:'💊', name:'회복 포션',       desc:'HP를 즉시 회복한다.',                         eff:'hp',    val:80, rarity:'common'},
+  {id:'gem_shard',   icon:'💎', name:'보석 조각',       desc:'가공하면 비싸게 팔 수 있을 것 같다.',         eff:'gold',  val:50, rarity:'uncommon'},
+  {id:'crystal_orb', icon:'🔮', name:'수정 구슬',       desc:'마력이 응축되어 있다. INT가 오른다.',          eff:'int',   val:3,  rarity:'uncommon'},
+  {id:'wand_tip',    icon:'🪄', name:'지팡이 끝부분',   desc:'마법사의 지팡이 끝. 마력이 남아있다.',         eff:'int',   val:2,  rarity:'common'},
+  {id:'elixir_vial', icon:'⚗️', name:'엘릭서 잔여물',   desc:'HP와 MP를 소량 회복한다.',                   eff:'elixir_s',val:0, rarity:'uncommon'},
+  {id:'old_key',     icon:'🗝️', name:'낡은 열쇠',       desc:'어딘가의 문을 열 수 있을 것 같다.',           eff:'gold',  val:30, rarity:'common'},
+  {id:'gold_coin',   icon:'💰', name:'금화 주머니',     desc:'누군가 흘린 금화 주머니.',                    eff:'gold',  val:80, rarity:'common'},
+  {id:'mystery_vial',icon:'🧪', name:'수상한 약',       desc:'마시면 어떻게 될지 모른다...',                eff:'random',val:0,  rarity:'rare'},
+  {id:'twin_blade',  icon:'⚔️', name:'쌍검 파편',       desc:'두 개의 검이 합쳐진 파편. 민첩이 오른다.',    eff:'agi',   val:3,  rarity:'uncommon'},
+  {id:'amulet_frag', icon:'🪬', name:'부적 조각',       desc:'고대의 부적. 생명력이 오른다.',               eff:'hpmax', val:30, rarity:'rare'},
+  {id:'cursed_ring', icon:'💍', name:'저주받은 반지',   desc:'STR+5 but DEF-3. 저주가 깃들어있다.',         eff:'cursed',val:0,  rarity:'rare'},
+  {id:'prayer_bead', icon:'📿', name:'기도 구슬',       desc:'MP 최대치가 오른다.',                         eff:'mpmax', val:25, rarity:'uncommon'},
+  {id:'magnet_ore',  icon:'🧲', name:'자석 광석',       desc:'금속을 끌어당긴다. DEF가 오른다.',            eff:'def',   val:3,  rarity:'common'},
+  {id:'fire_rune',   icon:'🔥', name:'화염 룬',         desc:'다음 공격이 불타오른다. 2배 피해!',            eff:'rune2', val:2,  rarity:'rare'},
+  {id:'ice_shard',   icon:'🧊', name:'얼음 파편',       desc:'적을 느리게 만든다. 스턴 확률 +30%.',          eff:'stun_boost',val:30,rarity:'rare'},
+  {id:'thunder_stone',icon:'⚡',name:'번개 돌',         desc:'AGI와 INT가 동시에 오른다.',                  eff:'thunder',val:0, rarity:'rare'},
+  {id:'shadow_cloak',icon:'🌑', name:'그림자 망토',     desc:'회피율이 크게 오른다.',                       eff:'dodge', val:25, rarity:'rare'},
+  {id:'blood_crystal',icon:'🩸',name:'피의 수정',       desc:'HP 최대치 +50, STR +3. 피의 맹세.',           eff:'blood', val:0,  rarity:'epic'},
+  {id:'void_essence', icon:'🌀',name:'공허의 정수',     desc:'모든 스탯 +2. 공허에서 온 힘.',               eff:'allstat',val:2, rarity:'epic'},
+  {id:'phoenix_ash',  icon:'🦅',name:'불사조 깃털',     desc:'사망 시 한 번 자동 부활. 확률 50%.',          eff:'amulet',val:.5, rarity:'epic'},
+];
+
+// 사냥 전용 아이템 (몬스터 처치로만 획득)
+const HUNT_ITEMS = [
+  {id:'slime_core',   icon:'💚', name:'슬라임 핵',       desc:'슬라임의 핵심. 독특한 재생력이 있다.',        eff:'regen_boost',val:3, rarity:'hunt', huntOnly:true},
+  {id:'goblin_ear',   icon:'👂', name:'고블린 귀',        desc:'고블린의 귀. 상인이 좋아한다.',               eff:'gold',  val:60, rarity:'hunt', huntOnly:true},
+  {id:'wolf_fang',    icon:'🦷', name:'늑대 이빨',        desc:'늑대인간의 이빨. STR+4, AGI+2.',              eff:'wolf_fang',val:0,rarity:'hunt', huntOnly:true},
+  {id:'dragon_scale', icon:'🐉', name:'드래곤 비늘',      desc:'드래곤의 비늘. DEF+15, 극히 희귀.',           eff:'def',   val:15, rarity:'hunt', huntOnly:true},
+  {id:'vampire_blood',icon:'🧛', name:'뱀파이어 혈액',    desc:'생명흡수 효과. HP 최대치 +40.',               eff:'hpmax', val:40, rarity:'hunt', huntOnly:true},
+  {id:'lich_soul',    icon:'💀', name:'리치의 영혼',      desc:'INT+8, MP 최대치 +50. 강렬한 마력.',          eff:'lich_soul',val:0,rarity:'hunt', huntOnly:true},
+  {id:'troll_heart',  icon:'💗', name:'트롤 심장',        desc:'재생력 강화. HP 회복 속도 2배.',              eff:'regen2',val:0, rarity:'hunt', huntOnly:true},
+  {id:'mimic_key',    icon:'🗝️', name:'미믹 열쇠',        desc:'미믹이 숨긴 보물. 골드 +200.',                eff:'gold',  val:200,rarity:'hunt', huntOnly:true},
+  {id:'banshee_tear', icon:'💧', name:'밴시의 눈물',      desc:'MP 최대치 +60, INT+5.',                       eff:'banshee_tear',val:0,rarity:'hunt',huntOnly:true},
+  {id:'cerberus_claw',icon:'🐾', name:'케르베로스 발톱',  desc:'STR+10, AGI+5. 강맹한 힘.',                  eff:'cerberus_claw',val:0,rarity:'hunt',huntOnly:true},
+];
+
+// ============================================================
+// 데이터: 상점
+// ============================================================
+const SHOP = [
+  {name:'회복 포션',    cost:50,  desc:'HP +80 즉시',          eff:'hp',    val:80,  icon:'💊'},
+  {name:'마나 포션',    cost:40,  desc:'MP +60 즉시',          eff:'mp',    val:60,  icon:'🔵'},
+  {name:'강화 스크롤',  cost:200, desc:'STR +4 영구',          eff:'str',   val:4,   icon:'📜'},
+  {name:'지식의 서',    cost:180, desc:'INT +4 영구',          eff:'int',   val:4,   icon:'📖'},
+  {name:'부적 조각',    cost:400, desc:'사망시 50% 자동부활',  eff:'amulet',val:.5,  icon:'🪬'},
+  {name:'어둠의 갑옷',  cost:700, desc:'DEF +12 영구',         eff:'def',   val:12,  icon:'🛡️'},
+  {name:'독수리의 눈',  cost:300, desc:'AGI +6 영구',          eff:'agi',   val:6,   icon:'👁️'},
+  {name:'엘릭서',       cost:600, desc:'HP/MP 완전 회복',      eff:'elixir',val:0,   icon:'⚗️'},
+  {name:'저주받은 반지',cost:120, desc:'STR+6 but DEF-4',      eff:'cursed',val:0,   icon:'💍'},
+  {name:'폭발의 룬',    cost:250, desc:'다음 공격 3배 피해',   eff:'rune',  val:3,   icon:'💥'},
+  {name:'도적의 부츠',  cost:220, desc:'회피율 +25%',          eff:'dodge', val:25,  icon:'👢'},
+  {name:'광기의 약',    cost:90,  desc:'STR+10 (부작용 있음)', eff:'madness',val:10, icon:'🧪'},
+  {name:'번개 부적',    cost:350, desc:'AGI+5, INT+5',         eff:'thunder',val:0,  icon:'⚡'},
+  {name:'피의 서약',    cost:500, desc:'HP최대+60, STR+5',     eff:'blood', val:0,   icon:'🩸'},
+  {name:'공허의 정수',  cost:800, desc:'전 스탯 +3',           eff:'allstat',val:3,  icon:'🌀'},
+];
+
+// ============================================================
+// 데이터: 코스튬
+// ============================================================
+const COSTUMES = [
+  {id:'sunglasses',  icon:'🕶️', name:'선글라스',    desc:'쿨함 +100. DEF 효과는 없음.',   slot:'head', stat:null},
+  {id:'glasses',     icon:'👓', name:'동그란 안경',  desc:'지적인 분위기. INT +1.',         slot:'head', stat:{int:1}},
+  {id:'santa_hat',   icon:'🎅', name:'산타 모자',    desc:'Ho Ho Ho! 행운이 깃든다.',       slot:'head', stat:{gold_bonus:0.05}},
+  {id:'crown',       icon:'👑', name:'황금 왕관',    desc:'왕족의 위엄. 모든 스탯 +1.',     slot:'head', stat:{str:1,int:1,agi:1,def:1}},
+  {id:'witch_hat',   icon:'🧙', name:'마녀 모자',    desc:'마법이 강해진다. INT +2.',        slot:'head', stat:{int:2}},
+  {id:'pirate_hat',  icon:'🏴‍☠️',name:'해적 모자',   desc:'모험심 충만! AGI +1.',           slot:'head', stat:{agi:1}},
+  {id:'halo',        icon:'😇', name:'천사 후광',    desc:'HP 회복 속도 증가.',              slot:'head', stat:{regen_boost:2}},
+  {id:'devil_horns', icon:'😈', name:'악마 뿔',      desc:'공격력이 오른다. STR +2.',        slot:'head', stat:{str:2}},
+  {id:'cape',        icon:'🦸', name:'영웅 망토',    desc:'영웅의 기운. DEF +2.',            slot:'body', stat:{def:2}},
+  {id:'lab_coat',    icon:'🥼', name:'연구원 가운',  desc:'지식의 힘. INT +3.',              slot:'body', stat:{int:3}},
+];
+
+// ============================================================
+// 데이터: NPC 채팅
+// ============================================================
+const NPC_CHAT = [
+  {race:'human',  name:'방랑기사',   msgs:['동쪽에 보스 나왔다고 카더라','슬라임한테 죽었다... 존심 버렸음','황야 3시간째인데 레벨업 안됨 ㅜㅜ','미믹한테 또 당함... 박스는 믿지마라','용사가 되려했으나 슬라임에 막혔음','파티 구함 혼자 무서움','드래곤 잡으러 갔다가 즉사했습니다']},
+  {race:'elf',    name:'Eilara',     msgs:['마법 연구 중... 방해하지 마세요','엘프어 수강료 500G임 배울 분','인간들 냄새나 ㅡㅡ','활 쏘다가 아군 맞췄는데 아군이 없었음','트리앤트가 말을 거는 줄 알았는데 공격함','레벨 15 달성! 아직 갈길이 멀다','공허의 정수 얻었다 ㄷㄷ']},
+  {race:'dwarf',  name:'Stonefist',  msgs:['드워프 키 작다고 놀리면 도끼 날린다','맥주 마시고 싶다 게임에 맥주 없음?','수염이 무기다 ㅋㅋㅋ','골렘 잡으려다 바위에 깔렸습니다','장비 제작 의뢰 받음 광석 가져와라','단련은 배신하지 않음 몸이 배신하지','드래곤 비늘 얻었다!! 희귀 아이템!!']},
+  {race:'demon',  name:'Xalath',     msgs:['저주 팔아요 합리적인 가격','드래곤? 나 어렸을때 애완용으로 키움','어둠의 힘 원하는가? 이자 붙는다','마족영토 오면 죽는다 ㅋ 나도 죽었음','인간들 약하네 ㅉㅉ','두려움을 모르는가 그렇다면 가르쳐주지','마왕 잡았다... 아니 못 잡았다 죽었다']},
+  {race:'human',  name:'초보용사123',msgs:['어떻게 레벨업해요??','슬라임이 너무 강한데 버그 아님?','죽으면 어떻게 되나요','ㅁㅊ 미믹이 상자인줄 알고 열었음','게임 재밌다 ㅋㅋ 대박','골드 어디서 많이 버나요','코스튬 어떻게 입어요??']},
+  {race:'system', name:'SYSTEM',     msgs:['[공지] 야간 레이드 보스 30분 후 스폰','[경고] 미믹은 절대 열지 마세요','[팁] 레벨차이 5 이상 몬스터는 즉사 위험','[공지] 마족 영토 전쟁 이벤트 진행 중','[팁] 사냥으로만 얻을 수 있는 아이템이 있습니다!']},
+  {race:'dwarf',  name:'광부아재',   msgs:['광석 캐다가 몬스터 나왔는데 냅다 달림','곡괭이가 무기보다 강함 ㄹㅇ','드워프 산맥은 내 집이다 나가','레벨 22 달성 이제 진짜 드워프다']},
+  {race:'elf',    name:'Sylvara',    msgs:['와이번 3마리 동시에 나타남 ㅎㅎ 죽음','트리앤트한테 친구먹자 했더니 공격함','엘프 숲 오지마 진심 위험','자연과 하나가 되는 중...']},
+];
+
+// ============================================================
+// 게임 상태
+// ============================================================
+const S = {
+  char: {
+    name:'', race:'human', wpn:'대검', lv:1, xp:0, xpMax:150,
+    hp:100, hpMax:100, mp:80, mpMax:80,
+    str:10, int:10, agi:12, def:8,
+    gold:150, skills:[], inv:[], equip:{head:null,body:null},
+    hasAmulet:false, dodgeBonus:0, runeBlast:0, shieldUp:false,
+    stunBoost:0, regenMult:1, goldBonus:0,
+  },
+  zone:'황야', monsters:[], quests:null, lock:false, fTick:0
+};
+
+// ============================================================
+// 픽셀 아트 렌더러
+// ============================================================
+const PIX = {
+  draw(ctx, race, sz, costume) {
+    ctx.clearRect(0,0,sz,sz);
+    const p = RACES[race].pal, S2 = sz/24;
+    const px = (x,y,c,w=1,h=1) => { ctx.fillStyle=c; ctx.fillRect(x*S2,y*S2,w*S2,h*S2); };
+    px(7,9,p.cloth,10,3); px(4,9,p.cloth,3,3); px(17,9,p.cloth,3,3);
+    px(4,12,p.skin,3,1); px(17,12,p.skin,3,1);
+    px(7,12,p.armor,4,4); px(13,12,p.armor,4,4);
+    px(7,16,p.cloth,4,2); px(13,16,p.cloth,4,2);
+    for(let x=6;x<=17;x++) for(let y=2;y<=7;y++) px(x,y,p.skin);
+    for(let x=5;x<=18;x++) px(x,1,p.hair);
+    for(let x=5;x<=6;x++) { px(x,2,p.hair); px(x,3,p.hair); }
+    for(let x=17;x<=18;x++) { px(x,2,p.hair); px(x,3,p.hair); }
+    px(8,5,'#000'); px(15,5,'#000');
+    px(9,5,'#332200'); px(16,5,'#332200');
+    px(10,7,'#8b4040',3,1);
+    if(race==='elf') { px(4,4,'#c8b890',2,1); px(18,4,'#c8b890',2,1); px(9,5,'#88ccff'); px(16,5,'#88ccff'); px(21,4,'#8b6030',1,6); }
+    if(race==='demon') { px(7,0,p.acc,1,2); px(16,0,p.acc,1,2); px(6,0,p.acc); px(17,0,p.acc); for(let x=6;x<=17;x++) for(let y=2;y<=7;y++) px(x,y,p.skin); px(8,5,'#ff2020'); px(15,5,'#ff2020'); px(20,3,p.acc,1,6); px(19,3,p.acc); px(21,3,p.acc); }
+    if(race==='dwarf') { for(let x=6;x<=17;x++) for(let y=7;y<=9;y++) px(x,y,p.hair); for(let x=0;x<=3;x++) for(let y=9;y<=13;y++) px(x,y,p.armor); px(1,11,'#d4a020'); px(20,7,p.armor,1,3); px(21,6,'#8b6030'); px(21,8,'#8b6030'); }
+    if(race==='human') { px(20,6,p.acc,1,5); px(19,8,p.armor); px(21,8,p.armor); }
+    if(costume) {
+      if(costume==='sunglasses') { px(7,5,'#1a1a2a',3,2); px(14,5,'#1a1a2a',3,2); px(10,6,'#111',1,1); }
+      if(costume==='glasses') { px(7,5,'#8b6030',3,2); px(14,5,'#8b6030',3,2); px(10,6,'#8b6030',1,1); }
+      if(costume==='santa_hat') { px(7,0,'#cc2020',10,2); px(6,2,'#eee',12,1); }
+      if(costume==='crown') { px(7,0,'#d4a020',10,2); px(8,0,'#fff',1,1); px(12,0,'#fff',1,1); px(16,0,'#fff',1,1); }
+      if(costume==='witch_hat') { px(9,0,'#1a0a2a',6,1); px(8,1,'#1a0a2a',8,1); px(7,2,'#1a0a2a',10,1); }
+      if(costume==='halo') { ctx.strokeStyle='#ffe080'; ctx.lineWidth=S2*0.8; ctx.beginPath(); ctx.ellipse(12*S2,0.5*S2,5*S2,1.5*S2,0,0,Math.PI*2); ctx.stroke(); }
+      if(costume==='devil_horns') { px(8,0,'#cc2020',2,2); px(14,0,'#cc2020',2,2); }
+      if(costume==='pirate_hat') { px(6,0,'#1a1a1a',12,2); px(8,0,'#eee',8,1); }
+    }
+  }
+};
+
+// ============================================================
+// 캐릭터 생성
+// ============================================================
+const CR = {
+  race: 'human',
+  init() {
+    const g = document.getElementById('rg'); g.innerHTML = '';
+    Object.entries(RACES).forEach(([k,r]) => {
+      const d = document.createElement('div');
+      d.className = 'rc' + (k==='human'?' sel':'');
+      d.dataset.race = k;
+      d.innerHTML = `<canvas class="rp" id="rp-${k}" width="24" height="24"></canvas><span class="rn">${r.label}</span><div class="rl">${r.lore}</div><div class="rs">STR:${r.base.str} INT:${r.base.int} AGI:${r.base.agi} DEF:${r.base.def}</div>`;
+      d.onclick = () => this.sel(k);
+      g.appendChild(d);
+      PIX.draw(document.getElementById('rp-'+k).getContext('2d'), k, 24);
+    });
+    this.upd();
+    document.getElementById('cname').addEventListener('keydown', e => { if(e.key==='Enter') this.enter(); });
+  },
+  sel(r) {
+    document.querySelectorAll('.rc').forEach(c => c.classList.remove('sel'));
+    document.querySelector('.rc[data-race="'+r+'"]').classList.add('sel');
+    this.race = r; this.upd();
+  },
+  upd() {
+    PIX.draw(document.getElementById('apc').getContext('2d'), this.race, 24);
+    const rb = RACES[this.race].base;
+    const vibe = document.getElementById('svibe').value;
+    const wpn = document.getElementById('swpn').value;
+    const d = {
+      human: `${vibe} 인간 전사. ${wpn}을 주무기로 황야에서 살아남은 자.`,
+      elf:   `${vibe} 엘프. ${wpn} 능숙. 숲의 마법사.`,
+      dwarf: `${vibe} 드워프. ${wpn}과 수염도 무기. 산맥의 베테랑.`,
+      demon: `${vibe} 마족. ${wpn}에서 어둠의 기운 흘러나옴.`,
+    };
+    document.getElementById('aidesc').textContent = d[this.race];
+    document.getElementById('svp').innerHTML = [{k:'STR',v:rb.str},{k:'INT',v:rb.int},{k:'AGI',v:rb.agi},{k:'DEF',v:rb.def}]
+      .map(s => `<div class="svr"><div class="svl">${s.k}</div><div class="svb"><div class="svf" style="width:${s.v/25*100}%"></div></div><div class="svn">${s.v}</div></div>`).join('');
+  },
+  enter() {
+    SFX.init();
+    const name = document.getElementById('cname').value.trim() || '이름없는자';
+    const r = RACES[this.race];
+    const wpn = document.getElementById('swpn').value;
+    Object.assign(S.char, {name, race:this.race, wpn, ...r.base});
+    S.char.hpMax = 100 + r.base.def*3 + r.base.str*2;
+    S.char.hp = S.char.hpMax;
+    S.char.mpMax = 60 + r.base.int*4;
+    S.char.mp = S.char.mpMax;
+    const raceSkills = RACE_SKILLS[this.race];
+    const skillList = raceSkills[wpn] || raceSkills[Object.keys(raceSkills)[0]];
+    S.char.skills = skillList.map(s => ({...s, cdLeft:0}));
+    S.char.inv = [];
+    S.char.equip = {head:null, body:null};
+    document.getElementById('mcc').getContext('2d').drawImage(document.getElementById('apc'),0,0);
+    const saved = SAVE.load();
+    if(saved) {
+      if(confirm('저장된 게임이 있습니다. 불러올까요?')) {
+        Object.assign(S.char, saved.char);
+        S.zone = saved.zone || '황야';
+        scr('sg'); G.init();
+        return;
+      }
+    }
+    scr('sg'); G.init();
+  }
+};
+
+// ============================================================
+// WebSocket
+// ============================================================
+const WS = {
+  ws: null, mode: 'world',
+  connect() {
+    const proto = location.protocol==='https:'?'wss':'ws';
+    try {
+      this.ws = new WebSocket(proto+'://'+location.host);
+      this.ws.onopen = () => {
+        document.querySelectorAll('.ws-dot').forEach(d => d.classList.add('live'));
+        this.ws.send(JSON.stringify({type:'join', name:S.char.name, race:S.char.race}));
+      };
+      this.ws.onmessage = (e) => {
+        let d; try { d = JSON.parse(e.data); } catch { return; }
+        if(d.type==='chat' && ((d.channel==='world'&&CH.mode==='world')||(d.channel==='nation'&&CH.mode==='nation'&&d.race===S.char.race)))
+          CH.append({race:d.race, name:d.name, text:d.text});
+        if(d.type==='online') document.getElementById('conline').textContent = '접속자 '+d.count+'명';
+        if(d.type==='lvup'&&CH.mode==='world') CH.append({race:'system', name:'SYSTEM', text:'🎉 '+d.name+' Lv.'+d.lv+' 달성!'});
+      };
+      this.ws.onclose = () => {
+        document.querySelectorAll('.ws-dot').forEach(d => d.classList.remove('live'));
+        setTimeout(() => this.connect(), 3000);
+      };
+      this.ws.onerror = () => this.ws.close();
+    } catch(e) {}
+  },
+  send(m) { if(this.ws && this.ws.readyState===1) this.ws.send(JSON.stringify(m)); }
+};
+
+// ============================================================
+// 채팅 시스템 (버그 수정: 중복 전송 방지)
+// ============================================================
+const CH = {
+  mode: 'world',
+  _sending: false,
+  init() { WS.connect(); this.seed(); setInterval(() => this.sim(), 6000+Math.random()*6000); },
+  seed() {
+    const el = document.getElementById('cmsgs'); el.innerHTML = '';
+    this.append({race:'system', name:'SYSTEM', text:'판타챗에 접속했습니다. 하드코어 모드 활성화.'});
+    NPC_CHAT.slice(0,3).forEach((n,i) => setTimeout(() => this.append({race:n.race, name:n.name, text:n.msgs[0]}), (i+1)*700));
+  },
+  append(m) {
+    const el = document.getElementById('cmsgs');
+    const d = document.createElement('div'); d.className = 'msg';
+    d.innerHTML = '<span class="mn3 '+m.race+'">['+esc(m.name)+']</span><span class="mt2">'+esc(m.text||'')+'</span>';
+    el.appendChild(d); el.scrollTop = el.scrollHeight;
+    while(el.children.length > 60) el.removeChild(el.firstChild);
+  },
+  send() {
+    if(this._sending) return;
+    const inp = document.getElementById('cinp'), txt = inp.value.trim();
+    if(!txt) return;
+    this._sending = true;
+    inp.value = ''; inp.blur();
+    this.append({race:'self', name:S.char.name, text:txt});
+    WS.send({type:'chat', text:txt, channel:this.mode});
+    setTimeout(() => { this._sending = false; }, 150);
+  },
+  sw(m, btn) {
+    this.mode = m; WS.mode = m;
+    document.querySelectorAll('.ctb').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const el = document.getElementById('cmsgs'); el.innerHTML = '';
+    if(m==='nation') this.append({race:'system', name:'SYSTEM', text:RACES[S.char.race].label+' 국가 채널'});
+    else if(m==='whisper') this.append({race:'system', name:'SYSTEM', text:'귓말 기능 준비 중'});
+    else this.seed();
+  },
+  sim() {
+    if(this.mode!=='world') return;
+    const n = NPC_CHAT[Math.floor(Math.random()*NPC_CHAT.length)];
+    this.append({race:n.race, name:n.name, text:n.msgs[Math.floor(Math.random()*n.msgs.length)]});
+  }
+};
+
+// ============================================================
+// 메인 게임 로직
+// ============================================================
+const G = {
+  fTick: 0,
+  init() {
+    const c = S.char;
+    document.getElementById('hrace').textContent = RACES[c.race].label;
+    document.getElementById('sname').textContent = c.name;
+    document.getElementById('srace').textContent = RACES[c.race].label + ' / ' + c.wpn;
+    S.quests = JSON.parse(JSON.stringify([
+      {id:'q1',name:'슬라임 토벌',   desc:'슬라임 5마리 처치',  reward:'XP +200, Gold +80',  target:'slime',   need:5, got:0, done:false, xp:200, gold:80},
+      {id:'q2',name:'고블린 패잔병', desc:'고블린 3마리 처치',  reward:'XP +150, Gold +60',  target:'goblin',  need:3, got:0, done:false, xp:150, gold:60},
+      {id:'q3',name:'오크 수장 제거',desc:'오크 3마리 처치',    reward:'XP +400, Gold +160', target:'orc',     need:3, got:0, done:false, xp:400, gold:160},
+      {id:'q4',name:'뱀파이어 사냥', desc:'뱀파이어 2마리 처치',reward:'XP +500, Gold +220', target:'vampire', need:2, got:0, done:false, xp:500, gold:220},
+      {id:'q5',name:'전설의 드래곤', desc:'드래곤 처치 - 극고위험',reward:'XP +1500, Gold +600',target:'dragon',need:1,got:0,done:false,xp:1500,gold:600},
+      {id:'q6',name:'마왕 토벌',     desc:'마왕 처치 - 최종 보스',reward:'XP +3000, Gold +1000',target:'demon_lord',need:1,got:0,done:false,xp:3000,gold:1000},
+    ]));
+    this.hud(); this.rStat(); this.rSkill(); this.rInv();
+    this.spawn('황야'); this.rMon(); this.rQuest(); this.rShop(); this.drawMap(); this.fieldLoop();
+    setInterval(() => this.regen(), 3000);
+    CH.init();
+    // 채팅 입력 이벤트 (버그 수정: 단일 이벤트)
+    const cinp = document.getElementById('cinp');
+    cinp.onkeydown = (e) => { if(e.key==='Enter') { e.preventDefault(); CH.send(); } };
+  },
+
+  hud() {
+    const c = S.char;
+    document.getElementById('hptx').textContent = c.hp+'/'+c.hpMax;
+    document.getElementById('mptx').textContent = c.mp+'/'+c.mpMax;
+    document.getElementById('xptx').textContent = c.xp+'/'+c.xpMax;
+    document.getElementById('hpb').style.width = Math.max(0,c.hp/c.hpMax*100)+'%';
+    document.getElementById('mpb').style.width = Math.max(0,c.mp/c.mpMax*100)+'%';
+    document.getElementById('xpb').style.width = Math.max(0,c.xp/c.xpMax*100)+'%';
+    document.getElementById('hgold').textContent = c.gold;
+    document.getElementById('hlv').textContent = c.lv;
+  },
+
+  rStat() {
+    const c = S.char;
+    const dodgePct = Math.min(80, c.agi * 0.8 + c.dodgeBonus);
+    const critPct = Math.min(60, c.agi * 0.5);
+    document.getElementById('smini').innerHTML = [
+      {k:'STR', v:c.str, note:`공격력 ~${Math.floor(c.str*2.2)}`},
+      {k:'INT', v:c.int, note:`스킬 ~${Math.floor(c.int*3.0)}`},
+      {k:'AGI', v:c.agi, note:`회피 ${dodgePct.toFixed(0)}%`},
+      {k:'DEF', v:c.def, note:`피해감소 ~${Math.floor(c.def*0.8)}`},
+    ].map(s => `<div class="sr"><div class="sl">${s.k}</div><div class="sb"><div class="sf" style="width:${Math.min(100,s.v/50*100)}%"></div></div><div class="sv">${s.v}</div><span style="font-size:9px;color:#555;margin-left:.2rem">${s.note}</span></div>`).join('');
+  },
+
+  rSkill() {
+    const c = S.char;
+    const maxSkills = 1 + Math.floor((c.lv-1)/5);
+    const chips = document.getElementById('schips');
+    chips.innerHTML = c.skills.map((sk,i) => {
+      const locked = i >= maxSkills;
+      if(locked) return `<div class="sch locked" title="Lv.${sk.unlockLv} 해금">${sk.name} 🔒</div>`;
+      return `<div class="sch ${sk.cdLeft>0?'on-cd':''}" id="sch-${i}" onclick="G.skill(${i})">${sk.name} <span style="font-size:10px;color:#4060aa">${sk.mp}MP</span></div>`;
+    }).join('');
+    const bar = document.getElementById('skill-bar');
+    bar.innerHTML = c.skills.map((sk,i) => {
+      const locked = i >= maxSkills;
+      if(locked) return `<button class="sk-btn locked" title="Lv.${sk.unlockLv} 해금">${sk.name}<span class="lk-txt">Lv.${sk.unlockLv}</span></button>`;
+      return `<button class="sk-btn ${sk.cdLeft>0?'cd':''}" id="skb-${i}" onclick="G.skill(${i})">${sk.name}<span class="mpc">${sk.mp}MP</span><div class="cdo" id="cdo-${i}" style="width:0%"></div></button>`;
+    }).join('');
+  },
+
+  rInv() {
+    const g = document.getElementById('invg'); g.innerHTML = '';
+    for(let i=0;i<20;i++) {
+      const it = S.char.inv[i];
+      const s = document.createElement('div');
+      s.className = 'is' + (it?' has':'') + (it&&it.huntOnly?' hunt-item':'');
+      if(it) {
+        s.innerHTML = `<div class="it-icon">${it.icon}</div><div class="it-name">${it.name}</div>`;
+        s.title = it.name + ': ' + it.desc;
+        s.onclick = () => openInvModal(i);
+      }
+      g.appendChild(s);
+    }
+  },
+
+  spawn(region) {
+    S.zone = region;
+    document.getElementById('hzone').textContent = region;
+    const pool = MONSTERS.filter(m => region==='황야' ? m.lv<=5 : m.region===region);
+    S.monsters = [...pool].sort(() => Math.random()-.5).slice(0,6).map(m => ({...m, curHp:m.hpMax, dead:false, stunned:0}));
+  },
+
+  rMon() {
+    document.getElementById('mlist').innerHTML = S.monsters.map((m,i) =>
+      `<div class="mr${m.dead?' d':''}" id="mr-${i}" onclick="G.atk(${i})"><div class="mi">${m.icon}</div><div class="mn2"><div class="mn">${m.name}</div><div class="mh"><div class="mf" style="width:${m.curHp/m.hpMax*100}%;background:${m.color}"></div></div></div><div class="mlv">Lv.${m.lv}</div></div>`
+    ).join('');
+  },
+
+  shake(i) { const el=document.getElementById('mr-'+i); if(!el)return; el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),400); },
+  pop(i,dmg,col) { const el=document.getElementById('mr-'+i); if(!el)return; const p=document.createElement('div'); p.className='dmg-pop'; p.style.color=col||'#d05050'; p.textContent='-'+dmg; el.appendChild(p); setTimeout(()=>p.remove(),700); },
+
+  atk(i) {
+    if(S.lock) return;
+    const m = S.monsters[i]; if(!m||m.dead) return;
+    S.lock = true;
+    const c = S.char;
+    // STR이 실제 공격력에 유의미하게 반영
+    let dmg = Math.max(1, Math.floor(c.str * 1.8 + Math.random()*12 - 3));
+    // 크리티컬: AGI 기반
+    const critChance = Math.min(50, c.agi * 0.5);
+    if(Math.random()*100 < critChance) {
+      dmg = Math.floor(dmg * 1.8);
+      this.log('💥 크리티컬! ' + dmg + ' 피해', 'skill');
+      SFX.play('skill');
+    } else {
+      SFX.play('atk');
+    }
+    if(c.runeBlast) { dmg *= c.runeBlast; c.runeBlast = 0; this.log('💥 룬 발동!', 'skill'); }
+    m.curHp = Math.max(0, m.curHp - dmg);
+    this.shake(i); this.pop(i, dmg);
+    this.log(m.icon+' '+m.name+'에게 '+dmg+' 피해', 'dmg');
+    setTimeout(() => { m.curHp<=0 ? this.kill(m,i) : this.mhit(m,i); this.rMon(); this.hud(); S.lock=false; }, 350);
+  },
+
+  skill(si) {
+    if(S.lock) return;
+    const c = S.char;
+    const maxSkills = 1 + Math.floor((c.lv-1)/5);
+    if(si >= maxSkills) { this.log('Lv.'+c.skills[si].unlockLv+' 이상에서 해금됩니다', 'sys'); return; }
+    const sk = c.skills[si]; if(!sk||sk.cdLeft>0) return;
+    if(c.mp < sk.mp) { this.log('MP 부족!', 'sys'); return; }
+    S.lock = true; c.mp -= sk.mp;
+    this.log(sk.fx, 'skill');
+    SFX.play('skill');
+    // INT가 스킬 위력에 유의미하게 반영
+    const intMult = 1 + (c.int / 30);
+    // 스킬 대상: 살아있는 몬스터 중 랜덤 선택 (자연스럽게)
+    const aliveMonsters = S.monsters.map((m,i)=>({m,i})).filter(x=>!x.m.dead);
+    const target = aliveMonsters.length > 0 ? aliveMonsters[Math.floor(Math.random()*aliveMonsters.length)] : null;
+    const m = target ? target.m : null;
+    const mi = target ? target.i : -1;
+
+    if(sk.type==='atk') {
+      const stat = (sk.id==='arrow'||sk.id==='dark'||sk.id==='arcane'||sk.id==='bolt') ? c.int : c.str;
+      const dmg = Math.floor(stat * sk.power * intMult + Math.random()*15);
+      if(m) { m.curHp=Math.max(0,m.curHp-dmg); this.shake(mi); this.pop(mi,dmg,'#c060d0'); }
+      this.log(sk.name+': '+dmg+' 피해! (대상: '+(m?m.name:'없음')+')', 'skill');
+    } else if(sk.type==='drain') {
+      const dmg = Math.floor(c.str * sk.power * intMult + Math.random()*10);
+      if(m) { m.curHp=Math.max(0,m.curHp-dmg); this.shake(mi); this.pop(mi,dmg,'#aa2050'); }
+      c.hp = Math.min(c.hpMax, c.hp+dmg);
+      this.log('생명 '+dmg+' 흡수! HP 회복', 'skill');
+      SFX.play('heal');
+    } else if(sk.type==='heal') {
+      const h = Math.floor(c.hpMax * sk.power * intMult);
+      c.hp = Math.min(c.hpMax, c.hp+h);
+      this.log('HP +'+h+' 회복', 'heal');
+      SFX.play('heal');
+    } else if(sk.type==='def') {
+      c.shieldUp = true;
+      this.log('다음 피해 70% 감소 (방어 준비)', 'inf');
+    } else if(sk.type==='stun') {
+      if(m) { m.stunned = (sk.id==='fear'?3:2); }
+      this.log('적 스턴! '+(m?m.name:'')+(m?' 행동 불가':''), 'skill');
+    } else if(sk.type==='buff') {
+      if(sk.id==='forge') { c.str+=4; this.rStat(); this.log('STR +4 영구!', 'inf'); }
+      if(sk.id==='eagle') { c.agi+=3; c.dodgeBonus+=10; this.rStat(); this.log('AGI +3, 회피 +10%!', 'inf'); }
+    }
+
+    sk.cdLeft = sk.cd; this.startCD(si, sk.cd);
+    if(m && m.curHp<=0) {
+      setTimeout(() => { this.kill(m,mi); S.lock=false; this.rMon(); this.hud(); }, 350);
+    } else if(m && sk.type!=='heal' && sk.type!=='buff') {
+      setTimeout(() => { this.mhit(m,mi); S.lock=false; this.rMon(); this.hud(); }, 400);
+    } else { S.lock=false; this.hud(); }
+    this.rSkill();
+  },
+
+  startCD(idx, cd) {
+    const start = Date.now();
+    const bar = document.getElementById('cdo-'+idx);
+    const btn = document.getElementById('skb-'+idx);
+    const chip = document.getElementById('sch-'+idx);
+    if(btn) btn.classList.add('cd');
+    if(chip) chip.classList.add('on-cd');
+    const tick = () => {
+      const el = Date.now()-start, pct = Math.max(0,100-(el/cd*100));
+      if(bar) bar.style.width = pct+'%';
+      if(el >= cd) {
+        S.char.skills[idx].cdLeft = 0;
+        if(btn) btn.classList.remove('cd');
+        if(bar) bar.style.width = '0%';
+        if(chip) chip.classList.remove('on-cd');
+        return;
+      }
+      S.char.skills[idx].cdLeft = cd-el;
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  },
+
+  mhit(m, i) {
+    if(m.stunned>0) { m.stunned--; this.log(m.icon+' '+m.name+' 스턴! (반격 불가)', 'inf'); return; }
+    const c = S.char;
+    // DEF가 실제로 피해 감소에 반영
+    let d = Math.max(1, m.atk - Math.floor(c.def*0.8) + Math.floor(Math.random()*6));
+    // AGI 기반 회피 (회피율 = agi*0.8 + dodgeBonus)
+    const dodgePct = Math.min(80, c.agi * 0.8 + c.dodgeBonus);
+    if(Math.random()*100 < dodgePct) {
+      this.log('💨 회피했습니다!', 'dodge');
+      SFX.play('dodge');
+      // 회피 모션 애니메이션
+      const anim = document.createElement('div');
+      anim.className = 'dodge-anim';
+      anim.textContent = '💨 DODGE!';
+      document.body.appendChild(anim);
+      setTimeout(() => anim.remove(), 1200);
+      return;
+    }
+    if(c.shieldUp) { d = Math.floor(d*.3); c.shieldUp=false; this.log('🛡️ 방패로 막음!', 'inf'); }
+    if(c.stunBoost > 0 && Math.random()*100 < c.stunBoost) {
+      this.log('얼음 파편 발동! 적 스턴!', 'skill');
+      m.stunned = 1;
+    }
+    c.hp = Math.max(0, c.hp-d);
+    this.log(m.icon+' 반격! '+d+' 피해', 'dmg');
+    SFX.play('hit');
+    if(c.hp<=0) setTimeout(() => this.die(), 400);
+  },
+
+  kill(m, i) {
+    m.dead = true;
+    const goldGain = Math.floor(m.gold * (1 + S.char.goldBonus));
+    this.log(m.icon+' '+m.name+' 처치! XP+'+m.xp+' Gold+'+goldGain, 'loot');
+    S.char.xp += m.xp; S.char.gold += goldGain;
+    SFX.play('loot');
+    // 일반 아이템 드롭
+    if(Math.random() < .4 && S.char.inv.length < 20) {
+      const it = ITEM_DATA[Math.floor(Math.random()*ITEM_DATA.length)];
+      S.char.inv.push({...it});
+      this.log('아이템 획득: '+it.icon+' '+it.name, 'loot');
+      this.rInv();
+    }
+    // 사냥 전용 아이템 드롭 (낮은 확률)
+    if(Math.random() < .15 && S.char.inv.length < 20) {
+      const huntPool = HUNT_ITEMS.filter(h => {
+        if(h.id==='dragon_scale') return m.id==='dragon';
+        if(h.id==='lich_soul') return m.id==='lich';
+        if(h.id==='cerberus_claw') return m.id==='cerberus';
+        if(h.id==='vampire_blood') return m.id==='vampire';
+        if(h.id==='troll_heart') return m.id==='troll';
+        if(h.id==='mimic_key') return m.id==='mimic';
+        if(h.id==='banshee_tear') return m.id==='banshee';
+        if(h.id==='wolf_fang') return m.id==='wolf';
+        return true;
+      });
+      if(huntPool.length > 0) {
+        const hit = huntPool[Math.floor(Math.random()*huntPool.length)];
+        S.char.inv.push({...hit});
+        this.log('🏹 사냥 전용 아이템: '+hit.icon+' '+hit.name, 'loot');
+        this.rInv();
+      }
+    }
+    this.qProg(m.id); this.lvChk();
+    setTimeout(() => { m.curHp=m.hpMax; m.dead=false; this.rMon(); this.log(m.icon+' '+m.name+' 리스폰', 'sys'); }, 15000);
+  },
+
+  qProg(id) {
+    let ch = false;
+    S.quests.forEach(q => {
+      if(!q.done && q.target===id) {
+        q.got = Math.min(q.need, q.got+1);
+        if(q.got >= q.need) {
+          q.done = true;
+          S.char.xp += q.xp || 0;
+          S.char.gold += q.gold || 0;
+          this.log('📜 퀘스트 완료: "'+q.name+'" — '+q.reward, 'inf');
+          SFX.play('lvup');
+        }
+        ch = true;
+      }
+    });
+    if(ch) this.rQuest();
+  },
+
+  lvChk() {
+    const c = S.char;
+    while(c.xp >= c.xpMax) {
+      c.xp -= c.xpMax;
+      c.xpMax = Math.floor(c.xpMax * 1.4);
+      c.lv++;
+      // 종족별 레벨업 스탯 차등
+      if(c.race==='human') { c.str+=3; c.int+=2; c.agi+=3; c.def+=2; c.hpMax+=30; c.mpMax+=18; }
+      else if(c.race==='elf') { c.str+=1; c.int+=4; c.agi+=4; c.def+=1; c.hpMax+=20; c.mpMax+=28; }
+      else if(c.race==='dwarf') { c.str+=4; c.int+=1; c.agi+=1; c.def+=5; c.hpMax+=45; c.mpMax+=10; }
+      else if(c.race==='demon') { c.str+=3; c.int+=4; c.agi+=2; c.def+=2; c.hpMax+=28; c.mpMax+=25; }
+      c.hp = c.hpMax; c.mp = c.mpMax;
+      this.log('★ 레벨업! Lv.'+c.lv+' — 스탯 상승', 'inf');
+      SFX.play('lvup');
+      document.getElementById('hlv').textContent = c.lv;
+      this.rStat(); this.rSkill(); this.spawn(S.zone); this.rMon();
+      const fl = document.createElement('div'); fl.className='lvfl'; document.body.appendChild(fl); setTimeout(()=>fl.remove(),700);
+      const ann = document.createElement('div'); ann.className='wann'; ann.textContent='🎉 '+c.name+' Lv.'+c.lv+' 달성!'; document.body.appendChild(ann); setTimeout(()=>ann.remove(),3100);
+      WS.send({type:'lvup', lv:c.lv, name:c.name, race:c.race});
+      // 5렙마다 스킬 해금 알림
+      if(c.lv % 5 === 0 && c.lv/5 < c.skills.length) {
+        const newSk = c.skills[Math.floor(c.lv/5)];
+        if(newSk) setTimeout(() => { this.log('🌟 새 스킬 해금: '+newSk.name+'!', 'skill'); SFX.play('equip'); }, 500);
+      }
+    }
+  },
+
+  die() {
+    const c = S.char; c.hp=0; this.hud();
+    SFX.play('die');
+    if(c.hasAmulet && Math.random() < c.amuletChance) {
+      this.log('부적 발동! 자동 부활!', 'inf');
+      c.hp = Math.floor(c.hpMax*.3); this.hud(); return;
+    }
+    document.getElementById('dstat').textContent = 'Lv.'+c.lv+' — XP 30% 손실';
+    document.getElementById('dcost').textContent = '골드 부활: '+c.lv*500+'G 필요 (현재 '+c.gold+'G)';
+    document.getElementById('sd').classList.add('on');
+  },
+
+  respawnFree() { const c=S.char; c.xp=Math.floor(c.xp*.7); c.hp=c.hpMax; c.mp=c.mpMax; document.getElementById('sd').classList.remove('on'); this.hud(); this.log('시작 지점 부활. XP 30% 손실.','sys'); },
+  respawnPaid() { const c=S.char,cost=c.lv*500; if(c.gold<cost){document.getElementById('dcost').textContent='골드 부족! 필요 '+cost+'G / 현재 '+c.gold+'G';return;} c.gold-=cost; c.hp=c.hpMax; c.mp=c.mpMax; document.getElementById('sd').classList.remove('on'); this.hud(); this.log('💛 현재 위치 부활! '+cost+'G 소모','loot'); },
+  reviveInfo() { this.log('캐릭터 보험 — 현재 부활 비용: '+S.char.lv*500+'G','inf'); },
+
+  regen() {
+    if(S.char.hp<=0) return;
+    const regenHP = Math.floor(8 * S.char.regenMult);
+    const regenMP = Math.floor(12 * S.char.regenMult);
+    S.char.hp = Math.min(S.char.hpMax, S.char.hp+regenHP);
+    S.char.mp = Math.min(S.char.mpMax, S.char.mp+regenMP);
+    this.hud();
+  },
+
+  log(msg, type) {
+    const el = document.createElement('span');
+    el.className = 'le '+(type||'sys');
+    el.textContent = '› '+msg;
+    const log = document.getElementById('flog');
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    while(log.children.length > 50) log.removeChild(log.firstChild);
+  },
+
+  rQuest() { document.getElementById('qlist').innerHTML = S.quests.map(q => `<div class="qc"><div class="qn">${q.done?'✓ ':''} ${q.name}</div><div class="qd">${q.desc}</div>${q.target?`<div class="qp">진행: ${q.got}/${q.need}</div>`:''}<div class="qr">▸ ${q.reward}</div></div>`).join(''); },
+
+  rShop() {
+    document.getElementById('shoplist').innerHTML = SHOP.map((it,i) =>
+      `<div class="si2"><div class="sin"><div class="sn">${it.icon} ${it.name}</div><div class="sd2">${it.desc}</div></div><div class="sc3">${it.cost}G</div><button class="bb" onclick="G.buy(${i})">구매</button></div>`
+    ).join('');
+  },
+
+  buy(i) {
+    const it = SHOP[i], c = S.char;
+    if(c.gold < it.cost) { this.log('골드 부족!', 'sys'); return; }
+    c.gold -= it.cost;
+    SFX.play('buy');
+    const fx = document.createElement('div'); fx.className='item-fx';
+    fx.innerHTML = `<div class="ifx-name">${it.icon} ${it.name}</div><div class="ifx-desc">${it.desc}</div>`;
+    document.body.appendChild(fx); setTimeout(()=>fx.remove(), 900);
+    this.applyItemEff(it.eff, it.val, it.name, it.icon);
+    this.log(it.icon+' '+it.name+' 구매. 잔여 '+c.gold+'G', 'loot');
+    this.hud();
+  },
+
+  useItem(idx) {
+    const c = S.char;
+    const it = c.inv[idx]; if(!it) return;
+    SFX.play('buy');
+    const fx = document.createElement('div'); fx.className='item-fx';
+    fx.innerHTML = `<div class="ifx-name">${it.icon} ${it.name}</div><div class="ifx-desc">${it.desc}</div><div class="ifx-eff">사용됨!</div>`;
+    document.body.appendChild(fx); setTimeout(()=>fx.remove(), 900);
+    this.applyItemEff(it.eff, it.val, it.name, it.icon);
+    c.inv.splice(idx, 1);
+    this.rInv(); this.hud();
+    closeModal('inv-modal');
+  },
+
+  applyItemEff(eff, val, name, icon) {
+    const c = S.char;
+    switch(eff) {
+      case 'hp':       c.hp=Math.min(c.hpMax,c.hp+val); this.log(icon+' HP +'+val, 'heal'); break;
+      case 'mp':       c.mp=Math.min(c.mpMax,c.mp+val); this.log(icon+' MP +'+val, 'inf'); break;
+      case 'elixir':   c.hp=c.hpMax; c.mp=c.mpMax; this.log('HP/MP 완전 회복!', 'heal'); break;
+      case 'elixir_s': c.hp=Math.min(c.hpMax,c.hp+50); c.mp=Math.min(c.mpMax,c.mp+40); this.log('HP+50 MP+40', 'heal'); break;
+      case 'str':      c.str+=val; this.rStat(); this.log('STR +'+val+' 영구!', 'inf'); break;
+      case 'int':      c.int+=val; this.rStat(); this.log('INT +'+val+' 영구!', 'inf'); break;
+      case 'agi':      c.agi+=val; this.rStat(); this.log('AGI +'+val+' 영구!', 'inf'); break;
+      case 'def':      c.def+=val; this.rStat(); this.log('DEF +'+val+' 영구!', 'inf'); break;
+      case 'hpmax':    c.hpMax+=val; c.hp=Math.min(c.hpMax,c.hp+val); this.rStat(); this.log('HP최대 +'+val+'!', 'inf'); break;
+      case 'mpmax':    c.mpMax+=val; c.mp=Math.min(c.mpMax,c.mp+val); this.rStat(); this.log('MP최대 +'+val+'!', 'inf'); break;
+      case 'gold':     c.gold+=val; this.log('Gold +'+val, 'loot'); break;
+      case 'amulet':   c.hasAmulet=true; c.amuletChance=val; this.log('부활 부적 장착! 확률 '+(val*100)+'%', 'inf'); break;
+      case 'cursed':   c.str+=6; c.def-=4; this.rStat(); this.log('저주받은 반지: STR+6 DEF-4', 'skill'); break;
+      case 'rune':     c.runeBlast=3; this.log('💥 다음 공격 3배!', 'skill'); break;
+      case 'rune2':    c.runeBlast=2; this.log('🔥 다음 공격 2배!', 'skill'); break;
+      case 'dodge':    c.dodgeBonus+=val; this.rStat(); this.log('회피율 +'+val+'%', 'inf'); break;
+      case 'madness':  c.str+=val; c.def-=3; this.rStat(); this.log('🧪 광기... STR+'+val+' DEF-3', 'skill'); break;
+      case 'thunder':  c.agi+=5; c.int+=5; this.rStat(); this.log('⚡ AGI+5 INT+5!', 'skill'); break;
+      case 'blood':    c.hpMax+=60; c.str+=5; c.hp=c.hpMax; this.rStat(); this.log('🩸 피의 서약: HP최대+60 STR+5', 'skill'); break;
+      case 'allstat':  c.str+=val; c.int+=val; c.agi+=val; c.def+=val; this.rStat(); this.log('🌀 전 스탯 +'+val, 'skill'); break;
+      case 'stun_boost': c.stunBoost+=val; this.log('🧊 스턴 확률 +'+val+'%', 'inf'); break;
+      case 'shadow_cloak': c.dodgeBonus+=val; this.rStat(); this.log('🌑 회피율 +'+val+'%', 'inf'); break;
+      case 'regen_boost': c.regenMult=(c.regenMult||1)+1; this.log('💚 HP 재생 2배!', 'heal'); break;
+      case 'regen2':   c.regenMult=(c.regenMult||1)+1; this.log('💗 재생력 강화!', 'heal'); break;
+      case 'wolf_fang': c.str+=4; c.agi+=2; this.rStat(); this.log('🦷 STR+4 AGI+2!', 'skill'); break;
+      case 'lich_soul': c.int+=8; c.mpMax+=50; c.mp=c.mpMax; this.rStat(); this.log('💀 INT+8 MP최대+50!', 'skill'); break;
+      case 'banshee_tear': c.mpMax+=60; c.int+=5; c.mp=c.mpMax; this.rStat(); this.log('💧 MP최대+60 INT+5!', 'skill'); break;
+      case 'cerberus_claw': c.str+=10; c.agi+=5; this.rStat(); this.log('🐾 STR+10 AGI+5!', 'skill'); break;
+      case 'random':
+        const effs = ['hp','mp','str','int','agi','def'];
+        const re = effs[Math.floor(Math.random()*effs.length)];
+        const rv = Math.floor(Math.random()*10)+3;
+        this.applyItemEff(re, rv, '수상한 약', '🧪');
+        break;
+    }
+  },
+
+  drawMap() {
+    const cv = document.getElementById('wm'); if(!cv) return;
+    const ctx = cv.getContext('2d'), W=600, H=340;
+    ctx.fillStyle='#020202'; ctx.fillRect(0,0,W,H);
+    const zones = [
+      {name:'인간 왕국',x:15,y:25,w:195,h:130,color:'#0d0d06',border:'#1a1a10',lv:'Lv 1-10',region:'황야'},
+      {name:'엘프 숲',x:385,y:15,w:200,h:140,color:'#060d06',border:'#0e1a0e',lv:'Lv 8-18',region:'엘프 숲'},
+      {name:'드워프 산맥',x:15,y:185,w:205,h:140,color:'#0d0d0a',border:'#1a1a14',lv:'Lv 12-22',region:'드워프 산맥'},
+      {name:'마족 영토',x:375,y:185,w:210,h:140,color:'#0d0606',border:'#1a0e0e',lv:'Lv 18-35',region:'마족 영토'},
+      {name:'황야',x:225,y:120,w:145,h:95,color:'#0a0a0a',border:'#181818',lv:'Lv 1-5',region:'황야'},
+      {name:'동굴',x:230,y:40,w:120,h:72,color:'#080808',border:'#141414',lv:'Lv 5-12',region:'동굴'},
+    ];
+    const minLv = {황야:1,동굴:5,'엘프 숲':8,'드워프 산맥':12,'마족 영토':18};
+    const lv = S.char.lv;
+    zones.forEach(z => {
+      const locked = (minLv[z.region]||1) > lv;
+      ctx.fillStyle = locked?'#050505':z.color;
+      ctx.fillRect(z.x,z.y,z.w,z.h);
+      ctx.strokeStyle = locked?'#111':z.border;
+      ctx.lineWidth=1; ctx.strokeRect(z.x,z.y,z.w,z.h);
+      ctx.fillStyle = locked?'#444':'#ccc'; ctx.font='bold 10px monospace'; ctx.fillText(z.name,z.x+7,z.y+16);
+      ctx.fillStyle = locked?'#333':'#888'; ctx.font='9px monospace'; ctx.fillText(z.lv+(locked?' 🔒':''),z.x+7,z.y+29);
+    });
+    ctx.fillStyle='#f0e7c8'; ctx.fillRect(290,160,7,7);
+    ctx.strokeStyle='#f0e7c844'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(293,163,10,0,Math.PI*2); ctx.stroke();
+    cv.onclick = (e) => {
+      const r=cv.getBoundingClientRect(), mx=(e.clientX-r.left)*(W/r.width), my=(e.clientY-r.top)*(H/r.height);
+      for(const z of zones) {
+        if(mx>=z.x&&mx<=z.x+z.w&&my>=z.y&&my<=z.y+z.h) {
+          const req=minLv[z.region]||1;
+          if(lv<req){this.log('레벨 '+req+' 이상 필요 (현재 Lv.'+lv+')','sys');return;}
+          this.spawn(z.region); this.rMon(); this.log(z.name+'으로 이동','inf');
+          this.tab('field',document.querySelector('.mt-btn'));
+          mobTab('game',document.querySelectorAll('.mob-tab')[1]);
+          break;
+        }
+      }
+    };
+  },
+
+  fieldLoop() {
+    const cv = document.getElementById('fc'); if(!cv) return;
+    const ctx = cv.getContext('2d'), W=cv.width, H=cv.height;
+    const loop = () => {
+      ctx.fillStyle='#020202'; ctx.fillRect(0,0,W,H);
+      [[28,10],[85,7],[145,16],[215,6],[285,13],[350,9],[410,17],[480,6]].forEach(([x,y])=>{ctx.fillStyle='#0e0e0e';ctx.fillRect(x,y,1,1);});
+      ctx.fillStyle='#141410'; ctx.beginPath(); ctx.arc(440,24,12,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#020202'; ctx.beginPath(); ctx.arc(447,21,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#080803';
+      for(let x=0;x<W;x+=3){const h=2+Math.sin(x*.09+this.fTick*.035)*3;ctx.fillRect(x,H-18+h,3,18);}
+      const mini=document.getElementById('mcc');
+      if(mini){ctx.imageSmoothingEnabled=false;ctx.drawImage(mini,40,H-52,32,32);}
+      // 코스튬 표시
+      const headCostume = S.char.equip && S.char.equip.head;
+      if(headCostume) {
+        const c = COSTUMES.find(c=>c.id===headCostume);
+        if(c) { ctx.font='14px serif'; ctx.fillText(c.icon, 40, H-52); }
+      }
+      S.monsters.filter(m=>!m.dead).slice(0,4).forEach((m,i)=>{
+        const mx=130+i*72;
+        ctx.fillStyle=m.color+'aa'; ctx.fillRect(mx,H-46,14,26); ctx.fillRect(mx+2,H-56,10,11);
+        ctx.fillStyle='#080808'; ctx.fillRect(mx-2,H-62,20,2);
+        ctx.fillStyle=m.color+'cc'; ctx.fillRect(mx-2,H-62,20*(m.curHp/m.hpMax),2);
+        ctx.fillStyle='#666'; ctx.font='6px monospace'; ctx.fillText(m.name.slice(0,4),mx-2,H-64);
+      });
+      this.fTick++; requestAnimationFrame(loop);
+    };
+    loop();
+  },
+
+  tab(n, btn) {
+    document.querySelectorAll('.mt-btn').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+    if(btn) btn.classList.add('on'); else document.querySelector('.mt-btn').classList.add('on');
+    document.getElementById('tp-'+n).classList.add('on');
+    if(n==='map') this.drawMap();
+  }
+};
+
+// ============================================================
+// 장비/코스튬 시스템
+// ============================================================
+const EQ = {
+  render() {
+    const c = S.char;
+    // 장비 슬롯
+    document.getElementById('equip-slots').innerHTML = [
+      {slot:'head', label:'머리 장식'},
+      {slot:'body', label:'몸 장식'},
+    ].map(s => {
+      const equipped = c.equip[s.slot];
+      const costume = equipped ? COSTUMES.find(c=>c.id===equipped) : null;
+      return `<div class="equip-slot" onclick="EQ.unequip('${s.slot}')">
+        <div class="slot-label">${s.label}</div>
+        <div class="slot-icon">${costume ? costume.icon : '—'}</div>
+        <div class="slot-name">${costume ? costume.name : '비어있음'}</div>
+        ${costume&&costume.stat ? `<div class="slot-stat">${Object.entries(costume.stat).map(([k,v])=>k+'+'+v).join(' ')}</div>` : ''}
+      </div>`;
+    }).join('');
+    // 코스튬 목록
+    document.getElementById('costume-list').innerHTML = COSTUMES.map(ct => {
+      const isEquipped = c.equip[ct.slot] === ct.id;
+      return `<div class="costume-item ${isEquipped?'equipped':''}" onclick="EQ.equip('${ct.id}')">
+        <div class="costume-icon">${ct.icon}</div>
+        <div class="costume-info">
+          <div class="costume-name">${ct.name}</div>
+          <div class="costume-desc">${ct.desc}</div>
+        </div>
+        <div class="costume-badge">${isEquipped?'✓ 착용중':ct.slot==='head'?'머리':'몸'}</div>
+      </div>`;
+    }).join('');
+  },
+  equip(id) {
+    const c = COSTUMES.find(c=>c.id===id);
+    if(!c) return;
+    const prev = S.char.equip[c.slot];
+    // 이전 코스튬 스탯 제거
+    if(prev) {
+      const prevC = COSTUMES.find(x=>x.id===prev);
+      if(prevC && prevC.stat) this.removeStat(prevC.stat);
+    }
+    S.char.equip[c.slot] = id;
+    // 새 코스튬 스탯 적용
+    if(c.stat) this.applyStat(c.stat);
+    G.rStat(); G.hud();
+    SFX.play('equip');
+    G.log(c.icon+' '+c.name+' 착용!', 'inf');
+    this.render();
+    // 캐릭터 픽셀 아트 업데이트
+    const mcc = document.getElementById('mcc');
+    const apc = document.getElementById('apc');
+    PIX.draw(apc.getContext('2d'), S.char.race, 24, S.char.equip.head);
+    mcc.getContext('2d').clearRect(0,0,24,24);
+    mcc.getContext('2d').drawImage(apc,0,0);
+  },
+  unequip(slot) {
+    const id = S.char.equip[slot];
+    if(!id) return;
+    const c = COSTUMES.find(x=>x.id===id);
+    if(c && c.stat) this.removeStat(c.stat);
+    S.char.equip[slot] = null;
+    G.rStat(); G.hud();
+    G.log('장비 해제', 'sys');
+    this.render();
+    const mcc = document.getElementById('mcc');
+    const apc = document.getElementById('apc');
+    PIX.draw(apc.getContext('2d'), S.char.race, 24, S.char.equip.head);
+    mcc.getContext('2d').clearRect(0,0,24,24);
+    mcc.getContext('2d').drawImage(apc,0,0);
+  },
+  applyStat(stat) {
+    const c = S.char;
+    if(stat.str) c.str += stat.str;
+    if(stat.int) c.int += stat.int;
+    if(stat.agi) c.agi += stat.agi;
+    if(stat.def) c.def += stat.def;
+    if(stat.gold_bonus) c.goldBonus = (c.goldBonus||0) + stat.gold_bonus;
+    if(stat.regen_boost) c.regenMult = (c.regenMult||1) + stat.regen_boost * 0.5;
+  },
+  removeStat(stat) {
+    const c = S.char;
+    if(stat.str) c.str -= stat.str;
+    if(stat.int) c.int -= stat.int;
+    if(stat.agi) c.agi -= stat.agi;
+    if(stat.def) c.def -= stat.def;
+    if(stat.gold_bonus) c.goldBonus = Math.max(0,(c.goldBonus||0) - stat.gold_bonus);
+    if(stat.regen_boost) c.regenMult = Math.max(1,(c.regenMult||1) - stat.regen_boost * 0.5);
+  }
+};
+
+// ============================================================
+// 저장 시스템 (LocalStorage)
+// ============================================================
+const SAVE = {
+  KEY: 'fantachat_save',
+  save() {
+    const data = { char: {...S.char}, zone: S.zone, savedAt: Date.now() };
+    localStorage.setItem(this.KEY, JSON.stringify(data));
+    const toast = document.createElement('div');
+    toast.className = 'save-toast';
+    toast.textContent = '💾 저장 완료!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    } catch(e) { return null; }
+  },
+  autoSave() { setInterval(() => { if(S.char.name) this.save(); }, 60000); }
+};
+
+// ============================================================
+// 스크린샷 & 인스타그램 공유
+// ============================================================
+const SS = {
+  open() {
+    const c = S.char;
+    // 캐릭터 캔버스 복사
+    const ssCanvas = document.getElementById('ss-canvas');
+    const apc = document.getElementById('apc');
+    PIX.draw(apc.getContext('2d'), c.race, 24, c.equip && c.equip.head);
+    ssCanvas.getContext('2d').clearRect(0,0,24,24);
+    ssCanvas.getContext('2d').drawImage(apc,0,0);
+
+    document.getElementById('ss-name').textContent = c.name;
+    document.getElementById('ss-sub').textContent = RACES[c.race].label + ' Lv.' + c.lv + ' / ' + c.wpn;
+    document.getElementById('ss-costume').textContent = (c.equip&&c.equip.head) ? (COSTUMES.find(x=>x.id===c.equip.head)||{icon:''}).icon : '';
+    document.getElementById('ss-bars').innerHTML = [
+      {label:'HP', val:c.hp, max:c.hpMax, color:'#aa2020'},
+      {label:'MP', val:c.mp, max:c.mpMax, color:'#2050aa'},
+    ].map(b => `<div class="ss-bar-row"><div class="ss-bar-label">${b.label}</div><div class="ss-bar-bg"><div class="ss-bar-fill" style="width:${b.val/b.max*100}%;background:${b.color}"></div></div><span style="font-size:10px;color:#666">${b.val}/${b.max}</span></div>`).join('');
+    document.getElementById('ss-stats').innerHTML = [
+      {k:'STR', v:c.str}, {k:'INT', v:c.int}, {k:'AGI', v:c.agi}, {k:'DEF', v:c.def}
+    ].map(s => `<div class="ss-stat"><span>${s.k}</span><b>${s.v}</b></div>`).join('');
+    document.getElementById('ss-modal').classList.add('on');
+  },
+  download() {
+    const card = document.getElementById('ss-card');
+    // html2canvas 없이 간단한 텍스트 기반 공유
+    const c = S.char;
+    const text = `판타챗 캐릭터\n${c.name}\n${RACES[c.race].label} Lv.${c.lv}\nSTR:${c.str} INT:${c.int} AGI:${c.agi} DEF:${c.def}\nhttps://fantachat.app`;
+    // Canvas 기반 이미지 생성
+    const cv = document.createElement('canvas');
+    cv.width = 320; cv.height = 280;
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0,0,320,280);
+    ctx.strokeStyle = '#333'; ctx.strokeRect(1,1,318,278);
+    ctx.fillStyle = '#f0e7c8'; ctx.font = 'bold 14px monospace'; ctx.fillText('✦ FANTACHAT ✦', 100, 30);
+    // 캐릭터 픽셀 아트
+    const apc = document.getElementById('apc');
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(apc, 20, 50, 64, 64);
+    ctx.fillStyle = '#d0d0bc'; ctx.font = 'bold 16px monospace'; ctx.fillText(c.name, 100, 70);
+    ctx.fillStyle = '#888'; ctx.font = '12px monospace';
+    ctx.fillText(RACES[c.race].label + ' Lv.' + c.lv, 100, 90);
+    ctx.fillText(c.wpn, 100, 108);
+    ctx.fillStyle = '#aa2020'; ctx.fillRect(20, 130, Math.floor(200*(c.hp/c.hpMax)), 6);
+    ctx.fillStyle = '#2050aa'; ctx.fillRect(20, 142, Math.floor(200*(c.mp/c.mpMax)), 6);
+    ctx.fillStyle = '#666'; ctx.font = '11px monospace';
+    ctx.fillText('HP '+c.hp+'/'+c.hpMax, 20, 165);
+    ctx.fillText('MP '+c.mp+'/'+c.mpMax, 20, 180);
+    ctx.fillStyle = '#888';
+    ctx.fillText('STR:'+c.str+'  INT:'+c.int+'  AGI:'+c.agi+'  DEF:'+c.def, 20, 210);
+    ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.fillText('판타챗 v1.0', 20, 260);
+    const link = document.createElement('a');
+    link.download = 'fantachat_'+c.name+'.png';
+    link.href = cv.toDataURL('image/png');
+    link.click();
+  },
+  share() {
+    const c = S.char;
+    const text = `🎮 판타챗 캐릭터\n${c.name} (${RACES[c.race].label} Lv.${c.lv})\nSTR:${c.str} INT:${c.int} AGI:${c.agi} DEF:${c.def}\n#판타챗 #판타지게임`;
+    if(navigator.share) {
+      navigator.share({ title:'판타챗 캐릭터', text });
+    } else {
+      // 클립보드 복사
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.createElement('div');
+        toast.className = 'save-toast';
+        toast.textContent = '📋 클립보드에 복사됨! 인스타에 붙여넣기 하세요';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      });
+    }
+  }
+};
+
+// ============================================================
+// 인벤토리 모달
+// ============================================================
+let _selectedInvIdx = -1;
+function openInvModal(preselect) {
+  const c = S.char;
+  const grid = document.getElementById('inv-modal-grid');
+  grid.innerHTML = '';
+  for(let i=0;i<20;i++) {
+    const it = c.inv[i];
+    const s = document.createElement('div');
+    s.className = 'inv-slot' + (it?' has':'') + (i===_selectedInvIdx?' selected':'');
+    if(it) {
+      s.innerHTML = `<div class="inv-icon">${it.icon}</div><div class="inv-name">${it.name}</div>`;
+      s.onclick = () => selectInvItem(i);
+    }
+    grid.appendChild(s);
+  }
+  if(preselect !== undefined) selectInvItem(preselect);
+  openModal('inv-modal');
+}
+function selectInvItem(idx) {
+  _selectedInvIdx = idx;
+  const it = S.char.inv[idx];
+  if(!it) return;
+  document.querySelectorAll('.inv-slot').forEach((s,i) => {
+    s.classList.toggle('selected', i===idx);
+  });
+  document.getElementById('inv-detail').innerHTML = `
+    <div class="inv-detail-name">${it.icon} ${it.name}</div>
+    <div class="inv-detail-desc">${it.desc}</div>
+    <div class="inv-detail-eff">효과: ${getEffDesc(it.eff, it.val)}</div>
+    ${it.huntOnly ? '<div class="inv-detail-hunt">🏹 사냥 전용 아이템</div>' : ''}
+  `;
+  document.getElementById('inv-actions').innerHTML = `
+    <button class="bb" onclick="G.useItem(${idx})">사용</button>
+    <button class="bb" onclick="dropItem(${idx})">버리기</button>
+  `;
+}
+function dropItem(idx) {
+  const it = S.char.inv[idx];
+  if(!it) return;
+  S.char.inv.splice(idx, 1);
+  G.rInv(); G.log(it.icon+' '+it.name+' 버림', 'sys');
+  openInvModal();
+}
+function getEffDesc(eff, val) {
+  const map = {
+    hp:'HP +'+val, mp:'MP +'+val, str:'STR +'+val+' 영구', int:'INT +'+val+' 영구',
+    agi:'AGI +'+val+' 영구', def:'DEF +'+val+' 영구', gold:'Gold +'+val,
+    hpmax:'HP 최대 +'+val, mpmax:'MP 최대 +'+val, amulet:'자동 부활 '+(val*100)+'%',
+    cursed:'STR+6 DEF-4', rune:'다음 공격 3배', rune2:'다음 공격 2배',
+    dodge:'회피율 +'+val+'%', madness:'STR+'+val+' DEF-3',
+    thunder:'AGI+5 INT+5', blood:'HP최대+60 STR+5', allstat:'전 스탯 +'+val,
+    elixir:'HP/MP 완전 회복', elixir_s:'HP+50 MP+40',
+    random:'랜덤 효과 (열어봐야 앎)',
+    stun_boost:'스턴 확률 +'+val+'%', regen_boost:'HP 재생 2배',
+    wolf_fang:'STR+4 AGI+2', lich_soul:'INT+8 MP최대+50',
+    banshee_tear:'MP최대+60 INT+5', cerberus_claw:'STR+10 AGI+5',
+    regen2:'재생력 강화', mimic_key:'Gold +200',
+    goblin_ear:'Gold +60', slime_core:'HP 재생 증가',
+    dragon_scale:'DEF +15', vampire_blood:'HP 최대 +40',
+  };
+  return map[eff] || eff;
+}
+
+// ============================================================
+// 유틸리티
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('on'); }
+function closeModal(id) { document.getElementById(id).classList.remove('on'); }
+function mobTab(p, btn) {
+  document.querySelectorAll('.mob-tab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.mob-panel').forEach(x => x.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  document.getElementById('mp-'+p).classList.add('on');
+}
+function scr(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ============================================================
+// 초기화
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  CR.init();
+  document.getElementById('ii').addEventListener('keydown', e => { if(e.key==='Enter') scr('sc'); });
+  SAVE.autoSave();
+  // 모달 배경 클릭 닫기
+  document.querySelectorAll('.modal-bg').forEach(bg => {
+    bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('on'); });
+  });
+  document.getElementById('ss-modal').addEventListener('click', e => {
+    if(e.target===document.getElementById('ss-modal')) closeModal('ss-modal');
+  });
+});
+</script>
+</body>
+</html>
