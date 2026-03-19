@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>판타챗 v1.0</title>
+<title>판타챗 v2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1736,7 +1736,7 @@ const EQ = {
 // 저장 시스템 (LocalStorage)
 // ============================================================
 const SAVE = {
-  KEY: 'fantachat_save',
+  KEY: 'fantachat_v2_save',
   save() {
     const data = { char: {...S.char}, zone: S.zone, savedAt: Date.now() };
     localStorage.setItem(this.KEY, JSON.stringify(data));
@@ -1808,7 +1808,7 @@ const SS = {
     ctx.fillText('MP '+c.mp+'/'+c.mpMax, 20, 180);
     ctx.fillStyle = '#888';
     ctx.fillText('STR:'+c.str+'  INT:'+c.int+'  AGI:'+c.agi+'  DEF:'+c.def, 20, 210);
-    ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.fillText('판타챗 v1.0', 20, 260);
+    ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.fillText('판타챗 v2.0', 20, 260);
     const link = document.createElement('a');
     link.download = 'fantachat_'+c.name+'.png';
     link.href = cv.toDataURL('image/png');
@@ -1919,16 +1919,16 @@ function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 // 초기화
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+  // v2.0 업그레이드: 구버전 세이브 자동 삭제
+  ['fantachat_save','fantachat_v1_save','fc_save'].forEach(k => localStorage.removeItem(k));
   CR.init();
   document.getElementById('ii').addEventListener('keydown', e => { if(e.key==='Enter') scr('sc'); });
   SAVE.autoSave();
-  // 모달 배경 클릭 닫기
   document.querySelectorAll('.modal-bg').forEach(bg => {
     bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('on'); });
   });
-  document.getElementById('ss-modal').addEventListener('click', e => {
-    if(e.target===document.getElementById('ss-modal')) closeModal('ss-modal');
-  });
+  const ssm = document.getElementById('ss-modal');
+  if(ssm) ssm.addEventListener('click', e => { if(e.target===ssm) closeModal('ss-modal'); });
 });
 </script>
 </body>
