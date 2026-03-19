@@ -520,10 +520,10 @@ const SFX = {
 // 데이터: 종족
 // ============================================================
 const RACES = {
-  human: { label:'인간족', lore:'균형 스탯, 빠른 성장', base:{str:12,int:10,agi:14,def:10}, pal:{skin:'#c8a882',hair:'#6b3a1a',cloth:'#3a4a7a',armor:'#7a7a7a',acc:'#d4c840'} },
-  elf:   { label:'엘프',   lore:'고지능·마법 특화',     base:{str:7,int:20,agi:18,def:6},   pal:{skin:'#d4c8a0',hair:'#d4b83c',cloth:'#2a5a3a',armor:'#4a7a4a',acc:'#c0d8ff'} },
-  dwarf: { label:'드워프', lore:'최고 방어·HP',          base:{str:18,int:8,agi:7,def:22},   pal:{skin:'#b8886a',hair:'#8b5a1a',cloth:'#4a3318',armor:'#8a8a8a',acc:'#d4901a'} },
-  demon: { label:'마족',   lore:'암흑 마력, 고위험',     base:{str:16,int:18,agi:13,def:8},  pal:{skin:'#5a1a2a',hair:'#1a0808',cloth:'#280818',armor:'#381838',acc:'#ff4060'} },
+  human: { label:'인간족', lore:'균형 스탯, 빠른 성장', base:{str:5,int:4,agi:6,def:3}, pal:{skin:'#c8a882',hair:'#6b3a1a',cloth:'#3a4a7a',armor:'#7a7a7a',acc:'#d4c840'} },
+  elf:   { label:'엘프',   lore:'고지능·마법 특화',     base:{str:3,int:8,agi:8,def:2},   pal:{skin:'#d4c8a0',hair:'#d4b83c',cloth:'#2a5a3a',armor:'#4a7a4a',acc:'#c0d8ff'} },
+  dwarf: { label:'드워프', lore:'최고 방어·HP',          base:{str:7,int:3,agi:3,def:9},   pal:{skin:'#b8886a',hair:'#8b5a1a',cloth:'#4a3318',armor:'#8a8a8a',acc:'#d4901a'} },
+  demon: { label:'마족',   lore:'암흑 마력, 고위험',     base:{str:6,int:7,agi:5,def:3},  pal:{skin:'#5a1a2a',hair:'#1a0808',cloth:'#280818',armor:'#381838',acc:'#ff4060'} },
 };
 
 // ============================================================
@@ -664,25 +664,25 @@ const RACE_SKILLS = {
 // 데이터: 몬스터
 // ============================================================
 const MONSTERS = [
-  {id:'slime',    name:'슬라임',    icon:'🟢',lv:1, hpMax:35, atk:5,  xp:25, gold:6,  color:'#1a4a1a',region:'황야'},
-  {id:'goblin',   name:'고블린',    icon:'👺',lv:2, hpMax:65, atk:10, xp:50, gold:15, color:'#2a4a14',region:'황야'},
-  {id:'zombie',   name:'좀비',      icon:'🧟',lv:3, hpMax:90, atk:14, xp:70, gold:20, color:'#1a3a14',region:'황야'},
-  {id:'orc',      name:'오크',      icon:'👹',lv:4, hpMax:120,atk:20, xp:100,gold:35, color:'#4a2a10',region:'황야'},
-  {id:'troll',    name:'트롤',      icon:'👾',lv:5, hpMax:160,atk:25, xp:130,gold:45, color:'#1a3a10',region:'황야'},
-  {id:'skeleton', name:'스켈레톤',  icon:'💀',lv:5, hpMax:140,atk:24, xp:125,gold:38, color:'#3a3a1a',region:'동굴'},
-  {id:'wolf',     name:'늑대인간',  icon:'🐺',lv:6, hpMax:180,atk:28, xp:160,gold:50, color:'#1a1a1a',region:'동굴'},
-  {id:'mimic',    name:'미믹',      icon:'📦',lv:7, hpMax:200,atk:32, xp:200,gold:110,color:'#3a2a10',region:'동굴'},
-  {id:'vampire',  name:'뱀파이어',  icon:'🧛',lv:8, hpMax:230,atk:36, xp:220,gold:80, color:'#3a0a1a',region:'동굴'},
-  {id:'banshee',  name:'밴시',      icon:'👻',lv:9, hpMax:260,atk:40, xp:260,gold:90, color:'#0a0a2a',region:'동굴'},
-  {id:'basilisk', name:'바실리스크',icon:'🦎',lv:10,hpMax:310,atk:44, xp:310,gold:95, color:'#143a14',region:'엘프 숲'},
-  {id:'treant',   name:'트리앤트',  icon:'🌳',lv:9, hpMax:280,atk:35, xp:275,gold:85, color:'#1a3a10',region:'엘프 숲'},
+  {id:'slime',    name:'슬라임',    icon:'🟢',lv:1, hpMax:50, atk:8,  xp:25, gold:6,  color:'#1a4a1a',region:'황야'},
+  {id:'goblin',   name:'고블린',    icon:'👺',lv:2, hpMax:90, atk:14, xp:50, gold:15, color:'#2a4a14',region:'황야'},
+  {id:'zombie',   name:'좀비',      icon:'🧟',lv:3, hpMax:120,atk:19, xp:70, gold:20, color:'#1a3a14',region:'황야'},
+  {id:'orc',      name:'오크',      icon:'👹',lv:4, hpMax:160,atk:28, xp:100,gold:35, color:'#4a2a10',region:'황야'},
+  {id:'troll',    name:'트롤',      icon:'👾',lv:5, hpMax:210,atk:35, xp:130,gold:45, color:'#1a3a10',region:'황야'},
+  {id:'skeleton', name:'스켈레톤',  icon:'💀',lv:5, hpMax:200,atk:32, xp:125,gold:38, color:'#3a3a1a',region:'동굴'},
+  {id:'wolf',     name:'늑대인간',  icon:'🐺',lv:6, hpMax:260,atk:42, xp:160,gold:50, color:'#1a1a1a',region:'동굴'},
+  {id:'mimic',    name:'미믹',      icon:'📦',lv:7, hpMax:300,atk:50, xp:200,gold:110,color:'#3a2a10',region:'동굴'},
+  {id:'vampire',  name:'뱀파이어',  icon:'🧛',lv:8, hpMax:340,atk:55, xp:220,gold:80, color:'#3a0a1a',region:'동굴'},
+  {id:'banshee',  name:'밴시',      icon:'👻',lv:9, hpMax:380,atk:62, xp:260,gold:90, color:'#0a0a2a',region:'동굴'},
+  {id:'basilisk', name:'바실리스크',icon:'🦎',lv:10,hpMax:450,atk:66, xp:310,gold:95, color:'#143a14',region:'엘프 숲'},
+  {id:'treant',   name:'트리앤트',  icon:'🌳',lv:9, hpMax:400,atk:55, xp:275,gold:85, color:'#1a3a10',region:'엘프 숲'},
   {id:'fairy',    name:'타락요정',  icon:'🧚',lv:8, hpMax:200,atk:38, xp:240,gold:75, color:'#2a1a3a',region:'엘프 숲'},
-  {id:'golem',    name:'골렘',      icon:'🪨',lv:12,hpMax:400,atk:38, xp:340,gold:110,color:'#3a3a28',region:'드워프 산맥'},
-  {id:'rock',     name:'록자이언트',icon:'⛰️',lv:14,hpMax:480,atk:45, xp:420,gold:145,color:'#2a2a18',region:'드워프 산맥'},
-  {id:'duergar',  name:'듀어가',    icon:'⛏️',lv:13,hpMax:360,atk:40, xp:360,gold:120,color:'#3a2a18',region:'드워프 산맥'},
-  {id:'lich',     name:'리치',      icon:'💎',lv:18,hpMax:440,atk:56, xp:540,gold:200,color:'#0a0a2a',region:'마족 영토'},
-  {id:'cerberus', name:'케르베로스',icon:'🐕',lv:20,hpMax:520,atk:65, xp:660,gold:180,color:'#1a0808',region:'마족 영토'},
-  {id:'dragon',   name:'드래곤',    icon:'🐉',lv:25,hpMax:750,atk:95, xp:1100,gold:420,color:'#2a0808',region:'마족 영토'},
+  {id:'golem',    name:'골렘',      icon:'🪨',lv:12,hpMax:600,atk:62, xp:340,gold:110,color:'#3a3a28',region:'드워프 산맥'},
+  {id:'rock',     name:'록자이언트',icon:'⛰️',lv:14,hpMax:700,atk:72, xp:420,gold:145,color:'#2a2a18',region:'드워프 산맥'},
+  {id:'duergar',  name:'듀어가',    icon:'⛏️',lv:13,hpMax:520,atk:65, xp:360,gold:120,color:'#3a2a18',region:'드워프 산맥'},
+  {id:'lich',     name:'리치',      icon:'💎',lv:18,hpMax:700,atk:90, xp:540,gold:200,color:'#0a0a2a',region:'마족 영토'},
+  {id:'cerberus', name:'케르베로스',icon:'🐕',lv:20,hpMax:900,atk:110,xp:660,gold:180,color:'#1a0808',region:'마족 영토'},
+  {id:'dragon',   name:'드래곤',    icon:'🐉',lv:25,hpMax:1400,atk:150,xp:1100,gold:420,color:'#2a0808',region:'마족 영토'},
   {id:'demon_lord',name:'마왕',     icon:'👿',lv:30,hpMax:1200,atk:130,xp:2000,gold:800,color:'#3a0020',region:'마족 영토'},
 
   // 차원 균열 (Lv 30-50)
@@ -701,13 +701,16 @@ const MONSTERS = [
 // 소비 아이템 (드롭 4%) / 장비 아이템 (드롭 1%)
 // ============================================================
 const CONSUMABLE_ITEMS = [
-  {id:'hp_pot',    icon:'💊', name:'HP 포션',     desc:'HP +80 즉시 회복',      eff:'hp',     val:80,  rarity:'common',   type:'consume'},
-  {id:'mp_pot',    icon:'🔵', name:'MP 포션',     desc:'MP +60 즉시 회복',      eff:'mp',     val:60,  rarity:'common',   type:'consume'},
-  {id:'elixir_s',  icon:'⚗️', name:'작은 엘릭서', desc:'HP+50 MP+40 회복',      eff:'elixir_s',val:0, rarity:'uncommon', type:'consume'},
-  {id:'gold_bag',  icon:'💰', name:'금화 주머니', desc:'Gold +100',             eff:'gold',   val:100, rarity:'common',   type:'consume'},
-  {id:'gem',       icon:'💎', name:'보석 조각',   desc:'Gold +60',             eff:'gold',   val:60,  rarity:'uncommon', type:'consume'},
-  {id:'rune2',     icon:'🔥', name:'화염 룬',     desc:'다음 공격 2배',         eff:'rune2',  val:2,   rarity:'rare',     type:'consume'},
-  {id:'mystery',   icon:'🧪', name:'수상한 약',   desc:'랜덤 효과!',            eff:'random', val:0,   rarity:'rare',     type:'consume'},
+  {id:'hp_pot',      icon:'💊', name:'HP 포션',       desc:'HP +60 즉시 회복',         eff:'hp',       val:60,  rarity:'common',   type:'consume'},
+  {id:'mp_pot',      icon:'🔵', name:'MP 포션',       desc:'MP +50 즉시 회복',         eff:'mp',       val:50,  rarity:'common',   type:'consume'},
+  {id:'big_hp',      icon:'🍶', name:'대형 HP 포션',  desc:'HP +150 즉시 회복',        eff:'hp',       val:150, rarity:'uncommon', type:'consume'},
+  {id:'elixir_s',    icon:'⚗️', name:'엘릭서',        desc:'HP+100 MP+80 동시 회복',   eff:'elixir_s', val:0,   rarity:'rare',     type:'consume'},
+  {id:'gold_bag',    icon:'💰', name:'금화 주머니',   desc:'Gold +120 즉시',           eff:'gold',     val:120, rarity:'common',   type:'consume'},
+  {id:'treasure_map',icon:'🗺️', name:'보물 지도',     desc:'Gold +300 즉시',           eff:'gold',     val:300, rarity:'rare',     type:'consume'},
+  {id:'void_essence',icon:'🌀', name:'공허의 정수',   desc:'전 스탯 +1 영구',          eff:'allstat',  val:1,   rarity:'epic',     type:'consume'},
+  {id:'mystery',     icon:'🧪', name:'수상한 약',     desc:'랜덤 효과! 뭐가 나올지 모름', eff:'random', val:0,   rarity:'rare',     type:'consume'},
+  {id:'mp_crystal',  icon:'💎', name:'마나 수정',     desc:'MP +120 즉시 회복',        eff:'mp',       val:120, rarity:'uncommon', type:'consume'},
+  {id:'gold_dust',   icon:'✨', name:'황금 가루',     desc:'Gold +80 즉시',            eff:'gold',     val:80,  rarity:'common',   type:'consume'},
 ];
 
 // 공허 세트 아이템 (맵당 1개, 0.1% 드롭, 5개 모으면 세트 옵션)
@@ -827,21 +830,18 @@ const ITEM_DATA = [
 // 데이터: 상점
 // ============================================================
 const SHOP = [
-  {name:'회복 포션',    cost:50,  desc:'HP +80 즉시',          eff:'hp',    val:80,  icon:'💊'},
-  {name:'마나 포션',    cost:40,  desc:'MP +60 즉시',          eff:'mp',    val:60,  icon:'🔵'},
-  {name:'강화 스크롤',  cost:200, desc:'STR +4 영구',          eff:'str',   val:4,   icon:'📜'},
-  {name:'지식의 서',    cost:180, desc:'INT +4 영구',          eff:'int',   val:4,   icon:'📖'},
-  {name:'부적 조각',    cost:400, desc:'사망시 50% 자동부활',  eff:'amulet',val:.5,  icon:'🪬'},
-  {name:'어둠의 갑옷',  cost:700, desc:'DEF +12 영구',         eff:'def',   val:12,  icon:'🛡️'},
-  {name:'독수리의 눈',  cost:300, desc:'AGI +6 영구',          eff:'agi',   val:6,   icon:'👁️'},
-  {name:'엘릭서',       cost:600, desc:'HP/MP 완전 회복',      eff:'elixir',val:0,   icon:'⚗️'},
-  {name:'저주받은 반지',cost:120, desc:'STR+6 but DEF-4',      eff:'cursed',val:0,   icon:'💍'},
-  {name:'폭발의 룬',    cost:250, desc:'다음 공격 3배 피해',   eff:'rune',  val:3,   icon:'💥'},
-  {name:'도적의 부츠',  cost:220, desc:'회피율 +25%',          eff:'dodge', val:25,  icon:'👢'},
-  {name:'광기의 약',    cost:90,  desc:'STR+10 (부작용 있음)', eff:'madness',val:10, icon:'🧪'},
-  {name:'번개 부적',    cost:350, desc:'AGI+5, INT+5',         eff:'thunder',val:0,  icon:'⚡'},
-  {name:'피의 서약',    cost:500, desc:'HP최대+60, STR+5',     eff:'blood', val:0,   icon:'🩸'},
-  {name:'공허의 정수',  cost:800, desc:'전 스탯 +3',           eff:'allstat',val:3,  icon:'🌀'},
+  // ── 소비 ──────────────────────────────────────────────────
+  {name:'HP 포션',       cost:80,   desc:'HP +60 즉시 회복',               eff:'hp',         val:60,   icon:'💊', type:'consume'},
+  {name:'MP 포션',       cost:70,   desc:'MP +50 즉시 회복',               eff:'mp',         val:50,   icon:'🔵', type:'consume'},
+  {name:'대형 HP 포션',  cost:200,  desc:'HP +150 즉시 회복',              eff:'hp',         val:150,  icon:'🍶', type:'consume'},
+  {name:'엘릭서',        cost:500,  desc:'HP/MP 완전 회복',                eff:'elixir',     val:0,    icon:'⚗️', type:'consume'},
+  {name:'공허의 정수',   cost:2000, desc:'전 스탯 +1 영구 (매우 희귀)',    eff:'allstat',    val:1,    icon:'🌀', type:'consume'},
+  // ── 장비 (수호의 부적만 — 나머지는 드롭으로) ──────────────
+  {name:'수호의 부적',   cost:800,  desc:'사망시 35% 자동 부활',           eff:'amulet',     val:.35,  icon:'🪬', type:'equip_buy'},
+  {name:'강화 스크롤',   cost:600,  desc:'STR +1 영구',                    eff:'str',        val:1,    icon:'📜', type:'equip_buy'},
+  {name:'지식의 서',     cost:600,  desc:'INT +1 영구',                    eff:'int',        val:1,    icon:'📖', type:'equip_buy'},
+  {name:'민첩 부적',     cost:600,  desc:'AGI +1 영구',                    eff:'agi',        val:1,    icon:'🏃', type:'equip_buy'},
+  {name:'철갑 강화',     cost:600,  desc:'DEF +1 영구',                    eff:'def',        val:1,    icon:'🔩', type:'equip_buy'},
 ];
 
 // ============================================================
@@ -970,9 +970,9 @@ const CR = {
     const r = RACES[this.race];
     const wpn = document.getElementById('swpn').value;
     Object.assign(S.char, {name, race:this.race, wpn, ...r.base});
-    S.char.hpMax = 100 + r.base.def*3 + r.base.str*2;
+    S.char.hpMax = 50 + r.base.def*2 + r.base.str;
     S.char.hp = S.char.hpMax;
-    S.char.mpMax = 60 + r.base.int*4;
+    S.char.mpMax = 30 + r.base.int*3;
     S.char.mp = S.char.mpMax;
     const raceSkills = RACE_SKILLS[this.race];
     const skillList = raceSkills[wpn] || raceSkills[Object.keys(raceSkills)[0]];
@@ -1312,6 +1312,8 @@ const G = {
     const c = S.char;
     // STR이 실제 공격력에 유의미하게 반영
     let dmg = Math.max(1, Math.floor(c.str * 1.8 + Math.random()*12 - 3));
+    // 광전사 — 공격 2배
+    if(c.berserker) { dmg *= 2; this.log('💢 광전사 2배!','skill'); }
     // 크리티컬: AGI 기반
     const critChance = Math.min(50, c.agi * 0.5);
     if(Math.random()*100 < critChance) {
@@ -1384,29 +1386,42 @@ const G = {
 
   startCD(idx, cd) {
     const start = Date.now();
-    const bar = document.getElementById('cdo-'+idx);
-    const btn = document.getElementById('skb-'+idx);
-    const chip = document.getElementById('sch-'+idx);
-    if(btn) btn.classList.add('cd');
-    if(chip) chip.classList.add('on-cd');
+    // 초기 CD 상태 적용
+    const b0=document.getElementById('skb-'+idx), c0=document.getElementById('sch-'+idx);
+    if(b0) b0.classList.add('cd');
+    if(c0) c0.classList.add('on-cd');
     let lastSec = -1;
     const tick = () => {
-      const el = Date.now()-start, pct = Math.max(0,100-(el/cd*100));
-      if(bar) bar.style.width = pct+'%';
-      if(el >= cd) {
+      const elapsed = Date.now()-start;
+      const left = cd - elapsed;
+      if(left <= 0) {
         S.char.skills[idx].cdLeft = 0;
-        if(btn){ btn.classList.remove('cd'); const sec=btn.querySelector('.cd-sec'); if(sec) sec.remove(); }
-        if(bar) bar.style.width = '0%';
-        if(chip){ chip.classList.remove('on-cd'); const sec=chip.querySelector('.cd-sec-chip'); if(sec) sec.remove(); }
+        // 매번 최신 DOM 참조 (rSkill로 재생성됐을 수 있음)
+        const btn=document.getElementById('skb-'+idx), bar=document.getElementById('cdo-'+idx), chip=document.getElementById('sch-'+idx);
+        if(btn){ btn.classList.remove('cd'); const s=btn.querySelector('.cd-sec');if(s)s.textContent=''; }
+        if(bar) bar.style.width='0%';
+        if(chip){ chip.classList.remove('on-cd'); const s=chip.querySelector('.cd-sec-chip');if(s)s.textContent=''; }
         return;
       }
-      S.char.skills[idx].cdLeft = cd-el;
-      // 초 단위로만 텍스트 업데이트 (매 프레임 DOM 조작 방지)
-      const secLeft = Math.ceil((cd-el)/1000);
+      S.char.skills[idx].cdLeft = left;
+      const secLeft = Math.ceil(left/1000);
       if(secLeft !== lastSec) {
         lastSec = secLeft;
-        if(btn){ let sec=btn.querySelector('.cd-sec'); if(!sec){sec=document.createElement('span');sec.className='cd-sec';btn.appendChild(sec);}; sec.textContent=secLeft+'s'; }
-        if(chip){ let sec=chip.querySelector('.cd-sec-chip'); if(!sec){sec=document.createElement('span');sec.className='cd-sec-chip';sec.style.cssText='font-size:9px;color:#666';chip.appendChild(sec);}; sec.textContent=' '+secLeft+'s'; }
+        // 매번 최신 DOM 참조
+        const btn=document.getElementById('skb-'+idx), bar=document.getElementById('cdo-'+idx), chip=document.getElementById('sch-'+idx);
+        if(bar) bar.style.width = Math.max(0,100-(elapsed/cd*100))+'%';
+        if(btn){
+          btn.classList.add('cd');
+          let s=btn.querySelector('.cd-sec');
+          if(!s){s=document.createElement('span');s.className='cd-sec';btn.appendChild(s);}
+          s.textContent=secLeft+'s';
+        }
+        if(chip){
+          chip.classList.add('on-cd');
+          let s=chip.querySelector('.cd-sec-chip');
+          if(!s){s=document.createElement('span');s.className='cd-sec-chip';s.style.cssText='font-size:9px;color:#666';chip.appendChild(s);}
+          s.textContent=' '+secLeft+'s';
+        }
       }
       requestAnimationFrame(tick);
     };
@@ -1416,14 +1431,15 @@ const G = {
   mhit(m, i) {
     if(m.stunned>0) { m.stunned--; this.log(m.icon+' '+m.name+' 스턴! (반격 불가)', 'inf'); return; }
     const c = S.char;
-    // DEF가 실제로 피해 감소에 반영
+    // 유령 모드 — 피해 없음
+    if(c.ghost) { this.log('👻 유령 모드! 피해 무효!', 'inf'); return; }
+    // 해독제 — 다음 피해 무효
+    if(c.nullifyNext) { c.nullifyNext=false; this.log('🧴 피해 무효화!', 'inf'); return; }
     let d = Math.max(1, m.atk - Math.floor(c.def*0.8) + Math.floor(Math.random()*6));
-    // AGI 기반 회피 (회피율 = agi*0.8 + dodgeBonus)
     const dodgePct = Math.min(80, c.agi * 0.8 + c.dodgeBonus);
     if(Math.random()*100 < dodgePct) {
       this.log('💨 회피했습니다!', 'dodge');
       SFX.play('dodge');
-      // 회피 모션 애니메이션
       const anim = document.createElement('div');
       anim.className = 'dodge-anim';
       anim.textContent = '💨 DODGE!';
@@ -1447,9 +1463,11 @@ const G = {
     const goldGain = Math.floor(m.gold * (1 + S.char.goldBonus));
     this.log(m.icon+' '+m.name+' 처치! XP+'+m.xp+' Gold+'+goldGain, 'loot');
     const xpMult = 1 + ((S.char.xpBonus||0)/100);
-    const finalXp = Math.floor(m.xp * xpMult);
+    const xp3 = S.char.xpMult3 ? 3 : 1;
+    if(S.char.xpMult3) { S.char.xpMult3=false; this.log('🌱 XP 3배 발동!','inf'); }
+    const finalXp = Math.floor(m.xp * xpMult * xp3);
     S.char.xp += finalXp; S.char.gold += goldGain;
-    if(xpMult>1) this.log('✨ XP x'+xpMult.toFixed(1)+' (장비 보너스)','inf');
+    if(xpMult>1||xp3>1) this.log('✨ XP x'+(xpMult*xp3).toFixed(1),'inf');
     SFX.play('loot');
     // 드롭: 소비 4%, 장비 1%, 사냥전용 8% (몬스터별)
     const dropRoll = Math.random()*1000;
@@ -1626,7 +1644,7 @@ const G = {
       case 'hp':       c.hp=Math.min(c.hpMax,c.hp+val); this.log(icon+' HP +'+val, 'heal'); break;
       case 'mp':       c.mp=Math.min(c.mpMax,c.mp+val); this.log(icon+' MP +'+val, 'inf'); break;
       case 'elixir':   c.hp=c.hpMax; c.mp=c.mpMax; this.log('HP/MP 완전 회복!', 'heal'); break;
-      case 'elixir_s': c.hp=Math.min(c.hpMax,c.hp+50); c.mp=Math.min(c.mpMax,c.mp+40); this.log('HP+50 MP+40', 'heal'); break;
+      case 'elixir_s': c.hp=Math.min(c.hpMax,c.hp+100); c.mp=Math.min(c.mpMax,c.mp+80); this.log('HP+100 MP+80 회복!', 'heal'); break;
       case 'str':      c.str+=val; this.rStat(); this.log('STR +'+val+' 영구!', 'inf'); break;
       case 'int':      c.int+=val; this.rStat(); this.log('INT +'+val+' 영구!', 'inf'); break;
       case 'agi':      c.agi+=val; this.rStat(); this.log('AGI +'+val+' 영구!', 'inf'); break;
@@ -1634,27 +1652,40 @@ const G = {
       case 'hpmax':    c.hpMax+=val; c.hp=Math.min(c.hpMax,c.hp+val); this.rStat(); this.log('HP최대 +'+val+'!', 'inf'); break;
       case 'mpmax':    c.mpMax+=val; c.mp=Math.min(c.mpMax,c.mp+val); this.rStat(); this.log('MP최대 +'+val+'!', 'inf'); break;
       case 'gold':     c.gold+=val; this.log('Gold +'+val, 'loot'); break;
-      case 'amulet':   c.hasAmulet=true; c.amuletChance=val; this.log('부활 부적 장착! 확률 '+(val*100)+'%', 'inf'); break;
-      case 'cursed':   c.str+=6; c.def-=4; this.rStat(); this.log('저주받은 반지: STR+6 DEF-4', 'skill'); break;
-      case 'rune':     c.runeBlast=3; this.log('💥 다음 공격 3배!', 'skill'); break;
-      case 'rune2':    c.runeBlast=2; this.log('🔥 다음 공격 2배!', 'skill'); break;
-      case 'dodge':    c.dodgeBonus+=val; this.rStat(); this.log('회피율 +'+val+'%', 'inf'); break;
-      case 'madness':  c.str+=val; c.def-=3; this.rStat(); this.log('🧪 광기... STR+'+val+' DEF-3', 'skill'); break;
-      case 'thunder':  c.agi+=5; c.int+=5; this.rStat(); this.log('⚡ AGI+5 INT+5!', 'skill'); break;
-      case 'blood':    c.hpMax+=60; c.str+=5; c.hp=c.hpMax; this.rStat(); this.log('🩸 피의 서약: HP최대+60 STR+5', 'skill'); break;
-      case 'allstat':  c.str+=val; c.int+=val; c.agi+=val; c.def+=val; this.rStat(); this.log('🌀 전 스탯 +'+val, 'skill'); break;
+      case 'amulet':   c.hasAmulet=true; c.amuletChance=val; this.log('부활 부적! 확률 '+(val*100)+'%', 'inf'); break;
+      case 'allstat':  c.str+=val; c.int+=val; c.agi+=val; c.def+=val; this.rStat(); this.log('🌀 전 스탯 +'+val+'!', 'skill'); break;
       case 'stun_boost': c.stunBoost+=val; this.log('🧊 스턴 확률 +'+val+'%', 'inf'); break;
-      case 'shadow_cloak': c.dodgeBonus+=val; this.rStat(); this.log('🌑 회피율 +'+val+'%', 'inf'); break;
       case 'regen_boost': c.regenMult=(c.regenMult||1)+1; this.log('💚 HP 재생 2배!', 'heal'); break;
-      case 'regen2':   c.regenMult=(c.regenMult||1)+1; this.log('💗 재생력 강화!', 'heal'); break;
-      case 'wolf_fang': c.str+=4; c.agi+=2; this.rStat(); this.log('🦷 STR+4 AGI+2!', 'skill'); break;
-      case 'lich_soul': c.int+=8; c.mpMax+=50; c.mp=c.mpMax; this.rStat(); this.log('💀 INT+8 MP최대+50!', 'skill'); break;
-      case 'banshee_tear': c.mpMax+=60; c.int+=5; c.mp=c.mpMax; this.rStat(); this.log('💧 MP최대+60 INT+5!', 'skill'); break;
-      case 'cerberus_claw': c.str+=10; c.agi+=5; this.rStat(); this.log('🐾 STR+10 AGI+5!', 'skill'); break;
+      case 'nullify':  // 해독제 — 다음 피해 무효화
+        c.nullifyNext=true;
+        this.log('🧴 다음 피해 무효화 준비!','inf');
+        break;
+      case 'berserker': // 광전사 — 30초간 공격 2배 방어 0
+        c._berserkerOldDef=c.def;
+        c.berserker=true; c.def=0;
+        this.log('💢 광전사 발동! 공격 2배, 방어 0 ('+val+'초)','skill');
+        this.rStat();
+        setTimeout(()=>{c.berserker=false;c.def=c._berserkerOldDef||c.def;this.rStat();this.log('💢 광전사 해제','sys');},val*1000);
+        break;
+      case 'ghost':    // 유령 가루 — 30초간 피해 없음
+        c.ghost=true;
+        this.log('👻 유령 모드! '+val+'초간 피해 없음','skill');
+        setTimeout(()=>{c.ghost=false;this.log('👻 유령 모드 해제','sys');},val*1000);
+        break;
+      case 'xp3':      // 성장의 씨앗 — 다음 전투 XP 3배
+        c.xpMult3=true;
+        this.log('🌱 다음 전투 XP 3배!','inf');
+        break;
+      case 'cursed_bone': // 저주받은 뼈 — HP -20 STR +3 (10초)
+        c.hp=Math.max(1,c.hp-20);
+        c.str+=3; this.rStat();
+        this.log('🦴 HP -20 STR +3 (10초 후 해제)','dmg');
+        setTimeout(()=>{c.str=Math.max(1,c.str-3);this.rStat();this.log('🦴 저주 해제','sys');},10000);
+        break;
       case 'random':
-        const effs = ['hp','mp','str','int','agi','def'];
+        const effs = ['hp','mp','hp','mp','str','int','agi','def','gold'];
         const re = effs[Math.floor(Math.random()*effs.length)];
-        const rv = Math.floor(Math.random()*10)+3;
+        const rv = re==='gold'?150:re==='hp'?80:re==='mp'?60:Math.floor(Math.random()*3)+1;
         this.applyItemEff(re, rv, '수상한 약', '🧪');
         break;
     }
