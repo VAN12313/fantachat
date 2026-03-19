@@ -82,7 +82,6 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .is .it-icon{font-size:1rem;line-height:1}
 .is .it-name{font-size:8px;color:#666;text-align:center;line-height:1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
 .is .it-eff{font-size:7px;color:#4a7a4a;text-align:center;line-height:1;padding:0 2px}
-.is.hunt-item{border-color:#3a3010}
 .ma{display:flex;flex-direction:column;overflow:hidden;flex:1}
 .mt{display:flex;border-bottom:1px solid #181818;background:#020202;flex-shrink:0}
 .mt-btn{background:transparent;border:none;border-right:1px solid #0d0d0d;color:#555;font-size:11px;letter-spacing:.12em;padding:.5rem .5rem;cursor:pointer;flex:1}
@@ -112,7 +111,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .sk-btn:active{background:#1a1a1a}.sk-btn.cd{color:#333;border-color:#111;pointer-events:none}
 .sk-btn.locked{color:#222;border-color:#0d0d0d;pointer-events:none;opacity:.35;background:#020202}
 .sk-btn .mpc{font-size:10px;color:#4060aa;margin-left:.25rem}
-.sk-btn .cdo{position:absolute;bottom:0;left:0;height:2px;background:#444}
+.sk-btn .cdo{position:absolute;bottom:0;left:0;height:2px;background:#444}.sk-btn .cd-sec{font-size:9px;color:#888;display:block;line-height:1}
 .sk-btn .lk-txt{font-size:9px;color:#333;display:block;margin-top:1px}
 .qc{padding:.7rem;background:var(--bg2);border:1px solid #0d0d0d;margin-bottom:4px}
 .qn{font-size:13px;color:var(--tx);margin-bottom:.2rem}.qd{font-size:12px;color:#aaa;line-height:1.4}
@@ -181,12 +180,11 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .inv-slot.selected{border-color:var(--gold)}
 .inv-slot .inv-icon{font-size:1.1rem}
 .inv-slot .inv-name{font-size:7px;color:#666;text-align:center;line-height:1.1}
-.inv-detail{background:var(--bg2);border:1px solid #222;padding:.7rem;margin-bottom:.8rem;min-height:60px}
+.inv-detail{display:none}
 .inv-detail-name{font-size:14px;color:var(--gold);margin-bottom:.3rem}
 .inv-detail-desc{font-size:12px;color:#aaa;line-height:1.5}
 .inv-detail-eff{font-size:11px;color:#80c080;margin-top:.3rem}
-.inv-detail-hunt{font-size:10px;color:#d4b040;margin-top:.2rem}
-.inv-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.inv-actions{display:none}
 .ss-modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:7000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:1rem}
 .ss-modal.on{display:flex}
 .ss-card{background:#0a0a0a;border:1px solid #333;padding:1.5rem;text-align:center;max-width:320px;width:90%}
@@ -327,14 +325,10 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
       <button class="bag-tab on" onclick="bagFilter('all',this)">전체</button>
       <button class="bag-tab" onclick="bagFilter('consume',this)">소비</button>
       <button class="bag-tab" onclick="bagFilter('equip',this)">장비</button>
-      <button class="bag-tab" onclick="bagFilter('hunt',this)">사냥</button>
     </div>
     <div class="bag-filter-info" id="bag-filter-info">전체 아이템</div>
     <div class="inv-modal-grid" id="inv-modal-grid"></div>
-    <div class="inv-detail" id="inv-detail">
-      <div style="color:#333;font-size:12px">아이템을 선택하세요</div>
-    </div>
-    <div class="inv-actions" id="inv-actions"></div>
+
   </div>
 </div>
 
@@ -716,29 +710,86 @@ const CONSUMABLE_ITEMS = [
   {id:'mystery',   icon:'🧪', name:'수상한 약',   desc:'랜덤 효과!',            eff:'random', val:0,   rarity:'rare',     type:'consume'},
 ];
 
+// 공허 세트 아이템 (맵당 1개, 0.1% 드롭, 5개 모으면 세트 옵션)
+const VOID_SET_IDS = ['void_helm','void_weapon','void_chest','void_boots','void_ring'];
+const VOID_SET_BONUS = {str:15, int:15, agi:15, def:15, xpBonus:50, goldBonus:0.3, desc:'공허 세트 완성: 올스탯 +15, XP +50%, 골드 +30%'};
+
 const EQUIP_ITEMS = [
-  // 무기
-  {id:'iron_sw',   icon:'🗡️', name:'철검',        desc:'STR +5',                eff:'str',  val:5,  slot:'weapon', rarity:'common',    type:'equip'},
-  {id:'silver_sw', icon:'⚔️', name:'은검',        desc:'STR +9, AGI +3',        eff:'str',  val:9,  slot:'weapon', rarity:'uncommon',  type:'equip', bonus:{agi:3}},
-  {id:'dark_blade',icon:'🌑', name:'암흑검',      desc:'STR +14, INT +5',       eff:'str',  val:14, slot:'weapon', rarity:'rare',      type:'equip', bonus:{int:5}},
-  {id:'legend_sw', icon:'✨', name:'전설의 검',   desc:'STR +22, 올스탯 +3%',   eff:'str',  val:22, slot:'weapon', rarity:'legendary', type:'equip', bonus:{allpct:3}},
-  // 투구
-  {id:'iron_helm', icon:'⛑️', name:'철 투구',     desc:'DEF +4',                eff:'def',  val:4,  slot:'helm',   rarity:'common',    type:'equip'},
-  {id:'mage_hood', icon:'🧙', name:'마법사 후드', desc:'INT +6, DEF +2',        eff:'int',  val:6,  slot:'helm',   rarity:'uncommon',  type:'equip', bonus:{def:2}},
-  {id:'dragon_hlm',icon:'🐉', name:'용 투구',     desc:'DEF +12, STR +5',       eff:'def',  val:12, slot:'helm',   rarity:'rare',      type:'equip', bonus:{str:5}},
-  // 갑옷
-  {id:'leather_ar',icon:'🛡️', name:'가죽 갑옷',  desc:'DEF +5',                eff:'def',  val:5,  slot:'chest',  rarity:'common',    type:'equip'},
-  {id:'chain_ar',  icon:'🔗', name:'사슬 갑옷',  desc:'DEF +10, AGI -2',       eff:'def',  val:10, slot:'chest',  rarity:'uncommon',  type:'equip', bonus:{agi:-2}},
-  {id:'void_ar',   icon:'🌀', name:'공허 갑옷',  desc:'DEF +18, 올스탯 +2',    eff:'def',  val:18, slot:'chest',  rarity:'legendary', type:'equip', bonus:{allpct:2}},
-  // 신발
-  {id:'swift_bt',  icon:'👢', name:'신속의 부츠', desc:'AGI +6, 회피 +15%',    eff:'agi',  val:6,  slot:'boots',  rarity:'uncommon',  type:'equip', bonus:{dodge:15}},
-  {id:'shadow_bt', icon:'🌑', name:'그림자 부츠', desc:'AGI +10, 회피 +25%',   eff:'agi',  val:10, slot:'boots',  rarity:'rare',      type:'equip', bonus:{dodge:25}},
-  // 장신구
-  {id:'xp_ring',   icon:'💍', name:'현자의 반지', desc:'경험치 +20%',          eff:'xpbonus',val:20,slot:'ring',   rarity:'rare',      type:'equip'},
-  {id:'gold_ring', icon:'💛', name:'황금 반지',   desc:'골드 획득 +15%',       eff:'goldbonus',val:15,slot:'ring', rarity:'rare',      type:'equip'},
-  {id:'amulet_eq', icon:'🪬', name:'수호의 부적', desc:'사망시 40% 자동 부활', eff:'amulet',val:.4, slot:'ring',   rarity:'rare',      type:'equip'},
-  {id:'chaos_ring',icon:'🌀', name:'혼돈의 반지', desc:'올스탯 +5, XP +30%',   eff:'allstat',val:5, slot:'ring',   rarity:'legendary', type:'equip', bonus:{xpbonus:30}},
+  // ── 무기 ──────────────────────────────
+  {id:'iron_sw',    icon:'🗡️', name:'철검',        desc:'STR +3',             eff:'str',  val:3,  slot:'weapon', rarity:'common',    type:'equip'},
+  {id:'bronze_sw',  icon:'⚔️', name:'청동검',      desc:'STR +6',             eff:'str',  val:6,  slot:'weapon', rarity:'common',    type:'equip'},
+  {id:'silver_sw',  icon:'🔪', name:'은검',        desc:'STR +9, AGI +2',     eff:'str',  val:9,  slot:'weapon', rarity:'uncommon',  type:'equip', bonus:{agi:2}},
+  {id:'dark_blade', icon:'🌑', name:'암흑검',      desc:'STR +12, INT +3',    eff:'str',  val:12, slot:'weapon', rarity:'rare',      type:'equip', bonus:{int:3}},
+  {id:'dragon_sw',  icon:'🔥', name:'용염검',      desc:'STR +16, AGI +4',    eff:'str',  val:16, slot:'weapon', rarity:'rare',      type:'equip', bonus:{agi:4}},
+  {id:'void_weapon',icon:'🌀', name:'공허의 검',   desc:'STR +10, INT +10 [공허 세트]', eff:'str', val:10, slot:'weapon', rarity:'legendary', type:'equip', bonus:{int:10}, setId:'void'},
+  // ── 투구 ──────────────────────────────
+  {id:'leather_hl', icon:'🪖', name:'가죽 투구',   desc:'DEF +2',             eff:'def',  val:2,  slot:'helm',   rarity:'common',    type:'equip'},
+  {id:'iron_helm',  icon:'⛑️', name:'철 투구',     desc:'DEF +5',             eff:'def',  val:5,  slot:'helm',   rarity:'common',    type:'equip'},
+  {id:'mage_hood',  icon:'🧙', name:'마법사 후드', desc:'INT +5, DEF +2',     eff:'int',  val:5,  slot:'helm',   rarity:'uncommon',  type:'equip', bonus:{def:2}},
+  {id:'knight_hl',  icon:'👑', name:'기사 투구',   desc:'DEF +8, STR +3',     eff:'def',  val:8,  slot:'helm',   rarity:'rare',      type:'equip', bonus:{str:3}},
+  {id:'void_helm',  icon:'🌀', name:'공허의 투구', desc:'DEF +8, INT +8 [공허 세트]',  eff:'def',  val:8,  slot:'helm',   rarity:'legendary', type:'equip', bonus:{int:8},  setId:'void'},
+  // ── 갑옷 ──────────────────────────────
+  {id:'cloth_ar',   icon:'👕', name:'천 갑옷',     desc:'DEF +2',             eff:'def',  val:2,  slot:'chest',  rarity:'common',    type:'equip'},
+  {id:'leather_ar', icon:'🛡️', name:'가죽 갑옷',  desc:'DEF +5',             eff:'def',  val:5,  slot:'chest',  rarity:'common',    type:'equip'},
+  {id:'chain_ar',   icon:'🔗', name:'사슬 갑옷',  desc:'DEF +9',             eff:'def',  val:9,  slot:'chest',  rarity:'uncommon',  type:'equip'},
+  {id:'plate_ar',   icon:'🦺', name:'판금 갑옷',  desc:'DEF +13, AGI -1',    eff:'def',  val:13, slot:'chest',  rarity:'rare',      type:'equip', bonus:{agi:-1}},
+  {id:'void_chest', icon:'🌀', name:'공허의 갑옷', desc:'DEF +10, STR +8 [공허 세트]', eff:'def', val:10, slot:'chest', rarity:'legendary', type:'equip', bonus:{str:8}, setId:'void'},
+  // ── 신발 ──────────────────────────────
+  {id:'cloth_bt',   icon:'🩴', name:'천 신발',     desc:'AGI +2',             eff:'agi',  val:2,  slot:'boots',  rarity:'common',    type:'equip'},
+  {id:'swift_bt',   icon:'👢', name:'신속의 부츠', desc:'AGI +5, 회피 +10%', eff:'agi',  val:5,  slot:'boots',  rarity:'uncommon',  type:'equip', bonus:{dodge:10}},
+  {id:'shadow_bt',  icon:'🥾', name:'그림자 부츠', desc:'AGI +8, 회피 +18%', eff:'agi',  val:8,  slot:'boots',  rarity:'rare',      type:'equip', bonus:{dodge:18}},
+  {id:'void_boots', icon:'🌀', name:'공허의 부츠', desc:'AGI +8, 회피 +15% [공허 세트]', eff:'agi', val:8, slot:'boots', rarity:'legendary', type:'equip', bonus:{dodge:15}, setId:'void'},
+  // ── 반지 ──────────────────────────────
+  {id:'copper_ring',icon:'🔵', name:'구리 반지',   desc:'STR +2',             eff:'str',  val:2,  slot:'ring',   rarity:'common',    type:'equip'},
+  {id:'xp_ring',    icon:'💍', name:'현자의 반지', desc:'경험치 +15%',        eff:'xpbonus',val:15, slot:'ring',  rarity:'rare',      type:'equip'},
+  {id:'gold_ring',  icon:'💛', name:'황금 반지',   desc:'골드 획득 +12%',    eff:'goldbonus',val:12, slot:'ring', rarity:'rare',      type:'equip'},
+  {id:'amulet_eq',  icon:'🪬', name:'수호의 부적', desc:'사망시 35% 자동 부활', eff:'amulet', val:.35, slot:'ring', rarity:'rare',   type:'equip'},
+  {id:'void_ring',  icon:'🌀', name:'공허의 반지', desc:'XP +20%, 골드 +20% [공허 세트]', eff:'xpbonus', val:20, slot:'ring', rarity:'legendary', type:'equip', bonus:{goldbonus:20}, setId:'void'},
 ];
+
+// 공허 세트 완성 체크
+function checkVoidSet() {
+  const c = S.char;
+  if(!c.equipped) return;
+  const equipped = Object.values(c.equipped).filter(Boolean);
+  const voidCount = VOID_SET_IDS.filter(id => equipped.includes(id)).length;
+  const prev = c.voidSetActive || 0;
+  if(voidCount === 5 && prev < 5) {
+    // 세트 완성!
+    c.voidSetActive = 5;
+    Object.entries(VOID_SET_BONUS).forEach(([k,v]) => {
+      if(k==='desc') return;
+      if(k==='str') c.str+=v;
+      else if(k==='int') c.int+=v;
+      else if(k==='agi') c.agi+=v;
+      else if(k==='def') c.def+=v;
+      else if(k==='xpBonus') c.xpBonus=(c.xpBonus||0)+v;
+      else if(k==='goldBonus') c.goldBonus=(c.goldBonus||0)+v;
+    });
+    G.log('🌀 공허 세트 완성!! 올스탯 +15, XP +50%, 골드 +30%', 'skill');
+    const ann=document.createElement('div');ann.className='wann';
+    ann.textContent='🌀 공허 세트 완성! 강대한 힘이 깃들었다!';
+    ann.style.color='#c0a0ff';document.body.appendChild(ann);setTimeout(()=>ann.remove(),4000);
+  } else if(voidCount < 5 && prev === 5) {
+    // 세트 해제
+    c.voidSetActive = voidCount;
+    Object.entries(VOID_SET_BONUS).forEach(([k,v]) => {
+      if(k==='desc') return;
+      if(k==='str') c.str=Math.max(1,c.str-v);
+      else if(k==='int') c.int=Math.max(1,c.int-v);
+      else if(k==='agi') c.agi=Math.max(1,c.agi-v);
+      else if(k==='def') c.def=Math.max(0,c.def-v);
+      else if(k==='xpBonus') c.xpBonus=Math.max(0,(c.xpBonus||0)-v);
+      else if(k==='goldBonus') c.goldBonus=Math.max(0,(c.goldBonus||0)-v);
+    });
+    G.log('🌀 공허 세트 해제됨','sys');
+  } else {
+    c.voidSetActive = voidCount;
+  }
+  if(voidCount > 0 && voidCount < 5) {
+    G.log('🌀 공허 세트 '+voidCount+'/5 — 모두 모으면 세트 효과 발동!','inf');
+  }
+}
 
 // ============================================================
 // 데이터: 아이템 (이름+설명+효과 포함)
@@ -771,19 +822,6 @@ const ITEM_DATA = [
   {id:'phoenix_ash',  icon:'🦅',name:'불사조 깃털',     desc:'사망 시 한 번 자동 부활. 확률 50%.',          eff:'amulet',val:.5, rarity:'epic'},
 ];
 
-// 사냥 전용 아이템 (몬스터 처치로만 획득)
-const HUNT_ITEMS = [
-  {id:'slime_core',   icon:'💚', name:'슬라임 핵',       desc:'슬라임의 핵심. 독특한 재생력이 있다.',        eff:'regen_boost',val:3, rarity:'hunt', huntOnly:true},
-  {id:'goblin_ear',   icon:'👂', name:'고블린 귀',        desc:'고블린의 귀. 상인이 좋아한다.',               eff:'gold',  val:60, rarity:'hunt', huntOnly:true},
-  {id:'wolf_fang',    icon:'🦷', name:'늑대 이빨',        desc:'늑대인간의 이빨. STR+4, AGI+2.',              eff:'wolf_fang',val:0,rarity:'hunt', huntOnly:true},
-  {id:'dragon_scale', icon:'🐉', name:'드래곤 비늘',      desc:'드래곤의 비늘. DEF+15, 극히 희귀.',           eff:'def',   val:15, rarity:'hunt', huntOnly:true},
-  {id:'vampire_blood',icon:'🧛', name:'뱀파이어 혈액',    desc:'생명흡수 효과. HP 최대치 +40.',               eff:'hpmax', val:40, rarity:'hunt', huntOnly:true},
-  {id:'lich_soul',    icon:'💀', name:'리치의 영혼',      desc:'INT+8, MP 최대치 +50. 강렬한 마력.',          eff:'lich_soul',val:0,rarity:'hunt', huntOnly:true},
-  {id:'troll_heart',  icon:'💗', name:'트롤 심장',        desc:'재생력 강화. HP 회복 속도 2배.',              eff:'regen2',val:0, rarity:'hunt', huntOnly:true},
-  {id:'mimic_key',    icon:'🗝️', name:'미믹 열쇠',        desc:'미믹이 숨긴 보물. 골드 +200.',                eff:'gold',  val:200,rarity:'hunt', huntOnly:true},
-  {id:'banshee_tear', icon:'💧', name:'밴시의 눈물',      desc:'MP 최대치 +60, INT+5.',                       eff:'banshee_tear',val:0,rarity:'hunt',huntOnly:true},
-  {id:'cerberus_claw',icon:'🐾', name:'케르베로스 발톱',  desc:'STR+10, AGI+5. 강맹한 힘.',                  eff:'cerberus_claw',val:0,rarity:'hunt',huntOnly:true},
-];
 
 // ============================================================
 // 데이터: 상점
@@ -1210,13 +1248,15 @@ const G = {
     chips.innerHTML = c.skills.map((sk,i) => {
       const locked = i >= maxSkills;
       if(locked) return `<div class="sch locked" title="Lv.${sk.unlockLv} 해금">${sk.name} 🔒</div>`;
-      return `<div class="sch ${sk.cdLeft>0?'on-cd':''}" id="sch-${i}" onclick="G.skill(${i})">${sk.name} <span style="font-size:10px;color:#4060aa">${sk.mp}MP</span></div>`;
+      const cdSecChip = sk.cdLeft>0 ? ' '+Math.ceil(sk.cdLeft/1000)+'s' : '';
+      return `<div class="sch ${sk.cdLeft>0?'on-cd':''}" id="sch-${i}" onclick="G.skill(${i})">${sk.name} <span style="font-size:10px;color:#4060aa">${sk.mp}MP</span>${cdSecChip?`<span style="font-size:9px;color:#666">${cdSecChip}</span>`:''}</div>`;
     }).join('');
     const bar = document.getElementById('skill-bar');
     bar.innerHTML = c.skills.map((sk,i) => {
       const locked = i >= maxSkills;
       if(locked) return `<button class="sk-btn locked" title="Lv.${sk.unlockLv} 해금">${sk.name}<span class="lk-txt">Lv.${sk.unlockLv}</span></button>`;
-      return `<button class="sk-btn ${sk.cdLeft>0?'cd':''}" id="skb-${i}" onclick="G.skill(${i})">${sk.name}<span class="mpc">${sk.mp}MP</span><div class="cdo" id="cdo-${i}" style="width:0%"></div></button>`;
+      const cdSec = sk.cdLeft>0 ? Math.ceil(sk.cdLeft/1000)+'s' : '';
+      return `<button class="sk-btn ${sk.cdLeft>0?'cd':''}" id="skb-${i}" onclick="G.skill(${i})">${sk.name}<span class="mpc">${sk.mp}MP</span>${cdSec?`<span class="cd-sec">${cdSec}</span>`:''}<div class="cdo" id="cdo-${i}" style="width:0%"></div></button>`;
     }).join('');
   },
 
@@ -1225,7 +1265,7 @@ const G = {
     for(let i=0;i<20;i++) {
       const it = S.char.inv[i];
       const s = document.createElement('div');
-      s.className = 'is' + (it?' has':'') + (it&&it.huntOnly?' hunt-item':'');
+      s.className = 'is' + (it?' has':'');
       if(it) {
         const rc={common:'',uncommon:'#4a8a4a',rare:'#4a5aaa',legendary:'#aa8a20',hunt:'#8a5a1a',equip:'#6a4aaa'};
         const bc=it.type==='equip'?rc[it.rarity]||'#6a4aaa':(rc[it.rarity]||'');
@@ -1396,29 +1436,30 @@ const G = {
     if(xpMult>1) this.log('✨ XP x'+xpMult.toFixed(1)+' (장비 보너스)','inf');
     SFX.play('loot');
     // 드롭: 소비 4%, 장비 1%, 사냥전용 8% (몬스터별)
-    const dropRoll = Math.random()*100;
+    const dropRoll = Math.random()*1000;
     if(S.char.inv.length < 20) {
       if(dropRoll < 1) {
-        // 장비 아이템 1%
-        const it = EQUIP_ITEMS[Math.floor(Math.random()*EQUIP_ITEMS.length)];
+        // 공허 장비 0.1% (지역별로 1개씩)
+        const voidMap = {'황야':'void_weapon','동굴':'void_helm','엘프 숲':'void_boots','드워프 산맥':'void_chest','마족 영토':'void_ring','차원 균열':'void_weapon','천계':'void_ring'};
+        const voidId = voidMap[S.zone] || 'void_weapon';
+        const it = EQUIP_ITEMS.find(x=>x.id===voidId);
+        if(it){S.char.inv.push({...it});this.log('🌀 [LEGENDARY] '+it.icon+' '+it.name+' 드롭!!','loot');this.rInv();}
+      } else if(dropRoll < 11) {
+        // 일반 장비 1% (공허 제외)
+        const normalEquip = EQUIP_ITEMS.filter(x=>x.rarity!=='legendary');
+        const it = normalEquip[Math.floor(Math.random()*normalEquip.length)];
         S.char.inv.push({...it});
-        this.log('⚔️ [희귀 장비] '+it.icon+' '+it.name+'!', 'loot');
+        this.log('⚔️ [장비] '+it.icon+' '+it.name, 'loot');
         this.rInv();
-      } else if(dropRoll < 5) {
+      } else if(dropRoll < 51) {
         // 소비 아이템 4%
         const it = CONSUMABLE_ITEMS[Math.floor(Math.random()*CONSUMABLE_ITEMS.length)];
         S.char.inv.push({...it});
-        this.log('🎁 아이템: '+it.icon+' '+it.name, 'loot');
+        this.log('🎁 '+it.icon+' '+it.name, 'loot');
         this.rInv();
       }
     }
-    // 사냥 전용 아이템 (몬스터별 8%)
-    if(Math.random() < .08 && S.char.inv.length < 20) {
-      const huntMap = {dragon:'dragon_scale',lich:'lich_soul',cerberus:'cerberus_claw',vampire:'vampire_blood',troll:'troll_heart',mimic:'mimic_key',banshee:'banshee_tear',wolf:'wolf_fang',slime:'slime_core',goblin:'goblin_ear'};
-      const huntId = huntMap[m.id];
-      const hit = huntId ? HUNT_ITEMS.find(h=>h.id===huntId) : HUNT_ITEMS[Math.floor(Math.random()*HUNT_ITEMS.length)];
-      if(hit) { S.char.inv.push({...hit}); this.log('🏹 [사냥 전용] '+hit.icon+' '+hit.name, 'loot'); this.rInv(); }
-    }
+
     this.qProg(m.id); this.lvChk();
     setTimeout(() => { m.curHp=m.hpMax; m.dead=false; this.rMon(); this.log(m.icon+' '+m.name+' 리스폰', 'sys'); }, 15000);
   },
@@ -1957,7 +1998,7 @@ function bagFilter(type, btn) {
   _bagFilter = type;
   document.querySelectorAll('.bag-tab').forEach(b=>b.classList.remove('on'));
   if(btn) btn.classList.add('on');
-  const labels={all:'전체 아이템',consume:'소비 아이템',equip:'장비 아이템',hunt:'사냥 전용'};
+  const labels={all:'전체 아이템',consume:'소비 아이템',equip:'장비 아이템'};
   const info=document.getElementById('bag-filter-info');
   if(info) info.textContent=labels[type]||'전체';
   openInvModal();
@@ -1975,7 +2016,6 @@ function openInvModal(preselect) {
     if(it && filterType !== 'all') {
       if(filterType==='consume' && it.type!=='consume') { grid.appendChild(document.createElement('div')); continue; }
       if(filterType==='equip'   && it.type!=='equip')   { grid.appendChild(document.createElement('div')); continue; }
-      if(filterType==='hunt'    && it.rarity!=='hunt')  { grid.appendChild(document.createElement('div')); continue; }
     }
     const s = document.createElement('div');
     s.className = 'inv-slot' + (it?' has':'') + (i===_selectedInvIdx?' selected':'');
@@ -1994,19 +2034,43 @@ function selectInvItem(idx) {
   _selectedInvIdx = idx;
   const it = S.char.inv[idx];
   if(!it) return;
-  document.querySelectorAll('.inv-slot').forEach((s,i) => {
-    s.classList.toggle('selected', i===idx);
-  });
-  document.getElementById('inv-detail').innerHTML = `
-    <div class="inv-detail-name">${it.icon} ${it.name}</div>
-    <div class="inv-detail-desc">${it.desc}</div>
-    <div class="inv-detail-eff">효과: ${getEffDesc(it.eff, it.val)}</div>
-    ${it.huntOnly ? '<div class="inv-detail-hunt">🏹 사냥 전용 아이템</div>' : ''}
-  `;
-  document.getElementById('inv-actions').innerHTML = `
-    <button class="bb" onclick="G.useItem(${idx})">사용</button>
-    <button class="bb" onclick="dropItem(${idx})">버리기</button>
-  `;
+  // 바로 사용/장착 확인 팝업
+  const type = it.type==='equip' ? '장착' : '사용';
+  // 간단 confirm 대신 커스텀 미니 팝업
+  showItemConfirm(idx);
+}
+
+function showItemConfirm(idx) {
+  const it = S.char.inv[idx];
+  if(!it) return;
+  // 기존 confirm 제거
+  document.getElementById('item-confirm')?.remove();
+  const div = document.createElement('div');
+  div.id = 'item-confirm';
+  div.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0a0a0a;border:1px solid #333;padding:.8rem 1rem;z-index:9000;display:flex;flex-direction:column;gap:.5rem;min-width:200px;text-align:center';
+  const typeLabel = it.type==='equip'?'장착':'사용';
+  const btnStyle = 'font-family:monospace;font-size:12px;padding:.35rem .7rem;cursor:pointer;border-radius:0';
+  div.innerHTML = '<div style="font-size:13px;color:#f0e7c8">'+it.icon+' '+it.name+'</div>'+
+    '<div style="font-size:11px;color:#888">'+it.desc+'</div>'+
+    '<div style="display:flex;gap:.4rem;justify-content:center;margin-top:.3rem" id="ic-btns"></div>';
+  document.body.appendChild(div);
+  const btns = document.getElementById('ic-btns');
+  const b1 = document.createElement('button');
+  b1.style.cssText = btnStyle+';background:#181818;border:1px solid #444;color:#d0d0bc';
+  b1.textContent = '✓ '+typeLabel;
+  b1.onclick = ()=>{ G.useItem(idx); document.getElementById('item-confirm')?.remove(); };
+  const b2 = document.createElement('button');
+  b2.style.cssText = btnStyle+';background:transparent;border:1px solid #2a2a2a;color:#666';
+  b2.textContent = '버리기';
+  b2.onclick = ()=>{ dropItem(idx); document.getElementById('item-confirm')?.remove(); };
+  const b3 = document.createElement('button');
+  b3.style.cssText = btnStyle+';background:transparent;border:1px solid #1a1a1a;color:#444';
+  b3.textContent = '✕';
+  b3.onclick = ()=>{ document.getElementById('item-confirm')?.remove(); };
+  btns.append(b1,b2,b3);
+  const _dummy = null; // placeholder
+  // 3초후 자동 사라짐
+  setTimeout(()=>document.getElementById('item-confirm')?.remove(), 4000);
 }
 function dropItem(idx) {
   const it = S.char.inv[idx];
