@@ -1476,7 +1476,8 @@ const G = {
     usedFx.innerHTML = '<div class="ifx-name">'+it.icon+' '+it.name+'</div><div class="ifx-desc" style="color:#50c050">✓ 아이템이 사용되었습니다!</div>';
     document.body.appendChild(usedFx);
     setTimeout(()=>usedFx.remove(), 1200);
-    // 인벤 창 유지 - 슬롯만 갱신
+    // 모달 창 열려있으면 그리드 갱신
+    if(document.getElementById('inv-modal').classList.contains('on')) openInvModal();
   },
 
   applyItemEff(eff, val, name, icon) {
