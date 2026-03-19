@@ -222,6 +222,31 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .locked-costume{opacity:.85}
 .locked-costume .costume-badge{cursor:default}
 .rarity-common{color:#888}.rarity-uncommon{color:#4a8a4a}.rarity-rare{color:#4a5aaa}.rarity-legendary{color:#aa8a20}
+
+/* ── 장비창 모달 ── */
+.equip-modal-body{display:flex;flex-direction:column;gap:.8rem}
+.equip-figure{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto auto;gap:.4rem;align-items:center;margin-bottom:.5rem}
+.eq-slot{background:#070707;border:1px solid #222;padding:.5rem .3rem;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.2rem;transition:all .15s;min-height:64px;position:relative}
+.eq-slot:active{background:#111}
+.eq-slot.empty{border-style:dashed;border-color:#1a1a1a}
+.eq-slot .eqs-label{font-size:9px;color:#444;letter-spacing:.15em}
+.eq-slot .eqs-icon{font-size:1.5rem;line-height:1}
+.eq-slot .eqs-name{font-size:10px;line-height:1.2;max-width:70px;word-break:keep-all}
+.eq-slot .eqs-stat{font-size:9px;color:#4a8a4a;margin-top:.1rem}
+.eq-slot.common   .eqs-name{color:#999}
+.eq-slot.uncommon{border-color:#2a5a2a}.eq-slot.uncommon .eqs-name{color:#4a8a4a}
+.eq-slot.rare     {border-color:#2a3a7a}.eq-slot.rare      .eqs-name{color:#6080d0}
+.eq-slot.legendary{border-color:#7a5a10;animation:legendglow 2s ease-in-out infinite}.eq-slot.legendary .eqs-name{color:#d4a020}
+@keyframes legendglow{0%,100%{border-color:#7a5a10;box-shadow:none}50%{border-color:#c8a030;box-shadow:0 0 8px rgba(200,160,48,.3)}}
+.eq-center-char{display:flex;align-items:center;justify-content:center;grid-column:2;grid-row:1/4}
+.eq-center-canvas{image-rendering:pixelated;width:72px;height:72px;border:1px solid #1a1a1a;background:#030303}
+.eq-ring-row{display:flex;gap:.4rem;justify-content:center}
+/* 가방 모달 */
+.bag-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.bag-tabs{display:flex;gap:2px;margin-bottom:.6rem}
+.bag-tab{background:transparent;border:1px solid #1a1a1a;color:#555;font-family:'Share Tech Mono',monospace;font-size:11px!important;padding:.3rem .6rem;cursor:pointer;border-radius:0}
+.bag-tab.on{border-color:#444;color:var(--tx)}
+.bag-filter-info{font-size:10px;color:#333;letter-spacing:.1em;margin-bottom:.4rem}
 </style>
 </head>
 <body>
@@ -238,24 +263,76 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
   <div class="dn" id="dcost"></div>
 </div>
 
-<!-- 장비/코스튬 모달 -->
+<!-- 장비창 모달 -->
 <div class="modal-bg" id="equip-modal">
-  <div class="modal">
-    <div class="modal-title">장비창 <button class="modal-close" onclick="closeModal('equip-modal')">✕</button></div>
-    <div class="sec-lbl">코스튬 슬롯</div>
-    <div class="equip-grid" id="equip-slots"></div>
-    <div class="sec-lbl">보유 코스튬</div>
-    <div class="costume-list" id="costume-list"></div>
+  <div class="modal" style="max-width:420px">
+    <div class="modal-title">⚔ 장비창 <button class="modal-close" onclick="closeModal('equip-modal')">✕</button></div>
+    <div class="equip-modal-body">
+      <!-- 장비 슬롯 피규어 -->
+      <div class="equip-figure">
+        <!-- 왼쪽: 무기, 갑옷 -->
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div class="eq-slot empty" id="eqs-weapon" onclick="EQ.unequipGear('weapon')" data-slot="weapon">
+            <div class="eqs-label">⚔ 무기</div>
+            <div class="eqs-icon">—</div>
+            <div class="eqs-name" style="color:#333">비어있음</div>
+          </div>
+          <div class="eq-slot empty" id="eqs-chest" onclick="EQ.unequipGear('chest')" data-slot="chest">
+            <div class="eqs-label">🛡 갑옷</div>
+            <div class="eqs-icon">—</div>
+            <div class="eqs-name" style="color:#333">비어있음</div>
+          </div>
+        </div>
+        <!-- 가운데: 캐릭터 -->
+        <div class="eq-center-char">
+          <canvas class="eq-center-canvas" id="eq-char-canvas" width="24" height="24"></canvas>
+        </div>
+        <!-- 오른쪽: 투구, 신발 -->
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div class="eq-slot empty" id="eqs-helm" onclick="EQ.unequipGear('helm')" data-slot="helm">
+            <div class="eqs-label">⛑ 투구</div>
+            <div class="eqs-icon">—</div>
+            <div class="eqs-name" style="color:#333">비어있음</div>
+          </div>
+          <div class="eq-slot empty" id="eqs-boots" onclick="EQ.unequipGear('boots')" data-slot="boots">
+            <div class="eqs-label">👢 신발</div>
+            <div class="eqs-icon">—</div>
+            <div class="eqs-name" style="color:#333">비어있음</div>
+          </div>
+        </div>
+      </div>
+      <!-- 반지 (하단 가운데) -->
+      <div class="eq-ring-row">
+        <div class="eq-slot empty" id="eqs-ring" onclick="EQ.unequipGear('ring')" data-slot="ring" style="width:120px">
+          <div class="eqs-label">💍 반지</div>
+          <div class="eqs-icon">—</div>
+          <div class="eqs-name" style="color:#333">비어있음</div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:#333;text-align:center;margin-top:-.3rem">탭하여 장비 해제</div>
+      <!-- 총 스탯 보너스 -->
+      <div id="equip-bonus-summary" style="background:#050505;border:1px solid #1a1a1a;padding:.6rem;font-size:11px;color:#666;line-height:1.8"></div>
+      <!-- 코스튬 섹션 -->
+      <div class="sec-lbl" style="margin-top:.5rem">💎 코스튬 (프리미엄)</div>
+      <div class="costume-list" id="costume-list"></div>
+    </div>
   </div>
 </div>
 
-<!-- 인벤토리 상세 모달 -->
+<!-- 가방 모달 -->
 <div class="modal-bg" id="inv-modal">
   <div class="modal">
-    <div class="modal-title">인벤토리 <button class="modal-close" onclick="closeModal('inv-modal')">✕</button></div>
+    <div class="modal-title">🎒 가방 <button class="modal-close" onclick="closeModal('inv-modal')">✕</button></div>
+    <div class="bag-tabs">
+      <button class="bag-tab on" onclick="bagFilter('all',this)">전체</button>
+      <button class="bag-tab" onclick="bagFilter('consume',this)">소비</button>
+      <button class="bag-tab" onclick="bagFilter('equip',this)">장비</button>
+      <button class="bag-tab" onclick="bagFilter('hunt',this)">사냥</button>
+    </div>
+    <div class="bag-filter-info" id="bag-filter-info">전체 아이템</div>
     <div class="inv-modal-grid" id="inv-modal-grid"></div>
     <div class="inv-detail" id="inv-detail">
-      <div style="color:#444;font-size:12px">아이템을 선택하세요</div>
+      <div style="color:#333;font-size:12px">아이템을 선택하세요</div>
     </div>
     <div class="inv-actions" id="inv-actions"></div>
   </div>
@@ -286,7 +363,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 <!-- 시작 화면 -->
 <div id="si" class="scr on">
   <span class="logo">판타챗</span>
-  <span class="sub">FANTACHAT ── HARDCORE FANTASY ── v1.0</span>
+  <span class="sub">FANTACHAT ── HARDCORE FANTASY ── v2.0</span>
   <div class="trm">
     <div class="trm-lbl">COMMAND TERMINAL</div>
     <div class="trm-row" onclick="document.getElementById('ii').focus()">
@@ -332,7 +409,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
     <div class="chip">Lv.<b id="hlv">1</b></div>
     <div class="chip">위치 <b id="hzone">황야</b></div>
     <div class="chip gold">골드 <b id="hgold">150</b>G</div>
-    <div class="chip act" onclick="openModal('equip-modal');EQ.render()">👗 장비</div>
+    <div class="chip act" onclick="openModal('equip-modal');EQ.render()">⚔ 장비창</div>
     <div class="chip act" onclick="SS.open()">📸 공유</div>
     <div class="chip act" onclick="SAVE.save()">💾 저장</div>
     <div class="chip ins" onclick="G.reviveInfo()">💀보험</div>
@@ -353,9 +430,15 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
         <div class="rr" style="margin-top:.4rem"><div class="rlr"><span>XP</span><span id="xptx">0/200</span></div><div class="rb"><div class="rf xp" id="xpb" style="width:0%"></div></div></div>
       </div>
       <div class="ls"><div class="lt">STATS</div><div class="sm" id="smini"></div></div>
-      <div class="ls"><div class="lt">스킬 (탭하여 사용)</div><div class="sc2" id="schips"></div></div>
+      <div class="ls"><div class="lt">SKILLS</div><div class="sc2" id="schips"></div></div>
       <div class="ls">
-        <div class="lt" style="display:flex;justify-content:space-between;align-items:center">INVENTORY <span style="color:#555;cursor:pointer;font-size:10px" onclick="openInvModal()">상세보기</span></div>
+        <div class="lt" style="display:flex;justify-content:space-between;align-items:center">
+          🎒 가방
+          <div style="display:flex;gap:.3rem">
+            <span style="color:#6a5a2a;cursor:pointer;font-size:10px;border:1px solid #2a2010;padding:.1rem .35rem" onclick="openModal('equip-modal');EQ.render()">⚔ 장비</span>
+            <span style="color:#555;cursor:pointer;font-size:10px;border:1px solid #1a1a1a;padding:.1rem .35rem" onclick="openInvModal()">열기</span>
+          </div>
+        </div>
         <div class="ig" id="invg"></div>
       </div>
     </div>
@@ -372,11 +455,11 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
           <div class="fw"><canvas id="fc" width="400" height="160"></canvas></div>
           <div class="lgt">전투 로그</div>
           <div class="fl" id="flog"></div>
-          <div class="zl">이 구역의 몬스터 (탭하여 공격)</div>
+          <div class="zl">이 구역의 몬스터</div>
           <div class="ml" id="mlist"></div>
         </div>
         <div class="tp" id="tp-quest"><div class="lgt" style="margin-bottom:.6rem">진행 중인 퀘스트</div><div id="qlist"></div></div>
-        <div class="tp" id="tp-map"><canvas id="wm" width="600" height="310" style="width:100%;border:1px solid #181818;image-rendering:pixelated"></canvas><div style="font-size:11px;color:#666;margin-top:.4rem">탭하여 이동 (레벨 제한 있음)</div></div>
+        <div class="tp" id="tp-map"><canvas id="wm" width="600" height="310" style="width:100%;border:1px solid #181818;image-rendering:pixelated"></canvas><div style="font-size:11px;color:#666;margin-top:.4rem">지역을 탭하여 이동 — 레벨 제한 있음</div></div>
         <div class="tp" id="tp-shop"><div class="lgt" style="margin-bottom:.6rem">블랙마켓</div><div id="shoplist"></div></div>
       </div>
       <div class="skill-bar" id="skill-bar"></div>
@@ -462,7 +545,7 @@ const RACE_SKILLS = {
     '활': [
       {id:'arrow',  name:'속사',     mp:40,cd:30000, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
       {id:'trap',   name:'함정설치', mp:48,cd:60000, type:'stun', power:0,   fx:'🪤 함정!',      unlockLv:5},
-      {id:'eagle',  name:'독수리눈', mp:72,cd:90000, type:'buff', power:0,   fx:'👁️ 독수리눈!', unlockLv:10},
+      {id:'stealth',name:'은신',     mp:60,cd:90000, type:'def',  power:0,   fx:'🌑 은신!',      unlockLv:10},
     ],
     '마법서': [
       {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
@@ -521,32 +604,32 @@ const RACE_SKILLS = {
     '도끼': [
       {id:'axe',    name:'대도끼',   mp:32, cd:30000, type:'atk',  power:2.8, fx:'⚒️ 대도끼!',   unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
     '대검': [
       {id:'slash',  name:'강베기',   mp:40,cd:30000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
     '쌍검': [
       {id:'dual',   name:'연속베기', mp:48,cd:30000, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
     '활': [
       {id:'arrow',  name:'속사',     mp:40,cd:30000, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
     '마법서': [
       {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
     '지팡이': [
       {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
       {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'forge',  name:'단련',     mp:80,cd:90000,type:'buff', power:3,   fx:'🔥 단련!',      unlockLv:10},
+      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
     ],
   },
   demon: {
@@ -1237,9 +1320,9 @@ const G = {
     } else if(sk.type==='stun') {
       if(m) { m.stunned = (sk.id==='fear'?3:2); }
       this.log('적 스턴! '+(m?m.name:'')+(m?' 행동 불가':''), 'skill');
-    } else if(sk.type==='buff') {
-      if(sk.id==='forge') { c.str+=4; this.rStat(); this.log('STR +4 영구!', 'inf'); }
-      if(sk.id==='eagle') { c.agi+=3; c.dodgeBonus+=10; this.rStat(); this.log('AGI +3, 회피 +10%!', 'inf'); }
+    } else if(sk.type==='def') {
+      if(sk.id==='iron'||sk.id==='taunt'||sk.id==='shield') { c.shieldUp=true; this.log('다음 피해 70% 감소!','inf'); }
+      else if(sk.id==='stealth'||sk.id==='evade') { c.dodgeBonus+=30; setTimeout(()=>{c.dodgeBonus=Math.max(0,c.dodgeBonus-30);},8000); this.log('회피율 +30% (8초)','inf'); }
     }
 
     sk.cdLeft = sk.cd; this.startCD(si, sk.cd);
@@ -1651,23 +1734,43 @@ const EQ = {
     const c = S.char;
     // 장비 슬롯
     const SLOTS=[{slot:'weapon',label:'⚔무기'},{slot:'helm',label:'⛑투구'},{slot:'chest',label:'🛡갑옷'},{slot:'boots',label:'👢신발'},{slot:'ring',label:'💍반지'}];
-        const esEl = document.getElementById('equip-slots');
-    esEl.innerHTML = '';
-    SLOTS.forEach(s=>{
-      const eid=c.equipped&&c.equipped[s.slot];
+        // 각 슬롯 업데이트
+    const rCol={common:'common',uncommon:'uncommon',rare:'rare',legendary:'legendary'};
+    const rColHex={common:'#888',uncommon:'#4a8a4a',rare:'#6080d0',legendary:'#d4a020'};
+    ['weapon','helm','chest','boots','ring'].forEach(slot=>{
+      const el=document.getElementById('eqs-'+slot); if(!el) return;
+      const eid=c.equipped&&c.equipped[slot];
       const ei=eid?EQUIP_ITEMS.find(x=>x.id===eid):null;
-      const rCol={common:'#888',uncommon:'#4a8a4a',rare:'#4a5aaa',legendary:'#aa8a20'};
-      const div=document.createElement('div');
-      div.className='equip-slot';
-      div.style.borderColor=ei?rCol[ei.rarity]:'#181818';
-      div.dataset.slot=s.slot;
-      div.onclick=()=>EQ.unequipGear(s.slot);
-      div.innerHTML='<div class="slot-label">'+s.label+'</div>'+
-        '<div class="slot-icon">'+(ei?ei.icon:'—')+'</div>'+
-        '<div class="slot-name" style="color:'+(ei?rCol[ei.rarity]:'#555')+'">'+(ei?ei.name:'비어있음')+'</div>'+
-        (ei?'<div class="slot-stat">'+ei.desc+'</div>':'');
-      esEl.appendChild(div);
+      el.className='eq-slot '+(ei?rCol[ei.rarity]||'common':'empty');
+      el.innerHTML='<div class="eqs-label">'+el.dataset.slot_label+'</div>'+
+        '<div class="eqs-icon">'+(ei?ei.icon:'—')+'</div>'+
+        '<div class="eqs-name">'+(ei?ei.name:'비어있음')+'</div>'+
+        (ei?'<div class="eqs-stat">'+ei.desc+'</div>':'');
     });
+    // 슬롯 레이블 복원
+    const labelMap={weapon:'⚔ 무기',helm:'⛑ 투구',chest:'🛡 갑옷',boots:'👢 신발',ring:'💍 반지'};
+    ['weapon','helm','chest','boots','ring'].forEach(slot=>{
+      const el=document.getElementById('eqs-'+slot); if(!el) return;
+      const eid=c.equipped&&c.equipped[slot];
+      const ei=eid?EQUIP_ITEMS.find(x=>x.id===eid):null;
+      el.innerHTML='<div class="eqs-label">'+labelMap[slot]+'</div>'+
+        '<div class="eqs-icon">'+(ei?ei.icon:'—')+'</div>'+
+        '<div class="eqs-name">'+(ei?ei.name:'비어있음')+'</div>'+
+        (ei?'<div class="eqs-stat">'+ei.desc+'</div>':'');
+    });
+    // 가운데 캐릭터
+    const eqCanvas=document.getElementById('eq-char-canvas');
+    if(eqCanvas) PIX.draw(eqCanvas.getContext('2d'), S.char.race, 24);
+    // 장비 보너스 합산
+    const bonusLines=[];
+    ['weapon','helm','chest','boots','ring'].forEach(slot=>{
+      const eid=c.equipped&&c.equipped[slot];
+      if(!eid) return;
+      const ei=EQUIP_ITEMS.find(x=>x.id===eid);
+      if(ei) bonusLines.push('<span style="color:'+(rColHex[ei.rarity]||'#888')+'">'+ei.icon+' '+ei.name+'</span> — '+ei.desc);
+    });
+    const bonusEl=document.getElementById('equip-bonus-summary');
+    if(bonusEl) bonusEl.innerHTML=bonusLines.length?bonusLines.join('<br>'):'<span style="color:#222">장착된 장비 없음</span>';
     // 코스튬 목록
     document.getElementById('costume-list').innerHTML = COSTUMES.map(ct => {
       const isEquipped = c.equip[ct.slot] === ct.id;
@@ -1849,16 +1952,37 @@ const SS = {
 // 인벤토리 모달
 // ============================================================
 let _selectedInvIdx = -1;
+let _bagFilter = 'all';
+function bagFilter(type, btn) {
+  _bagFilter = type;
+  document.querySelectorAll('.bag-tab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  const labels={all:'전체 아이템',consume:'소비 아이템',equip:'장비 아이템',hunt:'사냥 전용'};
+  const info=document.getElementById('bag-filter-info');
+  if(info) info.textContent=labels[type]||'전체';
+  openInvModal();
+}
+
 function openInvModal(preselect) {
   const c = S.char;
   const grid = document.getElementById('inv-modal-grid');
   grid.innerHTML = '';
+  // 필터 적용
+  const filterType = typeof _bagFilter !== 'undefined' ? _bagFilter : 'all';
   for(let i=0;i<20;i++) {
     const it = c.inv[i];
+    // 필터 적용
+    if(it && filterType !== 'all') {
+      if(filterType==='consume' && it.type!=='consume') { grid.appendChild(document.createElement('div')); continue; }
+      if(filterType==='equip'   && it.type!=='equip')   { grid.appendChild(document.createElement('div')); continue; }
+      if(filterType==='hunt'    && it.rarity!=='hunt')  { grid.appendChild(document.createElement('div')); continue; }
+    }
     const s = document.createElement('div');
     s.className = 'inv-slot' + (it?' has':'') + (i===_selectedInvIdx?' selected':'');
     if(it) {
-      s.innerHTML = `<div class="inv-icon">${it.icon}</div><div class="inv-name">${it.name}</div>`;
+      const rc={common:'',uncommon:'#2a5a2a',rare:'#2a3a7a',legendary:'#5a4010',hunt:'#3a2a08'};
+      if(rc[it.rarity]) s.style.borderColor=rc[it.rarity];
+      s.innerHTML = '<div class="inv-icon">'+it.icon+'</div><div class="inv-name">'+it.name+'</div>';
       s.onclick = () => selectInvItem(i);
     }
     grid.appendChild(s);
