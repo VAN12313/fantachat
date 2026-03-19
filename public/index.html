@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>판타챗 v2.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>판타챗 v3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--bg:#000;--bg1:#030303;--bg2:#070707;--bg3:#0d0d0d;--l1:#181818;--l2:#242424;--tx:#d0d0bc;--gold:#f0e7c8;--hp:#aa2020;--mp:#2050aa;--xp:#4a7020;--human:#b07020;--elf:#507020;--dwarf:#a09020;--demon:#aa2050;--sys:#3050cc;--dodge:#20c8a0}
 html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:14px;touch-action:manipulation}
+body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:15px;touch-action:manipulation}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:9999}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--l2)}
-input,select,button{font-size:16px!important;-webkit-appearance:none;font-family:'Share Tech Mono',monospace}
+input,select,button{font-size:16px!important;-webkit-appearance:none;font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif}
 .scr{display:none;height:100vh;flex-direction:column}.scr.on{display:flex}
 #si{align-items:center;justify-content:center;padding:2rem;overflow:hidden}
 .logo{font-family:'Noto Serif KR',serif;font-size:clamp(2.8rem,12vw,5rem);font-weight:700;color:var(--gold);letter-spacing:.3em;text-shadow:0 0 40px rgba(240,231,200,.2);animation:flk 9s infinite;display:block;text-align:center}
@@ -107,7 +107,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 @keyframes dodgefly{0%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}40%{opacity:1;transform:translate(-20%,-80%) scale(1.4) rotate(-15deg)}100%{opacity:0;transform:translate(10%,-110%) scale(0.7) rotate(20deg)}}
 .skill-bar{display:flex;gap:4px;padding:.5rem .7rem;background:#020202;border-top:1px solid #111;flex-shrink:0;overflow-x:auto}
 .skill-bar::-webkit-scrollbar{display:none}
-.sk-btn{background:var(--bg2);border:1px solid #222;color:#aaa;font-size:12px!important;padding:.45rem .65rem;cursor:pointer;flex-shrink:0;border-radius:0;white-space:nowrap;position:relative;overflow:hidden}
+.sk-btn{background:var(--bg2);border:1px solid #222;color:#aaa;font-size:13px!important;font-family:'Noto Sans KR',sans-serif;padding:.45rem .65rem;cursor:pointer;flex-shrink:0;border-radius:0;white-space:nowrap;position:relative;overflow:hidden}
 .sk-btn:active{background:#1a1a1a}.sk-btn.cd{color:#333;border-color:#111;pointer-events:none}
 .sk-btn.locked{color:#222;border-color:#0d0d0d;pointer-events:none;opacity:.35;background:#020202}
 .sk-btn .mpc{font-size:10px;color:#4060aa;margin-left:.25rem}
@@ -138,7 +138,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .mt2{color:#aaa}
 .ci{border-top:1px solid #0d0d0d;padding:.5rem;display:flex;gap:.35rem;flex-shrink:0}
 .ci input{flex:1;background:var(--bg2);border:1px solid #181818;outline:none;color:var(--tx);font-size:16px!important;padding:.45rem .55rem;border-radius:0}
-.csb{background:#181818;border:1px solid #333;color:#aaa;font-size:14px!important;padding:.45rem .8rem;cursor:pointer;border-radius:0;flex-shrink:0}
+.csb{background:#181818;border:1px solid #333;color:#aaa;font-size:14px!important;font-family:'Noto Sans KR',sans-serif;padding:.45rem .8rem;cursor:pointer;border-radius:0;flex-shrink:0}
 .csb:active{background:#282828;color:var(--tx)}
 #sd{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:5000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:1.5rem;text-align:center}
 #sd.on{display:flex}
@@ -276,6 +276,22 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .sk-learn-btn.cant{border-color:#1a1a1a;color:#333;cursor:default}
 .sk-locked-lv{font-size:10px;color:#333;position:absolute;top:.4rem;right:.5rem}
 .sk-ult-badge{font-size:9px;color:#d4a020;letter-spacing:.1em}
+
+/* 레이드 채팅 모드 */
+/* raid-mode chat styling removed */
+.raid-panel{display:none;flex-direction:column;background:#050202;border-bottom:1px solid #2a0808;padding:.5rem .7rem;gap:.3rem}
+.raid-panel.on{display:flex}
+.raid-boss-name{font-size:11px;color:#ff6060;letter-spacing:.2em}
+.raid-hp-bg{height:8px;background:#1a0808;border:1px solid #3a1010;margin:.2rem 0}
+.raid-hp-fill{height:100%;background:linear-gradient(90deg,#aa2020,#ff4040);transition:width .3s}
+.raid-hp-txt{font-size:10px;color:#884444;letter-spacing:.05em}
+.raid-phase-msg{font-size:11px;color:#ff4040;text-align:center;padding:.2rem;border:1px solid #3a0808;background:#0d0202;animation:raidmsg .5s ease}
+@keyframes raidmsg{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.raid-atk-log{font-size:10px;color:#884444}
+.raid-atk-log.crit{color:#ff8040}
+.raid-hint{font-size:10px;color:#3a1a1a;text-align:center;letter-spacing:.1em}
+.msg.raid-dmg span.mt2{color:#ff6040}
+.msg.raid-heal span.mt2{color:#40ff80}
 </style>
 </head>
 <body>
@@ -397,7 +413,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 <!-- 시작 화면 -->
 <div id="si" class="scr on">
   <span class="logo">판타챗</span>
-  <span class="sub">FANTACHAT ── HARDCORE FANTASY ── v2.0</span>
+  <span class="sub">FANTACHAT ── HARDCORE FANTASY ── v3.0</span>
   <div class="trm">
     <div class="trm-lbl">COMMAND TERMINAL</div>
     <div class="trm-row" onclick="document.getElementById('ii').focus()">
@@ -506,6 +522,14 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
         <button class="ctb" onclick="CH.sw('whisper',this)">[귓말]</button>
       </div>
       <div class="co"><div class="ws-dot" id="wsdot2"></div><span id="conline">접속자 —명</span></div>
+      <!-- 레이드 보스 패널 (레이드 맵 진입시 표시) -->
+      <div class="raid-panel" id="raid-panel">
+        <div class="raid-boss-name" id="raid-boss-name">★ RAID BOSS</div>
+        <div class="raid-hp-bg"><div class="raid-hp-fill" id="raid-hp-fill" style="width:100%"></div></div>
+        <div class="raid-hp-txt" id="raid-hp-txt"></div>
+        <div class="raid-phase-msg" id="raid-phase-msg" style="display:none"></div>
+        <div class="raid-hint">⚔️ 몬스터를 탭하여 보스를 공격!</div>
+      </div>
       <div class="cm" id="cmsgs"></div>
       <div class="ci">
         <input id="cinp" type="text" placeholder="메시지..." enterkeyhint="send"/>
@@ -632,18 +656,33 @@ const MONSTERS = [
   {id:'duergar',  name:'듀어가',    icon:'⛏️',lv:13,hpMax:520,atk:65, xp:360,gold:120,color:'#3a2a18',region:'드워프 산맥'},
   {id:'lich',     name:'리치',      icon:'💎',lv:18,hpMax:700,atk:90, xp:540,gold:200,color:'#0a0a2a',region:'마족 영토'},
   {id:'cerberus', name:'케르베로스',icon:'🐕',lv:20,hpMax:900,atk:110,xp:660,gold:180,color:'#1a0808',region:'마족 영토'},
-  {id:'dragon',   name:'드래곤',    icon:'🐉',lv:25,hpMax:1400,atk:150,xp:1100,gold:420,color:'#2a0808',region:'마족 영토'},
-  {id:'demon_lord',name:'마왕',     icon:'👿',lv:30,hpMax:1200,atk:130,xp:2000,gold:800,color:'#3a0020',region:'마족 영토'},
+  {id:'hellhound',name:'지옥견',    icon:'🔥',lv:22,hpMax:800,atk:100,xp:700,gold:250,color:'#4a1010',region:'마족 영토'},
+  {id:'dark_mage', name:'암흑 마법사',icon:'🧙',lv:24,hpMax:600,atk:110,xp:900,gold:300,color:'#1a0a3a',region:'마족 영토'},
 
+  // ── 레이드 보스 ──────────────────────
+  {id:'raid_dragon',    name:'드래곤 ★레이드',  icon:'🐉', lv:20, hpMax:15000, atk:180, xp:12000, gold:3000, color:'#4a0808', region:'드래곤 레이드',
+   raidPhases:[
+     {hp:0.7, msg:'드래곤이 불꽃을 내뿜는다!', eff:'fire_breath', dmg:80},
+     {hp:0.5, msg:'드래곤이 분노한다! 공격 강화!', eff:'rage', dmg:0},
+     {hp:0.3, msg:'드래곤이 광란 상태! 전체 화염!', eff:'aoe_fire', dmg:60},
+     {hp:0.1, msg:'최후의 발악! 극대화 공격!', eff:'berserk', dmg:0},
+   ], respawnMs: 10800000}, // 3시간
+  {id:'raid_demon_lord',name:'마왕 ★레이드',    icon:'👿', lv:30, hpMax:30000, atk:250, xp:30000, gold:8000, color:'#4a0030', region:'마왕 레이드',
+   raidPhases:[
+     {hp:0.7, msg:'마왕이 저주를 내린다! HP 절반!', eff:'curse_hp', dmg:0},
+     {hp:0.5, msg:'마왕의 공포! 전체 스턴!', eff:'mass_stun', dmg:0},
+     {hp:0.3, msg:'마왕 변신! 암흑 폭발!', eff:'dark_nova', dmg:100},
+     {hp:0.1, msg:'마왕 최후! 멸망의 뇌성!', eff:'doomsday', dmg:150},
+   ], respawnMs: 18000000}, // 5시간
   // 차원 균열 (Lv 30-50)
-  {id:'chaos_golem',   name:'혼돈 골렘',    icon:'🌀', lv:30, hpMax:700,  atk:80,  xp:1000, gold:400, color:'#5a1a5a', region:'차원 균열'},
-  {id:'shadow_dragon', name:'그림자 드래곤', icon:'🖤', lv:35, hpMax:900,  atk:100, xp:1400, gold:600, color:'#1a0a1a', region:'차원 균열'},
-  {id:'void_knight',   name:'공허 기사',     icon:'⚫', lv:32, hpMax:750,  atk:88,  xp:1100, gold:450, color:'#2a1a4a', region:'차원 균열'},
+  {id:'chaos_golem',   name:'혼돈 골렘',    icon:'🌀', lv:30, hpMax:700,  atk:80,  xp:2500, gold:400, color:'#5a1a5a', region:'차원 균열'},
+  {id:'shadow_dragon', name:'그림자 드래곤', icon:'🖤', lv:35, hpMax:900,  atk:100, xp:3500, gold:600, color:'#1a0a1a', region:'차원 균열'},
+  {id:'void_knight',   name:'공허 기사',     icon:'⚫', lv:32, hpMax:750,  atk:88,  xp:2800, gold:450, color:'#2a1a4a', region:'차원 균열'},
   {id:'time_wraith',   name:'시간 망령',     icon:'⌛', lv:38, hpMax:600,  atk:110, xp:1600, gold:500, color:'#3a2a5a', region:'차원 균열'},
   // 천계 (Lv 45-60)
-  {id:'fallen_angel',  name:'타락 천사',     icon:'😈', lv:45, hpMax:1200, atk:130, xp:2000, gold:800, color:'#4a3060', region:'천계'},
-  {id:'seraph',        name:'세라핌',        icon:'😇', lv:50, hpMax:1500, atk:150, xp:2500, gold:1000,color:'#c0a030', region:'천계'},
-  {id:'arch_demon',    name:'대악마',        icon:'👿', lv:55, hpMax:2000, atk:180, xp:3500, gold:1500,color:'#8a0a0a', region:'천계'},
+  {id:'fallen_angel',  name:'타락 천사',     icon:'😈', lv:45, hpMax:1200, atk:130, xp:5000, gold:800, color:'#4a3060', region:'천계'},
+  {id:'seraph',        name:'세라핌',        icon:'😇', lv:50, hpMax:1500, atk:150, xp:7000, gold:1000,color:'#c0a030', region:'천계'},
+  {id:'arch_demon',    name:'대악마',        icon:'👿', lv:55, hpMax:2000, atk:180, xp:10000, gold:1500,color:'#8a0a0a', region:'천계'},
 ];
 
 
@@ -657,7 +696,7 @@ const CONSUMABLE_ITEMS = [
   {id:'elixir_s',    icon:'⚗️', name:'엘릭서',        desc:'HP+100 MP+80 동시 회복',   eff:'elixir_s', val:0,   rarity:'rare',     type:'consume'},
   {id:'gold_bag',    icon:'💰', name:'금화 주머니',   desc:'Gold +120 즉시',           eff:'gold',     val:120, rarity:'common',   type:'consume'},
   {id:'treasure_map',icon:'🗺️', name:'보물 지도',     desc:'Gold +300 즉시',           eff:'gold',     val:300, rarity:'rare',     type:'consume'},
-  {id:'void_essence',icon:'🌀', name:'공허의 정수',   desc:'전 스탯 +1 영구',          eff:'allstat',  val:1,   rarity:'epic',     type:'consume'},
+  {id:'void_essence',icon:'🌀', name:'공허의 정수',   desc:'전 스탯 +1, HP최대 +10 영구', eff:'void_essence', val:1, rarity:'epic', type:'consume'},
   {id:'mystery',     icon:'🧪', name:'수상한 약',     desc:'랜덤 효과! 뭐가 나올지 모름', eff:'random', val:0,   rarity:'rare',     type:'consume'},
   {id:'mp_crystal',  icon:'💎', name:'마나 수정',     desc:'MP +120 즉시 회복',        eff:'mp',       val:120, rarity:'uncommon', type:'consume'},
   {id:'gold_dust',   icon:'✨', name:'황금 가루',     desc:'Gold +80 즉시',            eff:'gold',     val:80,  rarity:'common',   type:'consume'},
@@ -668,36 +707,37 @@ const VOID_SET_IDS = ['void_helm','void_weapon','void_chest','void_boots','void_
 const VOID_SET_BONUS = {str:15, int:15, agi:15, def:15, xpBonus:50, goldBonus:0.3, desc:'공허 세트 완성: 올스탯 +15, XP +50%, 골드 +30%'};
 
 const EQUIP_ITEMS = [
-  // ── 무기 ──────────────────────────────
-  {id:'iron_sw',    icon:'🗡️', name:'철검',        desc:'STR +3',             eff:'str',  val:3,  slot:'weapon', rarity:'common',    type:'equip'},
-  {id:'bronze_sw',  icon:'⚔️', name:'청동검',      desc:'STR +6',             eff:'str',  val:6,  slot:'weapon', rarity:'common',    type:'equip'},
-  {id:'silver_sw',  icon:'🔪', name:'은검',        desc:'STR +9, AGI +2',     eff:'str',  val:9,  slot:'weapon', rarity:'uncommon',  type:'equip', bonus:{agi:2}},
-  {id:'dark_blade', icon:'🌑', name:'암흑검',      desc:'STR +12, INT +3',    eff:'str',  val:12, slot:'weapon', rarity:'rare',      type:'equip', bonus:{int:3}},
-  {id:'dragon_sw',  icon:'🔥', name:'용염검',      desc:'STR +16, AGI +4',    eff:'str',  val:16, slot:'weapon', rarity:'rare',      type:'equip', bonus:{agi:4}},
+  // ── 무기 (common/rare/unique/legendary) ──
+  {id:'iron_sw',    icon:'🗡️', name:'철검',        desc:'STR +3',               eff:'str', val:3,  slot:'weapon', rarity:'common',   type:'equip'},
+  {id:'silver_sw',  icon:'⚔️', name:'은검',        desc:'STR +6, AGI +2',       eff:'str', val:6,  slot:'weapon', rarity:'rare',     type:'equip', bonus:{agi:2}},
+  {id:'dark_blade', icon:'🌑', name:'암흑검',      desc:'STR +10, INT +4',      eff:'str', val:10, slot:'weapon', rarity:'unique',   type:'equip', bonus:{int:4}},
   {id:'void_weapon',icon:'🌀', name:'공허의 검',   desc:'STR +10, INT +10 [공허 세트]', eff:'str', val:10, slot:'weapon', rarity:'legendary', type:'equip', bonus:{int:10}, setId:'void'},
-  // ── 투구 ──────────────────────────────
-  {id:'leather_hl', icon:'🪖', name:'가죽 투구',   desc:'DEF +2',             eff:'def',  val:2,  slot:'helm',   rarity:'common',    type:'equip'},
-  {id:'iron_helm',  icon:'⛑️', name:'철 투구',     desc:'DEF +5',             eff:'def',  val:5,  slot:'helm',   rarity:'common',    type:'equip'},
-  {id:'mage_hood',  icon:'🧙', name:'마법사 후드', desc:'INT +5, DEF +2',     eff:'int',  val:5,  slot:'helm',   rarity:'uncommon',  type:'equip', bonus:{def:2}},
-  {id:'knight_hl',  icon:'👑', name:'기사 투구',   desc:'DEF +8, STR +3',     eff:'def',  val:8,  slot:'helm',   rarity:'rare',      type:'equip', bonus:{str:3}},
-  {id:'void_helm',  icon:'🌀', name:'공허의 투구', desc:'DEF +8, INT +8 [공허 세트]',  eff:'def',  val:8,  slot:'helm',   rarity:'legendary', type:'equip', bonus:{int:8},  setId:'void'},
-  // ── 갑옷 ──────────────────────────────
-  {id:'cloth_ar',   icon:'👕', name:'천 갑옷',     desc:'DEF +2',             eff:'def',  val:2,  slot:'chest',  rarity:'common',    type:'equip'},
-  {id:'leather_ar', icon:'🛡️', name:'가죽 갑옷',  desc:'DEF +5',             eff:'def',  val:5,  slot:'chest',  rarity:'common',    type:'equip'},
-  {id:'chain_ar',   icon:'🔗', name:'사슬 갑옷',  desc:'DEF +9',             eff:'def',  val:9,  slot:'chest',  rarity:'uncommon',  type:'equip'},
-  {id:'plate_ar',   icon:'🦺', name:'판금 갑옷',  desc:'DEF +13, AGI -1',    eff:'def',  val:13, slot:'chest',  rarity:'rare',      type:'equip', bonus:{agi:-1}},
+  // ── 투구 ──
+  {id:'leather_hl', icon:'🪖', name:'가죽 투구',   desc:'DEF +3',               eff:'def', val:3,  slot:'helm',   rarity:'common',   type:'equip'},
+  {id:'iron_helm',  icon:'⛑️', name:'철 투구',     desc:'DEF +6, STR +2',       eff:'def', val:6,  slot:'helm',   rarity:'rare',     type:'equip', bonus:{str:2}},
+  {id:'knight_hl',  icon:'👑', name:'기사 투구',   desc:'DEF +10, STR +4',      eff:'def', val:10, slot:'helm',   rarity:'unique',   type:'equip', bonus:{str:4}},
+  {id:'void_helm',  icon:'🌀', name:'공허의 투구', desc:'DEF +8, INT +8 [공허 세트]', eff:'def', val:8, slot:'helm', rarity:'legendary', type:'equip', bonus:{int:8}, setId:'void'},
+  // ── 갑옷 ──
+  {id:'cloth_ar',   icon:'👕', name:'천 갑옷',     desc:'DEF +2',               eff:'def', val:2,  slot:'chest',  rarity:'common',   type:'equip'},
+  {id:'chain_ar',   icon:'🔗', name:'사슬 갑옷',  desc:'DEF +8',               eff:'def', val:8,  slot:'chest',  rarity:'rare',     type:'equip'},
+  {id:'plate_ar',   icon:'🦺', name:'판금 갑옷',  desc:'DEF +13, STR +3',      eff:'def', val:13, slot:'chest',  rarity:'unique',   type:'equip', bonus:{str:3}},
   {id:'void_chest', icon:'🌀', name:'공허의 갑옷', desc:'DEF +10, STR +8 [공허 세트]', eff:'def', val:10, slot:'chest', rarity:'legendary', type:'equip', bonus:{str:8}, setId:'void'},
-  // ── 신발 ──────────────────────────────
-  {id:'cloth_bt',   icon:'🩴', name:'천 신발',     desc:'AGI +2',             eff:'agi',  val:2,  slot:'boots',  rarity:'common',    type:'equip'},
-  {id:'swift_bt',   icon:'👢', name:'신속의 부츠', desc:'AGI +5, 회피 +10%', eff:'agi',  val:5,  slot:'boots',  rarity:'uncommon',  type:'equip', bonus:{dodge:10}},
-  {id:'shadow_bt',  icon:'🥾', name:'그림자 부츠', desc:'AGI +8, 회피 +18%', eff:'agi',  val:8,  slot:'boots',  rarity:'rare',      type:'equip', bonus:{dodge:18}},
+  // ── 신발 ──
+  {id:'cloth_bt',   icon:'🩴', name:'천 신발',     desc:'AGI +2',               eff:'agi', val:2,  slot:'boots',  rarity:'common',   type:'equip'},
+  {id:'swift_bt',   icon:'👢', name:'신속의 부츠', desc:'AGI +5, 회피 +12%',   eff:'agi', val:5,  slot:'boots',  rarity:'rare',     type:'equip', bonus:{dodge:12}},
+  {id:'shadow_bt',  icon:'🥾', name:'그림자 부츠', desc:'AGI +9, 회피 +22%',   eff:'agi', val:9,  slot:'boots',  rarity:'unique',   type:'equip', bonus:{dodge:22}},
   {id:'void_boots', icon:'🌀', name:'공허의 부츠', desc:'AGI +8, 회피 +15% [공허 세트]', eff:'agi', val:8, slot:'boots', rarity:'legendary', type:'equip', bonus:{dodge:15}, setId:'void'},
-  // ── 반지 ──────────────────────────────
-  {id:'copper_ring',icon:'🔵', name:'구리 반지',   desc:'STR +2',             eff:'str',  val:2,  slot:'ring',   rarity:'common',    type:'equip'},
-  {id:'xp_ring',    icon:'💍', name:'현자의 반지', desc:'경험치 +15%',        eff:'xpbonus',val:15, slot:'ring',  rarity:'rare',      type:'equip'},
-  {id:'gold_ring',  icon:'💛', name:'황금 반지',   desc:'골드 획득 +12%',    eff:'goldbonus',val:12, slot:'ring', rarity:'rare',      type:'equip'},
-  {id:'amulet_eq',  icon:'🪬', name:'수호의 부적', desc:'사망시 35% 자동 부활', eff:'amulet', val:.35, slot:'ring', rarity:'rare',   type:'equip'},
+  // ── 반지 ──
+  {id:'copper_ring',icon:'🔵', name:'구리 반지',   desc:'STR +2',               eff:'str', val:2,  slot:'ring',   rarity:'common',   type:'equip'},
+  {id:'xp_ring',    icon:'💍', name:'현자의 반지', desc:'경험치 +15%',          eff:'xpbonus', val:15, slot:'ring', rarity:'rare',   type:'equip'},
+  {id:'chaos_ring', icon:'🌀', name:'혼돈의 반지', desc:'XP+15%, 골드+15%, 올스탯+2', eff:'allstat', val:2, slot:'ring', rarity:'unique', type:'equip', bonus:{xpbonus:15, goldbonus:15}},
   {id:'void_ring',  icon:'🌀', name:'공허의 반지', desc:'XP +20%, 골드 +20% [공허 세트]', eff:'xpbonus', val:20, slot:'ring', rarity:'legendary', type:'equip', bonus:{goldbonus:20}, setId:'void'},
+  // ── 드래곤 세트 (레이드 전용) ──
+  {id:'dragon_scale_ar',icon:'🐉',name:'용린 갑옷',  desc:'DEF +20, STR +8, 보스 피해 +10% [용 세트]', eff:'def', val:20, slot:'chest', rarity:'legendary', type:'equip', bonus:{str:8, bossBonus:10}, setId:'dragon'},
+  {id:'dragon_fang_sw', icon:'🔥',name:'용검',        desc:'STR +20, AGI +6, 보스 피해 +10% [용 세트]', eff:'str', val:20, slot:'weapon',rarity:'legendary', type:'equip', bonus:{agi:6, bossBonus:10}, setId:'dragon'},
+  // ── 마왕 세트 (레이드 전용) ──
+  {id:'demon_crown',    icon:'👿',name:'마왕 왕관',   desc:'INT +20, STR +10, 보스 피해 +15% [마왕 세트]',eff:'int', val:20, slot:'helm',  rarity:'legendary', type:'equip', bonus:{str:10, bossBonus:15}, setId:'demonic'},
+  {id:'demon_robe',     icon:'🌑',name:'마왕 로브',   desc:'DEF +15, INT +15, 보스 피해 +15% [마왕 세트]',eff:'def', val:15, slot:'chest', rarity:'legendary', type:'equip', bonus:{int:15, bossBonus:15}, setId:'demonic'},
 ];
 
 // 공허 세트 완성 체크
@@ -787,7 +827,6 @@ const SHOP = [
   {name:'엘릭서',        cost:500,  desc:'HP/MP 완전 회복',                eff:'elixir',     val:0,    icon:'⚗️', type:'consume'},
   {name:'공허의 정수',   cost:2000, desc:'전 스탯 +1 영구 (매우 희귀)',    eff:'allstat',    val:1,    icon:'🌀', type:'consume'},
   // ── 장비 (수호의 부적만 — 나머지는 드롭으로) ──────────────
-  {name:'수호의 부적',   cost:800,  desc:'사망시 35% 자동 부활',           eff:'amulet',     val:.35,  icon:'🪬', type:'equip_buy'},
   {name:'강화 스크롤',   cost:600,  desc:'STR +1 영구',                    eff:'str',        val:1,    icon:'📜', type:'equip_buy'},
   {name:'지식의 서',     cost:600,  desc:'INT +1 영구',                    eff:'int',        val:1,    icon:'📖', type:'equip_buy'},
   {name:'민첩 부적',     cost:600,  desc:'AGI +1 영구',                    eff:'agi',        val:1,    icon:'🏃', type:'equip_buy'},
@@ -836,7 +875,8 @@ const S = {
     hasAmulet:false, dodgeBonus:0, runeBlast:0, shieldUp:false,
     stunBoost:0, regenMult:1, goldBonus:0,
   },
-  zone:'황야', monsters:[], quests:null, lock:false, fTick:0
+  zone:'황야', monsters:[], quests:null, lock:false, fTick:0,
+  atkAnim:{active:false, tick:0, dir:1} // 공격 모션
 };
 
 // ============================================================
@@ -952,6 +992,172 @@ const CR = {
   }
 };
 
+
+// ============================================================
+// RAID 시스템 — 채팅으로 보스 공격
+// ============================================================
+const RAID = {
+  boss: null,
+  bossMaxHp: 0,
+  phaseTriggered: {},
+
+  // 보스 진입
+  enter(zone) {
+    const bossMap = {
+      '드래곤 레이드': {id:'raid_dragon',    name:'🐉 드래곤',      hpMax:10000, atk:180, color:'#4a0808'},
+      '마왕 레이드':   {id:'raid_demon_lord', name:'👿 마왕',        hpMax:25000, atk:250, color:'#4a0030'},
+    };
+    const b = bossMap[zone];
+    if(!b) return;
+    this.boss = {...b, curHp: b.hpMax};
+    this.bossMaxHp = b.hpMax;
+    this.phaseTriggered = {};
+    // UI 업데이트
+    document.getElementById('raid-panel').classList.add('on');
+    document.getElementById('raid-boss-name').textContent = '★ ' + b.name;
+    document.getElementById('raid-hp-txt').textContent = b.hpMax+'/'+b.hpMax+' HP';
+    document.getElementById('raid-hp-fill').style.width = '100%';
+    document.getElementById('raid-phase-msg').style.display='none';
+    // 채팅창 레이드 모드
+    // raid-mode removed
+    document.getElementById('cinp').placeholder = '메시지...';
+    CH.append({race:'system', name:'RAID', text:'⚔️ '+b.name+' 레이드 시작! 몬스터를 탭하여 공격!'});
+    CH.append({race:'system', name:'RAID', text:'💀 레이드 보스는 HP가 매우 높습니다. 여러 번 도전하세요!'});
+    // 보스 반격 타이머
+    this.startBossAttack();
+  },
+
+  // 레이드 종료/이탈
+  leave() {
+    this.boss = null;
+    this.phaseTriggered = {};
+    if(this._atkTimer) clearInterval(this._atkTimer);
+    document.getElementById('raid-panel').classList.remove('on');
+    // raid-mode removed
+    document.getElementById('cinp').placeholder = '메시지...';
+    document.getElementById('raid-phase-msg').style.display='none';
+  },
+
+  // 데미지 계산
+  baseDmg() {
+    const c = S.char;
+    const stat = c.race==='demon'||c.race==='elf' ? c.int : c.str;
+    return Math.floor(stat * 2.5);
+  },
+
+  calcDmg(txt) {
+    const c = S.char;
+    const stat = c.race==='demon'||c.race==='elf' ? c.int : c.str;
+    const base = Math.floor(stat * 2.0 + Math.random()*stat);
+    // 메시지 길이 보너스 (최대 3배)
+    const lenMult = Math.min(3.0, 1 + txt.length * 0.05);
+    // 특수 키워드 보너스
+    const keywords = {
+      '공격':1.3,'베기':1.3,'마법':1.4,'화살':1.3,'도끼':1.3,
+      '필살':2.0,'크리':1.8,'강격':1.5,'폭발':1.6,'멸망':2.0,
+      '죽어':1.5,'박살':1.5,'쳐':1.2,'때':1.2,'공격!':1.5,
+      '용':1.4,'마왕':1.4,'레이드':1.3,
+    };
+    let kwMult = 1.0;
+    Object.entries(keywords).forEach(([k,v])=>{ if(txt.includes(k)) kwMult = Math.max(kwMult,v); });
+    // 보스 피해 보너스 장비
+    const bossBonus = 1 + (c._bossBonus||0)/100;
+    return Math.max(1, Math.floor(base * lenMult * kwMult * bossBonus));
+  },
+
+  // 보스 피격
+  hit(dmg, attackerName, isCrit, fromOther) {
+    if(!this.boss) return;
+    this.boss.curHp = Math.max(0, this.boss.curHp - dmg);
+    // HP바 업데이트
+    const pct = this.boss.curHp / this.bossMaxHp * 100;
+    document.getElementById('raid-hp-fill').style.width = pct+'%';
+    document.getElementById('raid-hp-fill').style.background =
+      pct > 50 ? 'linear-gradient(90deg,#aa2020,#ff4040)' :
+      pct > 30 ? 'linear-gradient(90deg,#cc4010,#ff6020)' :
+                 'linear-gradient(90deg,#dd2000,#ff2000)';
+    document.getElementById('raid-hp-txt').textContent =
+      Math.max(0,this.boss.curHp)+'/'+this.bossMaxHp+' HP  ⚔ '+attackerName+(isCrit?' 💥CRIT!':'');
+    // 페이즈 체크
+    if(!fromOther) this.checkPhase();
+    // 사망 체크
+    if(this.boss.curHp <= 0) this.kill();
+  },
+
+  // 보스 페이즈
+  checkPhase() {
+    const pct = this.boss.curHp / this.bossMaxHp;
+    const phases = [
+      {at:0.7, msg:'🔥 분노 발동! 반격 강화!',       eff:'rage'},
+      {at:0.5, msg:'💀 절반! 보스 패턴 변화!',       eff:'pattern'},
+      {at:0.3, msg:'🌋 광란! 전체 공격 시작!',        eff:'aoe'},
+      {at:0.1, msg:'⚡ 최후의 발악! 극대화!',         eff:'final'},
+    ];
+    phases.forEach(p => {
+      if(pct <= p.at && !this.phaseTriggered[p.at]) {
+        this.phaseTriggered[p.at] = true;
+        // 페이즈 메시지
+        const el = document.getElementById('raid-phase-msg');
+        el.textContent = p.msg; el.style.display='block';
+        setTimeout(()=>el.style.display='none', 3000);
+        CH.append({race:'system', name:'RAID', text:'⚠️ '+p.msg});
+        SFX.play('sk_ult_dm');
+        // 페이즈 특수 효과
+        if(p.eff==='rage') this.boss.atk = Math.floor(this.boss.atk * 1.3);
+        if(p.eff==='aoe') this.bossAoe();
+        if(p.eff==='final') { this.boss.atk = Math.floor(this.boss.atk * 1.5); this.bossAoe(); }
+      }
+    });
+  },
+
+  // 보스 전체 공격
+  bossAoe() {
+    const dmg = Math.floor(this.boss.atk * 0.6);
+    const c = S.char;
+    if(c.ghost) { CH.append({race:'system',name:'RAID',text:'👻 유령 모드! 피해 무효!'}); return; }
+    c.hp = Math.max(1, c.hp - dmg);
+    G.hud();
+    CH.append({race:'system', name:'RAID', text:'💥 보스 전체 공격! '+dmg+' 피해!'});
+    if(c.hp <= 1) G.die();
+  },
+
+  // 보스 반격 (주기적)
+  startBossAttack() {
+    if(this._atkTimer) clearInterval(this._atkTimer);
+    this._atkTimer = setInterval(() => {
+      if(!this.boss || this.boss.curHp <= 0) { clearInterval(this._atkTimer); return; }
+      if(S.zone !== '드래곤 레이드' && S.zone !== '마왕 레이드') { clearInterval(this._atkTimer); return; }
+      const c = S.char;
+      const def = Math.floor(c.def * 0.8);
+      const rawDmg = this.boss.atk + Math.floor(Math.random()*30);
+      const dmg = Math.max(1, rawDmg - def);
+      if(c.ghost) return;
+      if(c.shieldUp) { c.shieldUp=false; G.log('🛡️ 방패로 막음!','inf'); return; }
+      c.hp = Math.max(0, c.hp - dmg);
+      G.hud();
+      G.log('🐉 보스 반격! '+dmg+' 피해','dmg');
+      if(c.hp <= 0) G.die();
+    }, 4000); // 4초마다 반격
+  },
+
+  // 보스 처치
+  kill() {
+    if(!this.boss) return;
+    if(this._atkTimer) clearInterval(this._atkTimer);
+    const bossId = this.boss.id;
+    CH.append({race:'system', name:'RAID', text:'🎉🎉 '+this.boss.name+' 처치!! 레이드 클리어!!'});
+    SFX.play('lvup'); setTimeout(()=>SFX.play('lvup'),300); setTimeout(()=>SFX.play('equip'),600);
+    // 보상
+    const m = {id:bossId, xp:bossId==='raid_dragon'?8000:20000, gold:bossId==='raid_dragon'?2000:5000, color:'#ff0000'};
+    G.kill(m, -1);
+    // 재도전 타이머 표시
+    const waitMs = bossId==='raid_dragon'?10800000:18000000;
+    const waitH = Math.floor(waitMs/3600000);
+    CH.append({race:'system', name:'RAID', text:'⏳ 다음 레이드: '+waitH+'시간 후 재도전 가능'});
+    setTimeout(() => this.leave(), 3000);
+  },
+};
+
 // ============================================================
 // WebSocket
 // ============================================================
@@ -971,6 +1177,7 @@ const WS = {
           CH.append({race:d.race, name:d.name, text:d.text});
         if(d.type==='online') document.getElementById('conline').textContent = '접속자 '+d.count+'명';
         if(d.type==='lvup'&&CH.mode==='world') CH.append({race:'system', name:'SYSTEM', text:'🎉 '+d.name+' Lv.'+d.lv+' 달성!'});
+
       };
       this.ws.onclose = () => {
         document.querySelectorAll('.ws-dot').forEach(d => d.classList.remove('live'));
@@ -1007,9 +1214,31 @@ const CH = {
     if(!txt) return;
     this._sending = true;
     inp.value = ''; inp.blur();
+    // 주인장 전용 치트코드
+    if(txt === '/함반이왔다') {
+      const c = S.char;
+      c.lv = 50;
+      c.str = 1000; c.int = 1000; c.agi = 1000; c.def = 1000;
+      c.hpMax = 9999; c.hp = 9999;
+      c.mpMax = 9999; c.mp = 9999;
+      if(c.race==='elf') { c.fpMax=9999; c.fp=9999; }
+      c.gold += 99999;
+      c.xp = 0; c.xpMax = 999999;
+      c.learnedSkills = {0:true,1:true,2:true,3:true};
+      // 스킬 쿨타임 전부 제거
+      c.skills = c.skills.map(s=>({...s, cdLeft:0, cd:100}));
+      G.hud(); G.rStat(); G.rSkill();
+      document.getElementById('hlv').textContent = c.lv;
+      const ann=document.createElement('div');ann.className='wann';
+      ann.textContent='👑 주인장 모드 활성화!';
+      ann.style.color='#ffd700';document.body.appendChild(ann);setTimeout(()=>ann.remove(),3000);
+      G.log('👑 주인장 등장! 능력치 MAX + 스킬 쿨타임 없음','loot');
+      setTimeout(()=>{this._sending=false;},500);
+      return;
+    }
     this.append({race:'self', name:S.char.name, text:txt});
     WS.send({type:'chat', text:txt, channel:this.mode});
-    setTimeout(() => { this._sending = false; }, 150);
+    setTimeout(() => { this._sending = false; }, 500);
   },
   sw(m, btn) {
     this.mode = m; WS.mode = m;
@@ -1157,16 +1386,39 @@ const G = {
     // 스킬 항상 최신 RACE_SKILLS로 강제 갱신
     c.skills = RACE_SKILLS[c.race].map(s => ({...s, cdLeft:0, fp:s.fp||0}));
     if(!c.learnedSkills) c.learnedSkills={0:true};
+    // 보스 보너스 합산
+    c._bossBonus = 0;
+    if(c.equipped) Object.values(c.equipped).forEach(eid=>{
+      const ei=EQUIP_ITEMS.find(x=>x.id===eid);
+      if(ei&&ei.bonus&&ei.bonus.bossBonus) c._bossBonus+=(ei.bonus.bossBonus||0);
+    });
     document.getElementById('hrace').textContent = RACES[c.race].label;
     document.getElementById('sname').textContent = c.name;
     document.getElementById('srace').textContent = RACES[c.race].label + ' / ' + (RACES[c.race].cls||c.wpn);
     S.quests = JSON.parse(JSON.stringify([
-      {id:'q1',name:'슬라임 토벌',   desc:'슬라임 5마리 처치',  reward:'XP +200, Gold +80',  target:'slime',   need:5, got:0, done:false, xp:200, gold:80},
-      {id:'q2',name:'고블린 패잔병', desc:'고블린 3마리 처치',  reward:'XP +150, Gold +60',  target:'goblin',  need:3, got:0, done:false, xp:150, gold:60},
-      {id:'q3',name:'오크 수장 제거',desc:'오크 3마리 처치',    reward:'XP +400, Gold +160', target:'orc',     need:3, got:0, done:false, xp:400, gold:160},
-      {id:'q4',name:'뱀파이어 사냥', desc:'뱀파이어 2마리 처치',reward:'XP +500, Gold +220', target:'vampire', need:2, got:0, done:false, xp:500, gold:220},
-      {id:'q5',name:'전설의 드래곤', desc:'드래곤 처치 - 극고위험',reward:'XP +1500, Gold +600',target:'dragon',need:1,got:0,done:false,xp:1500,gold:600},
-      {id:'q6',name:'마왕 토벌',     desc:'마왕 처치 - 최종 보스',reward:'XP +3000, Gold +1000',target:'demon_lord',need:1,got:0,done:false,xp:3000,gold:1000},
+      // ── 황야 퀘스트 ──
+      {id:'q1', name:'슬라임 소탕',      desc:'황야의 슬라임 5마리',    reward:'XP +150, G +60',   target:'slime',    need:5,   got:0, done:false, repeat:true,  xp:150,  gold:60},
+      {id:'q2', name:'슬라임 헌터',      desc:'슬라임 20마리 처치',     reward:'XP +500, G +150',  target:'slime',    need:20,  got:0, done:false, repeat:false, xp:500,  gold:150},
+      {id:'q3', name:'슬라임 전멸 ★',   desc:'슬라임 100마리! 보상↑',  reward:'XP +3000, G +500, 공허의 정수', target:'slime', need:100, got:0, done:false, repeat:false, xp:3000, gold:500, bonus:'void_essence'},
+      {id:'q4', name:'고블린 패잔병',    desc:'고블린 3마리 처치',      reward:'XP +200, G +80',   target:'goblin',   need:3,   got:0, done:false, repeat:true,  xp:200,  gold:80},
+      {id:'q5', name:'오크 수장 제거',   desc:'오크 5마리 처치',        reward:'XP +500, G +180',  target:'orc',      need:5,   got:0, done:false, repeat:false, xp:500,  gold:180},
+      // ── 동굴 퀘스트 ──
+      {id:'q6', name:'뼈 수집가',        desc:'스켈레톤 5마리 처치',    reward:'XP +400, G +120',  target:'skeleton', need:5,   got:0, done:false, repeat:true,  xp:400,  gold:120},
+      {id:'q7', name:'뱀파이어 사냥',    desc:'뱀파이어 2마리 처치',    reward:'XP +600, G +220',  target:'vampire',  need:2,   got:0, done:false, repeat:true,  xp:600,  gold:220},
+      {id:'q8', name:'미믹 주의보',      desc:'미믹 3마리 처치',        reward:'XP +700, G +300',  target:'mimic',    need:3,   got:0, done:false, repeat:false, xp:700,  gold:300},
+      {id:'q9', name:'늑대인간의 밤',    desc:'늑대인간 5마리',         reward:'XP +500, G +160',  target:'wolf',     need:5,   got:0, done:false, repeat:true,  xp:500,  gold:160},
+      // ── 엘프 숲 퀘스트 ──
+      {id:'q10',name:'숲 정화',          desc:'트리앤트 3마리 처치',    reward:'XP +800, G +250',  target:'treant',   need:3,   got:0, done:false, repeat:true,  xp:800,  gold:250},
+      {id:'q11',name:'바실리스크 퇴치',  desc:'바실리스크 2마리',       reward:'XP +900, G +280',  target:'basilisk', need:2,   got:0, done:false, repeat:true,  xp:900,  gold:280},
+      // ── 드워프 산맥 퀘스트 ──
+      {id:'q12',name:'골렘 분쇄',        desc:'골렘 3마리 처치',        reward:'XP +1200, G +350', target:'golem',    need:3,   got:0, done:false, repeat:true,  xp:1200, gold:350},
+      {id:'q13',name:'듀어가 반란 진압', desc:'듀어가 5마리 처치',      reward:'XP +1500, G +400', target:'duergar',  need:5,   got:0, done:false, repeat:false, xp:1500, gold:400},
+      // ── 마족 영토 퀘스트 ──
+      {id:'q14',name:'리치 봉인',        desc:'리치 2마리 처치',        reward:'XP +2500, G +500', target:'lich',     need:2,   got:0, done:false, repeat:true,  xp:2500, gold:500},
+      {id:'q15',name:'케르베로스 사냥',  desc:'케르베로스 처치',        reward:'XP +3500, G +600', target:'cerberus', need:1,   got:0, done:false, repeat:true,  xp:3500, gold:600},
+      // ── 레이드 퀘스트 ──
+      {id:'q16',name:'전설의 드래곤',    desc:'드래곤 레이드 처치',     reward:'XP +8000, G +2000',target:'raid_dragon',need:1, got:0, done:false, repeat:true,  xp:8000, gold:2000},
+      {id:'q17',name:'마왕 토벌',        desc:'마왕 레이드 처치',       reward:'XP +20000, G +5000',target:'raid_demon_lord',need:1,got:0,done:false,repeat:true,xp:20000,gold:5000},
     ]));
     this.hud(); this.rStat(); this.rSkill(); this.rInv();
     this.spawn('황야'); this.rMon(); this.rQuest(); this.rShop(); this.drawMap(); this.fieldLoop();
@@ -1210,7 +1462,8 @@ const G = {
 
   rSkill() {
     const c = S.char;
-    const maxSkills = 1 + Math.floor((c.lv-1)/5);
+    const skillLvReqs = [1,5,10,20];
+    const maxSkills = c.skills.filter((_,i)=>c.lv>=(skillLvReqs[i]||1)).length;
     const isElf = c.race==='elf';
     const chips = document.getElementById('schips');
     chips.innerHTML = c.skills.map((sk,i) => {
@@ -1261,13 +1514,26 @@ const G = {
   },
 
   spawn(region) {
+    // 레이드 이탈 처리
+    if(S.zone==='드래곤 레이드'||S.zone==='마왕 레이드') {
+      if(region!=='드래곤 레이드'&&region!=='마왕 레이드') RAID.leave();
+    }
     S.zone = region;
     document.getElementById('hzone').textContent = region;
+    // 레이드 진입
+    if(region==='드래곤 레이드'||region==='마왕 레이드') {
+      RAID.enter(region);
+      const raidMon = MONSTERS.find(m=>m.id===(region==='드래곤 레이드'?'raid_dragon':'raid_demon_lord'));
+      S.monsters = raidMon ? [{...raidMon, curHp:raidMon.hpMax, dead:false, stunned:0}] : [];
+      S.battleTarget = S.monsters[0]||null;
+      return;
+    }
     const pool = MONSTERS.filter(m => {
       if(region==='황야') return m.lv<=5;
       return m.region===region;
     });
     S.monsters = [...pool].sort(() => Math.random()-.5).slice(0,6).map(m => ({...m, curHp:m.hpMax, dead:false, stunned:0}));
+    S.battleTarget = null;
   },
 
   rMon() {
@@ -1282,10 +1548,13 @@ const G = {
   atk(i) {
     if(S.lock) return;
     const m = S.monsters[i]; if(!m||m.dead) return;
+    S.battleTarget = m; // 1vs1 타겟 지정
     S.lock = true;
     const c = S.char;
     // STR이 실제 공격력에 유의미하게 반영
-    let dmg = Math.max(1, Math.floor(c.str * 1.8 + Math.random()*12 - 3));
+    // 엘프는 AGI도 평타에 반영
+    const atkStat = c.race==='elf' ? Math.floor(c.str*0.8+c.agi*0.8) : c.str;
+    let dmg = Math.max(1, Math.floor(atkStat * 1.8 + Math.random()*10 - 2));
     // 광전사 — 공격 2배
     if(c.berserker) { dmg *= 2; this.log('💢 광전사 2배!','skill'); }
     // 크리티컬: AGI 기반
@@ -1307,11 +1576,19 @@ const G = {
   skill(si) {
     if(S.lock) return;
     const c = S.char;
-    const maxSkills = 1 + Math.floor((c.lv-1)/5);
+    // maxSkills: 기본(1)+방어(5)+연타(10)+궁극(20) 각각 레벨 체크
+    const skillLvReqs = [1,5,10,20];
+    const maxSkills = c.skills.filter((_,i)=>c.lv>=(skillLvReqs[i]||1)).length;
     const sk = c.skills[si];
     if(!sk) return;
     if(si >= maxSkills) { this.log('Lv.'+c.skills[si].unlockLv+' 이상에서 해금됩니다','sys'); return; }
     if(!c.learnedSkills) c.learnedSkills={0:true};
+    // 보스 보너스 합산
+    c._bossBonus = 0;
+    if(c.equipped) Object.values(c.equipped).forEach(eid=>{
+      const ei=EQUIP_ITEMS.find(x=>x.id===eid);
+      if(ei&&ei.bonus&&ei.bonus.bossBonus) c._bossBonus+=(ei.bonus.bossBonus||0);
+    });
     if(!c.learnedSkills[si]&&si!==0) { this.log('💰 스킬을 먼저 습득하세요! (스킬북 참고)','sys'); return; }
     if(sk.cdLeft>0) return;
 
@@ -1324,6 +1601,7 @@ const G = {
     }
 
     S.lock = true;
+    S.atkAnim = {active:true, tick:0, dir:1};
     if(isElf) c.fp = Math.max(0,(c.fp||0)-cost);
     else c.mp -= cost;
 
@@ -1333,7 +1611,13 @@ const G = {
 
     const intMult = 1 + (c.int/40);
     const alive = S.monsters.map((m,i)=>({m,i})).filter(x=>!x.m.dead);
-    const tgt = alive.length>0 ? alive[Math.floor(Math.random()*alive.length)] : null;
+    // battleTarget 우선, 없으면 첫 번째 살아있는 몬스터
+    let tgt = null;
+    if(S.battleTarget && !S.battleTarget.dead) {
+      const idx = S.monsters.indexOf(S.battleTarget);
+      if(idx >= 0) tgt = {m: S.battleTarget, i: idx};
+    }
+    if(!tgt && alive.length>0) tgt = alive[0];
     const m = tgt?.m, mi = tgt?.i ?? -1;
 
     if(sk.type==='atk') {
@@ -1406,7 +1690,7 @@ const G = {
         x.curHp=Math.max(0,x.curHp-dmg);
         this.shake(idx);this.pop(idx,dmg,'#ffd040');
         total+=dmg;
-        if(x.curHp<=0){killed++;x.dead=true;c.xp+=x.xp;c.gold+=x.gold;this.questProg(x.id);
+        if(x.curHp<=0){killed++;x.dead=true;c.xp+=x.xp;c.gold+=x.gold;this.qProg(x.id);
           setTimeout(()=>{x.curHp=x.hpMax;x.dead=false;this.rMon();},12000);}
       });
       if(killed>0){this.lvChk();}
@@ -1515,31 +1799,75 @@ const G = {
     if(xpMult>1||xp3>1) this.log('✨ XP x'+(xpMult*xp3).toFixed(1),'inf');
     SFX.play('loot');
     // 드롭: 소비 4%, 장비 1%, 사냥전용 8% (몬스터별)
-    const dropRoll = Math.random()*1000;
+    // 드롭: common장비 5%, rare장비 2%, unique장비 1%, 공허 0.1%, 소비 8%
+    const dropRoll = Math.random()*100;
+    const isNoob = ['황야','동굴','엘프 숲'].includes(S.zone);
     if(S.char.inv.length < 20) {
-      if(dropRoll < 1) {
-        // 공허 장비 0.1% (지역별로 1개씩)
-        const voidMap = {'황야':'void_weapon','동굴':'void_helm','엘프 숲':'void_boots','드워프 산맥':'void_chest','마족 영토':'void_ring','차원 균열':'void_weapon','천계':'void_ring'};
-        const voidId = voidMap[S.zone] || 'void_weapon';
-        const it = EQUIP_ITEMS.find(x=>x.id===voidId);
-        if(it){S.char.inv.push({...it});this.log('🌀 [LEGENDARY] '+it.icon+' '+it.name+' 드롭!!','loot');this.rInv();}
-      } else if(dropRoll < 11) {
-        // 일반 장비 1% (공허 제외)
-        const normalEquip = EQUIP_ITEMS.filter(x=>x.rarity!=='legendary');
-        const it = normalEquip[Math.floor(Math.random()*normalEquip.length)];
-        S.char.inv.push({...it});
-        this.log('⚔️ [장비] '+it.icon+' '+it.name, 'loot');
-        this.rInv();
-      } else if(dropRoll < 51) {
-        // 소비 아이템 4%
-        const it = CONSUMABLE_ITEMS[Math.floor(Math.random()*CONSUMABLE_ITEMS.length)];
-        S.char.inv.push({...it});
-        this.log('🎁 '+it.icon+' '+it.name, 'loot');
-        this.rInv();
+      if(!isNoob && dropRoll < 0.1) {
+        // 공허 장비 0.1% (초보구간 제외)
+        const voidMap={'드워프 산맥':'void_chest','마족 영토':'void_ring','차원 균열':'void_weapon','천계':'void_ring','드래곤 레이드':'void_weapon','마왕 레이드':'void_ring'};
+        const voidId=voidMap[S.zone]||'void_weapon';
+        const it=EQUIP_ITEMS.find(x=>x.id===voidId);
+        if(it){S.char.inv.push({...it});this.log('🌀 [전설] '+it.icon+' '+it.name+' 획득!!','loot');this.rInv();}
+      } else if(!isNoob && dropRoll < 1.1) {
+        // unique 장비 1% (초보구간 제외)
+        const pool=EQUIP_ITEMS.filter(x=>x.rarity==='unique');
+        if(pool.length){const it=pool[Math.floor(Math.random()*pool.length)];S.char.inv.push({...it});this.log('💜 [유니크] '+it.icon+' '+it.name,'loot');this.rInv();}
+      } else if(!isNoob && dropRoll < 3.1) {
+        // rare 장비 2% (초보구간 제외)
+        const pool=EQUIP_ITEMS.filter(x=>x.rarity==='rare');
+        if(pool.length){const it=pool[Math.floor(Math.random()*pool.length)];S.char.inv.push({...it});this.log('💙 [레어] '+it.icon+' '+it.name,'loot');this.rInv();}
+      } else if(dropRoll < 8.1) {
+        // common 장비 5% (전 구간)
+        const pool=EQUIP_ITEMS.filter(x=>x.rarity==='common');
+        if(pool.length){const it=pool[Math.floor(Math.random()*pool.length)];S.char.inv.push({...it});this.log('🗡️ [일반] '+it.icon+' '+it.name,'loot');this.rInv();}
+      } else if(dropRoll < 13.1) {
+        // 소비 아이템 5%
+        const consumePool=CONSUMABLE_ITEMS.filter(x=>x.id!=='void_essence');
+        const it=consumePool[Math.floor(Math.random()*consumePool.length)];
+        S.char.inv.push({...it});this.log('🎁 '+it.icon+' '+it.name,'loot');this.rInv();
+      } else if(!isNoob && dropRoll < 15.1) {
+        // 공허의 정수 2% (초보구간 제외)
+        const it=CONSUMABLE_ITEMS.find(x=>x.id==='void_essence');
+        if(it){S.char.inv.push({...it});this.log('🌀 공허의 정수 획득!','loot');this.rInv();}
       }
     }
 
     this.qProg(m.id); this.lvChk();
+    // 레이드 보스 특별 드롭
+    if(m.id==='raid_dragon'||m.id==='raid_demon_lord') {
+      const raidDrops = m.id==='raid_dragon'
+        ? [
+            {icon:'💰',name:'황금 보물상자',eff:'gold',val:3000,desc:'드래곤의 보물',type:'consume',rarity:'rare'},
+            {icon:'⚗️',name:'용의 엘릭서', eff:'elixir',val:0,desc:'HP/MP 완전회복',type:'consume',rarity:'rare'},
+            {icon:'🌀',name:'공허의 정수x3',eff:'void_essence',val:1,desc:'전스탯+1',type:'consume',rarity:'epic'},
+          ]
+        : [
+            {icon:'💰',name:'마왕의 금고',  eff:'gold',val:8000,desc:'마왕의 재화',type:'consume',rarity:'rare'},
+            {icon:'💊',name:'대형 회복묶음',eff:'hp',val:500,desc:'HP +500',type:'consume',rarity:'rare'},
+            {icon:'🌀',name:'공허의 정수x5',eff:'void_essence',val:1,desc:'전스탯+1',type:'consume',rarity:'epic'},
+          ];
+      // 골드/XP 대량 지급
+      S.char.gold += m.gold;
+      S.char.xp += m.xp;
+      this.log('🎉 레이드 클리어! +'+m.xp+'XP +'+m.gold+'G','loot');
+      // 아이템 드롭 (5%)
+      if(Math.random()<0.05 && S.char.inv.length<20) {
+        const rp = raidDrops[Math.floor(Math.random()*raidDrops.length)];
+        S.char.inv.push({...rp});
+        this.log('🏆 레이드 드롭: '+rp.icon+' '+rp.name,'loot');
+        this.rInv();
+      }
+      // 장비 드롭 (5%)
+      if(Math.random()<0.05 && S.char.inv.length<20) {
+        const ePool = m.id==='raid_dragon'
+          ? EQUIP_ITEMS.filter(x=>x.setId==='dragon')
+          : EQUIP_ITEMS.filter(x=>x.setId==='demonic');
+        if(ePool.length){const ei=ePool[Math.floor(Math.random()*ePool.length)];S.char.inv.push({...ei});this.log('⚔️ [전설] '+ei.icon+' '+ei.name+' 획득!!','loot');this.rInv();}
+      }
+      this.lvChk(); // 추가 레벨체크
+    }
+    if(S.battleTarget===m) S.battleTarget=null;
     setTimeout(() => { m.curHp=m.hpMax; m.dead=false; this.rMon(); this.log(m.icon+' '+m.name+' 리스폰', 'sys'); }, 15000);
   },
 
@@ -1550,15 +1878,41 @@ const G = {
         q.got = Math.min(q.need, q.got+1);
         if(q.got >= q.need) {
           q.done = true;
-          S.char.xp += q.xp || 0;
-          S.char.gold += q.gold || 0;
-          this.log('📜 퀘스트 완료: "'+q.name+'" — '+q.reward, 'inf');
+          const xpGain = q.xp || 0;
+          const goldGain = q.gold || 0;
+          S.char.xp += xpGain;
+          S.char.gold += goldGain;
+          // 보너스 아이템 (슬라임 100마리 등)
+          if(q.bonus==='void_essence' && S.char.inv.length<20) {
+            S.char.inv.push({id:'void_essence',icon:'🌀',name:'공허의 정수',desc:'전 스탯 +1, HP최대 +10',eff:'void_essence',val:1,rarity:'epic',type:'consume'});
+            this.rInv();
+          }
+          // 또로롱 퀘스트 완료 알림
+          this.questClear(q.name, xpGain, goldGain);
           SFX.play('lvup');
+          // 반복 퀘스트면 초기화
+          if(q.repeat) { setTimeout(()=>{ q.got=0; q.done=false; this.rQuest(); }, 3000); }
         }
         ch = true;
       }
     });
     if(ch) this.rQuest();
+  },
+
+  questClear(name, xp, gold) {
+    const ann = document.createElement('div');
+    ann.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.5);background:#0a0a06;border:2px solid #c8a830;padding:1rem 2rem;z-index:5000;text-align:center;transition:all .3s;pointer-events:none';
+    ann.innerHTML = '<div style="font-size:11px;color:#888;letter-spacing:.3em">QUEST CLEAR</div>'+
+      '<div style="font-family:serif;font-size:1.4rem;color:#f0e7c8;margin:.3rem 0">'+name+'</div>'+
+      '<div style="font-size:12px;color:#c8a830">XP +'+xp+' &nbsp; Gold +'+gold+'</div>';
+    document.body.appendChild(ann);
+    setTimeout(()=>{ ann.style.transform='translate(-50%,-50%) scale(1)'; ann.style.opacity='1'; }, 50);
+    setTimeout(()=>{ ann.style.opacity='0'; ann.style.transform='translate(-50%,-70%) scale(1.1)'; }, 2000);
+    setTimeout(()=>ann.remove(), 2500);
+    // 또로롱 사운드 (엘릭서 느낌으로)
+    SFX.play('equip');
+    setTimeout(()=>SFX.play('loot'), 150);
+    setTimeout(()=>SFX.play('lvup'), 300);
   },
 
   lvChk() {
@@ -1606,13 +1960,13 @@ const G = {
 
   regen() {
     if(S.char.hp<=0) return;
-    const regenHP = Math.floor(8 * S.char.regenMult);
-    const regenMP = Math.floor(12 * S.char.regenMult);
+    const regenHP = Math.floor(6 * S.char.regenMult);
+    const regenMP = Math.floor(1.3 * S.char.regenMult);
     S.char.hp = Math.min(S.char.hpMax, S.char.hp+regenHP);
     S.char.mp = Math.min(S.char.mpMax, S.char.mp+regenMP);
     // 엘프 집중력 빠르게 충전 (3초마다 +12)
     if(S.char.race==='elf' && S.char.fpMax>0)
-      S.char.fp = Math.min(S.char.fpMax, (S.char.fp||0)+12);
+      S.char.fp = Math.min(S.char.fpMax, (S.char.fp||0)+8);
     this.hud();
   },
 
@@ -1626,7 +1980,20 @@ const G = {
     while(log.children.length > 50) log.removeChild(log.firstChild);
   },
 
-  rQuest() { document.getElementById('qlist').innerHTML = S.quests.map(q => `<div class="qc"><div class="qn">${q.done?'✓ ':''} ${q.name}</div><div class="qd">${q.desc}</div>${q.target?`<div class="qp">진행: ${q.got}/${q.need}</div>`:''}<div class="qr">▸ ${q.reward}</div></div>`).join(''); },
+  rQuest() {
+    const el = document.getElementById('qlist');
+    el.innerHTML = S.quests.map(q => {
+      const pct = q.need>0 ? (q.got/q.need*100) : 0;
+      const rCol = q.done ? '#2a4a2a' : '#0d0d0d';
+      const nameCol = q.done ? '#4a8a4a' : (q.bonus ? '#d4a020' : '#d0d0bc');
+      return '<div class="qc" style="background:'+rCol+';border-color:'+(q.done?'#2a4a2a':'#181818')+'">'+
+        '<div class="qn" style="color:'+nameCol+'">'+(q.done?'✓ ':'')+(q.repeat?'🔄 ':'')+q.name+'</div>'+
+        '<div class="qd">'+q.desc+'</div>'+
+        (q.target && !q.done ? '<div style="margin:.3rem 0"><div style="height:3px;background:#111;border-radius:1px"><div style="height:3px;background:#4a7a4a;width:'+Math.min(100,pct)+'%;transition:width .3s"></div></div><div class="qp">'+q.got+'/'+q.need+'</div></div>' : '')+
+        '<div class="qr">▸ '+q.reward+'</div>'+
+      '</div>';
+    }).join('');
+  },
 
   rShop() {
     document.getElementById('shoplist').innerHTML = SHOP.map((it,i) =>
@@ -1655,10 +2022,18 @@ const G = {
     if(it.type==='equip') {
       if(!c.equipped) c.equipped={};
       const prevId=c.equipped[it.slot];
-      if(prevId){const prev=EQUIP_ITEMS.find(x=>x.id===prevId);if(prev)EQ.removeEquipStats(prev);}
+      if(prevId){
+        const prev=EQUIP_ITEMS.find(x=>x.id===prevId);
+        if(prev){
+          EQ.removeEquipStats(prev);
+          // 이전 장비를 인벤에 돌려줌
+          if(c.inv.length<20) c.inv.push({...prev});
+          else this.log('인벤 가득참! '+prev.name+' 버려짐','sys');
+        }
+      }
       c.equipped[it.slot]=it.id;
       EQ.applyEquipStats(it);
-      c.inv.splice(idx,1);
+      c.inv.splice(idx,1); // 새 장비는 인벤에서 제거
       this.log(it.icon+' '+it.name+' 장착!','inf');
       SFX.play('equip');
       const fx=document.createElement('div');fx.className='item-fx';
@@ -1702,6 +2077,7 @@ const G = {
       case 'gold':     c.gold+=val; this.log('Gold +'+val, 'loot'); break;
       case 'amulet':   c.hasAmulet=true; c.amuletChance=val; this.log('부활 부적! 확률 '+(val*100)+'%', 'inf'); break;
       case 'allstat':  c.str+=val; c.int+=val; c.agi+=val; c.def+=val; this.rStat(); this.log('🌀 전 스탯 +'+val+'!', 'skill'); break;
+      case 'void_essence': c.str+=val;c.int+=val;c.agi+=val;c.def+=val;c.hpMax+=10;c.hp=Math.min(c.hpMax,c.hp+10);this.rStat();this.log('🌀 전 스탯 +1, HP최대 +10!','skill'); break;
       case 'stun_boost': c.stunBoost+=val; this.log('🧊 스턴 확률 +'+val+'%', 'inf'); break;
       case 'regen_boost': c.regenMult=(c.regenMult||1)+1; this.log('💚 HP 재생 2배!', 'heal'); break;
       case 'nullify':  // 해독제 — 다음 피해 무효화
@@ -1744,28 +2120,57 @@ const G = {
     const ctx = cv.getContext('2d'), W=600, H=340;
     ctx.fillStyle='#020202'; ctx.fillRect(0,0,W,H);
     const zones = [
-      {name:'인간 왕국',x:15,y:25,w:175,h:120,color:'#0d0d06',border:'#1a1a10',lv:'Lv 1-10',region:'황야'},
-      {name:'엘프 숲', x:355,y:15,w:180,h:130,color:'#060d06',border:'#0e1a0e',lv:'Lv 8-18',region:'엘프 숲'},
-      {name:'드워프 산', x:15,y:175,w:185,h:125,color:'#0d0d0a',border:'#1a1a14',lv:'Lv 12-22',region:'드워프 산맥'},
-      {name:'마족 영토',x:350,y:170,w:190,h:130,color:'#0d0606',border:'#1a0e0e',lv:'Lv 18-35',region:'마족 영토'},
-      {name:'황야',x:205,y:115,w:130,h:85,color:'#0a0a0a',border:'#181818',lv:'Lv 1-5',region:'황야'},
-      {name:'동굴',x:210,y:40,w:110,h:65,color:'#080808',border:'#141414',lv:'Lv 5-12',region:'동굴'},
-      {name:'차원 균열',x:545,y:80,w:50,h:120,color:'#0d0615',border:'#2a0a3a',lv:'Lv 30+',region:'차원 균열'},
-      {name:'천계',x:545,y:210,w:50,h:90,color:'#100d06',border:'#2a2010',lv:'Lv 45+',region:'천계'},
+      {name:'인간 왕국',x:15,y:25,  w:170,h:115,color:'#0d0d06',border:'#1a1a10',lv:'1-10',region:'황야'},
+      {name:'엘프 숲',  x:340,y:15, w:175,h:125,color:'#060d06',border:'#0e1a0e',lv:'8-18', region:'엘프 숲'},
+      {name:'드워프 산',x:15,y:170, w:175,h:120,color:'#0d0d0a',border:'#1a1a14',lv:'12-22',region:'드워프 산맥'},
+      {name:'마족 영토',x:340,y:165,w:175,h:125,color:'#0d0606',border:'#1a0e0e',lv:'18-30',region:'마족 영토'},
+      {name:'황야',     x:200,y:110,w:120,h:80, color:'#0a0a0a',border:'#181818',lv:'1-5',  region:'황야'},
+      {name:'동굴',     x:205,y:38, w:105,h:62, color:'#080808',border:'#141414',lv:'5-12', region:'동굴'},
+      {name:'차원 균열',x:530,y:50, w:65, h:115,color:'#0d0615',border:'#2a0a3a',lv:'30+',  region:'차원 균열'},
+      {name:'천계',     x:530,y:178,w:65, h:105,color:'#100d06',border:'#2a2010',lv:'45+',  region:'천계'},
+      {name:'⚔️드래곤',  x:200,y:208,w:118,h:80, color:'#150505',border:'#4a1010',lv:'Lv20+',region:'드래곤 레이드', raid:true},
     ];
-    const minLv = {황야:1,동굴:5,'엘프 숲':8,'드워프 산맥':12,'마족 영토':18,'차원 균열':30,'천계':45};
+    const minLv = {황야:1,동굴:5,'엘프 숲':8,'드워프 산맥':12,'마족 영토':18,'차원 균열':30,'천계':45,'드래곤 레이드':20,'마왕 레이드':30};
     const lv = S.char.lv;
+    // 전체 배경 — 노이즈
+    for(let i=0;i<80;i++){ctx.fillStyle='#0a0a08';ctx.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*2,1);}
     zones.forEach(z => {
       const locked = (minLv[z.region]||1) > lv;
-      ctx.fillStyle = locked?'#050505':z.color;
+      const isRaid = z.raid;
+      // 배경 fill
+      ctx.fillStyle = locked ? '#030303' : z.color;
       ctx.fillRect(z.x,z.y,z.w,z.h);
-      ctx.strokeStyle = locked?'#111':z.border;
-      ctx.lineWidth=1; ctx.strokeRect(z.x,z.y,z.w,z.h);
-      ctx.fillStyle = locked?'#444':'#ddd'; ctx.font='bold 11px serif'; ctx.fillText(z.name,z.x+7,z.y+18);
-      ctx.fillStyle = locked?'#333':'#aaa'; ctx.font='10px serif'; ctx.fillText(z.lv+(locked?' [LOCK]':''),z.x+7,z.y+32);
+      // 테두리 — 3px 레이드는 빨강
+      ctx.strokeStyle = locked ? '#111' : (isRaid ? '#5a1010' : z.border);
+      ctx.lineWidth = isRaid ? 2 : 1;
+      ctx.strokeRect(z.x+0.5,z.y+0.5,z.w-1,z.h-1);
+      // 레이드 경고 삼각형
+      if(isRaid && !locked){ctx.fillStyle='#4a1010';ctx.fillRect(z.x,z.y,z.w,14);ctx.fillStyle='#ff4040';ctx.font='bold 9px monospace';ctx.fillText('⚠ RAID',z.x+4,z.y+10);}
+      // 지역 이름
+      const txtY = isRaid ? z.y+24 : z.y+16;
+      ctx.fillStyle = locked ? '#333' : (isRaid ? '#ff8080' : '#ddd');
+      ctx.font = 'bold 11px Noto Sans KR, sans-serif';
+      ctx.fillText(z.name.replace('⚔️드래곤','드래곤 레이드'), z.x+5, txtY);
+      // 레벨 범위
+      ctx.fillStyle = locked ? '#222' : (isRaid ? '#884444' : '#666');
+      ctx.font = '10px Noto Sans KR, sans-serif';
+      ctx.fillText('Lv.'+z.lv+(locked?' [LOCKED]':''), z.x+5, txtY+13);
+      // 작은 도트 지형
+      if(!locked){
+        const dotCol = z.region==='황야'?'#1a1a12':z.region==='엘프 숲'?'#0a140a':z.region==='동굴'?'#060606':'#0a0808';
+        for(let i=0;i<6;i++){ctx.fillStyle=dotCol;const dx=z.x+10+i*(z.w/7),dy=z.y+z.h-8;ctx.fillRect(dx,dy,3,4+i%3);}
+      }
     });
-    ctx.fillStyle='#f0e7c8'; ctx.fillRect(290,160,7,7);
-    ctx.strokeStyle='#f0e7c844'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(293,163,10,0,Math.PI*2); ctx.stroke();
+    // 플레이어 위치 마커
+    const curZone = zones.find(z=>z.region===S.zone);
+    if(curZone){
+      const mx=curZone.x+curZone.w/2, my=curZone.y+curZone.h/2;
+      ctx.fillStyle='#f0e7c8';ctx.fillRect(mx-3,my-3,7,7);
+      ctx.strokeStyle='#f0e7c8aa';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mx,my,12,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle='#c8a830';ctx.font='8px monospace';ctx.fillText('YOU',mx-8,my-16);
+    } else {
+      ctx.fillStyle='#f0e7c8';ctx.fillRect(290,160,7,7);
+    }
     cv.onclick = (e) => {
       const r=cv.getBoundingClientRect(), mx=(e.clientX-r.left)*(W/r.width), my=(e.clientY-r.top)*(H/r.height);
       for(const z of zones) {
@@ -1785,22 +2190,94 @@ const G = {
     const cv = document.getElementById('fc'); if(!cv) return;
     const ctx = cv.getContext('2d'), W=cv.width, H=cv.height;
     const loop = () => {
-      ctx.fillStyle='#020202'; ctx.fillRect(0,0,W,H);
-      [[28,10],[85,7],[145,16],[215,6],[285,13],[350,9],[410,17],[480,6]].forEach(([x,y])=>{ctx.fillStyle='#0e0e0e';ctx.fillRect(x,y,1,1);});
-      ctx.fillStyle='#141410'; ctx.beginPath(); ctx.arc(440,24,12,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#020202'; ctx.beginPath(); ctx.arc(447,21,10,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#080803';
-      for(let x=0;x<W;x+=3){const h=2+Math.sin(x*.09+this.fTick*.035)*3;ctx.fillRect(x,H-18+h,3,18);}
-      const mini=document.getElementById('mcc');
-      if(mini){ctx.imageSmoothingEnabled=false;ctx.drawImage(mini,40,H-52,32,32);}
-      // 코스튬은 유료 잠금 상태 - 미리보기만
-      S.monsters.filter(m=>!m.dead).slice(0,4).forEach((m,i)=>{
-        const mx=130+i*72, my=H-66;
-        drawMonster(ctx,m,mx,my,30);
-        // HP bar
-        ctx.fillStyle='#0a0a0a'; ctx.fillRect(mx-2,my-8,32,3);
-        ctx.fillStyle=m.color+'ee'; ctx.fillRect(mx-2,my-8,32*(m.curHp/m.hpMax),3);
+      ctx.fillStyle='#010101'; ctx.fillRect(0,0,W,H);
+      // 배경 별
+      [[28,8],[85,5],[145,14],[215,4],[285,11],[350,7],[410,15],[480,4],[60,20],[200,18],[350,22],[120,10]].forEach(([x,y])=>{
+        ctx.fillStyle='#1a1a1a';ctx.fillRect(x,y,1,1);
       });
+      // 달
+      ctx.fillStyle='#141410'; ctx.beginPath(); ctx.arc(W-40,22,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#010101'; ctx.beginPath(); ctx.arc(W-36,19,8,0,Math.PI*2); ctx.fill();
+      // 땅
+      ctx.fillStyle='#060604';
+      for(let x=0;x<W;x+=3){const h=2+Math.sin(x*.09+this.fTick*.03)*2;ctx.fillRect(x,H-16+h,3,16);}
+
+      const c = S.char;
+      const target = S.battleTarget; // 현재 대상 몬스터
+
+      if(target && !target.dead) {
+        // ── 1vs1 모드 ──
+        const mTick = this.fTick;
+        // 몬스터 — 오른쪽, 약간 흔들리는 idle 모션
+        const mxBase = W-90;
+        const mx = mxBase + Math.sin(mTick*0.05)*2;
+        const my = H-90;
+        drawMonster(ctx, target, mx, my, 50);
+        // 몬스터 HP바
+        ctx.fillStyle='#0a0a0a'; ctx.fillRect(W-105,H-100,70,5);
+        ctx.fillStyle=target.color+'dd'; ctx.fillRect(W-105,H-100,70*(target.curHp/target.hpMax),5);
+        // 몬스터 이름+HP
+        ctx.font='bold 11px Noto Sans KR, sans-serif'; ctx.fillStyle='#d0d0bc';
+        ctx.fillText(target.name, W-105, H-106);
+        ctx.font='10px Noto Sans KR, sans-serif'; ctx.fillStyle='#888';
+        ctx.fillText(target.curHp+'/'+target.hpMax, W-105, H-115);
+        ctx.font='8px monospace'; ctx.fillStyle='#555';
+        ctx.fillText('Lv.'+target.lv, W-55, H-106);
+
+        // 플레이어 — 공격 모션
+        const cxBase = 50;
+        let charOffX = Math.sin(mTick*0.05+1)*1.5; // idle
+        if(S.atkAnim && S.atkAnim.active) {
+          S.atkAnim.tick++;
+          const t = S.atkAnim.tick;
+          if(t < 6)       charOffX = t * 10;      // 앞으로 훅!
+          else if(t < 12) charOffX = (12-t) * 10; // 뒤로 복귀
+          else { S.atkAnim.active = false; charOffX = 0; }
+        }
+        const cx = cxBase + charOffX;
+        const mini=document.getElementById('mcc');
+        if(mini){ctx.imageSmoothingEnabled=false;ctx.drawImage(mini,cx,H-88,42,42);}
+        // 플레이어 HP바
+        const hpPct = Math.max(0,c.hp/c.hpMax);
+        const mpPct = c.race==='elf'?Math.max(0,(c.fp||0)/c.fpMax):Math.max(0,c.mp/c.mpMax);
+        ctx.fillStyle='#1a0a0a'; ctx.fillRect(10,H-52,80,5);
+        ctx.fillStyle='#aa2020'; ctx.fillRect(10,H-52,80*hpPct,5);
+        ctx.fillStyle='#0a0a1a'; ctx.fillRect(10,H-44,80,4);
+        ctx.fillStyle=c.race==='elf'?'#20aa60':'#2050aa'; ctx.fillRect(10,H-44,80*mpPct,4);
+        // 플레이어 이름+HP
+        ctx.font='bold 11px Noto Sans KR, sans-serif'; ctx.fillStyle='#d0d0bc';
+        ctx.fillText(c.name||'용사', 10, H-58);
+        ctx.font='10px Noto Sans KR, sans-serif'; ctx.fillStyle='#888';
+        ctx.fillText('Lv.'+c.lv+' HP '+c.hp+'/'+c.hpMax, 10, H-67);
+        ctx.font='8px monospace'; ctx.fillStyle='#555';
+        ctx.fillText(c.race==='elf'?'FP '+(c.fp||0)+'/'+c.fpMax:'MP '+c.mp+'/'+c.mpMax, 10, H-38);
+
+        // VS 텍스트
+        ctx.font='bold 10px monospace'; ctx.fillStyle='#3a3a3a';
+        ctx.fillText('VS', W/2-8, H-60);
+        // 전투 영역 구분선
+        ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(W/2,H-95); ctx.lineTo(W/2,H-15); ctx.stroke();
+
+      } else {
+        // ── 대기 모드 — 몬스터 목록 미리보기 ──
+        const mini=document.getElementById('mcc');
+        if(mini){ctx.imageSmoothingEnabled=false;ctx.drawImage(mini,20,H-52,32,32);}
+        ctx.font='bold 11px Noto Sans KR, sans-serif'; ctx.fillStyle='#d0d0bc';
+        ctx.fillText(c.name||'용사', 60, H-40);
+        ctx.font='10px Noto Sans KR, sans-serif'; ctx.fillStyle='#888';
+        ctx.fillText('Lv.'+c.lv, 60, H-28);
+        // 살아있는 몬스터 미리보기 (작게)
+        S.monsters.filter(m=>!m.dead).slice(0,4).forEach((m,i)=>{
+          const px2=W-120+i*28, py2=H-50;
+          drawMonster(ctx,m,px2,py2,22);
+          ctx.fillStyle='#0a0a0a'; ctx.fillRect(px2,py2-5,24,3);
+          ctx.fillStyle=m.color+'cc'; ctx.fillRect(px2,py2-5,24*(m.curHp/m.hpMax),3);
+        });
+        ctx.font='8px monospace'; ctx.fillStyle='#333';
+        ctx.fillText('몬스터를 탭하여 전투!', W/2-55, H-10);
+      }
+
       this.fTick++; requestAnimationFrame(loop);
     };
     loop();
@@ -1861,10 +2338,10 @@ const EQ = {
     const it=EQUIP_ITEMS.find(x=>x.id===eid); if(!it) return;
     this.removeEquipStats(it);
     delete c.equipped[slot];
-    G.log(it.icon+' '+it.name+' 해제','sys');
+    G.log(it.icon+' '+it.name+' 해제 — 가방으로 이동','sys');
     G.rStat();G.hud();this.render();
-    // put back in inv
-    if(S.char.inv.length<20){S.char.inv.push({...it});G.rInv();}
+    if(c.inv.length<20){c.inv.push({...it});G.rInv();}
+    else G.log('가방 가득! 장비 버려짐','sys');
   },
   render() {
     const c = S.char;
@@ -1988,7 +2465,7 @@ const EQ = {
 // 저장 시스템 (LocalStorage)
 // ============================================================
 const SAVE = {
-  KEY: 'fantachat_v2_save',
+  KEY: 'fantachat_v3_save',
   save() {
     const data = { char: {...S.char}, zone: S.zone, savedAt: Date.now() };
     localStorage.setItem(this.KEY, JSON.stringify(data));
@@ -2060,7 +2537,7 @@ const SS = {
     ctx.fillText('MP '+c.mp+'/'+c.mpMax, 20, 180);
     ctx.fillStyle = '#888';
     ctx.fillText('STR:'+c.str+'  INT:'+c.int+'  AGI:'+c.agi+'  DEF:'+c.def, 20, 210);
-    ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.fillText('판타챗 v2.0', 20, 260);
+    ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.fillText('판타챗 v3.0', 20, 260);
     const link = document.createElement('a');
     link.download = 'fantachat_'+c.name+'.png';
     link.href = cv.toDataURL('image/png');
@@ -2151,7 +2628,7 @@ function showItemConfirm(idx) {
   document.body.appendChild(div);
   const btns = document.getElementById('ic-btns');
   const b1 = document.createElement('button');
-  b1.style.cssText = btnStyle+';background:#181818;border:1px solid #444;color:#d0d0bc';
+  b1.style.cssText = btnStyle+";background:#181818;border:1px solid #444;color:#d0d0bc;font-family:'Noto Sans KR',sans-serif";
   b1.textContent = '✓ '+typeLabel;
   b1.onclick = ()=>{ G.useItem(idx); document.getElementById('item-confirm')?.remove(); };
   const b2 = document.createElement('button');
@@ -2170,9 +2647,12 @@ function showItemConfirm(idx) {
 function dropItem(idx) {
   const it = S.char.inv[idx];
   if(!it) return;
+  const sellPrice = it.type==='equip' ? 50 : 10;
   S.char.inv.splice(idx, 1);
-  G.rInv(); G.log(it.icon+' '+it.name+' 버림', 'sys');
-  openInvModal();
+  S.char.gold += sellPrice;
+  G.rInv(); G.hud();
+  G.log(it.icon+' '+it.name+' 판매 +'+sellPrice+'G', 'loot');
+  if(document.getElementById('inv-modal').classList.contains('on')) openInvModal();
 }
 function getEffDesc(eff, val) {
   const map = {
@@ -2348,7 +2828,7 @@ function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   // v2.0 업그레이드: 구버전 세이브 자동 삭제
-  ['fantachat_save','fantachat_v1_save','fc_save'].forEach(k => localStorage.removeItem(k));
+  ['fantachat_save','fantachat_v1_save','fantachat_v2_save','fc_save'].forEach(k => localStorage.removeItem(k));
   try { CR.init(); } catch(e) { console.error('CR.init 에러:', e); }
   document.getElementById('ii').addEventListener('keydown', e => { if(e.key==='Enter') scr('sc'); });
   SAVE.autoSave();
