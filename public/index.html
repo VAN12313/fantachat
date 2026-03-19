@@ -245,6 +245,37 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
 .bag-tab{background:transparent;border:1px solid #1a1a1a;color:#555;font-family:'Share Tech Mono',monospace;font-size:11px!important;padding:.3rem .6rem;cursor:pointer;border-radius:0}
 .bag-tab.on{border-color:#444;color:var(--tx)}
 .bag-filter-info{font-size:10px;color:#333;letter-spacing:.1em;margin-bottom:.4rem}
+.ult-skill{border-color:#5a4a10!important;color:#d4a020!important}
+.ult-sk-btn{border-color:#5a4a10!important;background:rgba(80,60,10,.15)!important}
+.ult-sk-btn:active{background:rgba(120,90,15,.3)!important}
+
+/* ── 스킬창 모달 ── */
+.skill-modal-body{display:flex;flex-direction:column;gap:.6rem}
+.sk-card{background:#060606;border:1px solid #1a1a1a;padding:.7rem;display:flex;gap:.7rem;align-items:flex-start;position:relative;transition:border-color .15s}
+.sk-card.unlocked{border-color:#2a3a2a}
+.sk-card.locked{opacity:.55}
+.sk-card.ult{border-color:#3a2a08}
+.sk-canvas{image-rendering:pixelated;flex-shrink:0;border:1px solid #111;background:#020202}
+.sk-info{flex:1;min-width:0}
+.sk-name-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem}
+.sk-name{font-size:13px;color:var(--gold);letter-spacing:.05em}
+.sk-badge{font-size:9px;padding:.1rem .3rem;border:1px solid;letter-spacing:.1em}
+.sk-badge.atk{color:#d05050;border-color:#3a1010}
+.sk-badge.def{color:#5080d0;border-color:#102040}
+.sk-badge.stun{color:#a050d0;border-color:#2a1040}
+.sk-badge.drain{color:#d04080;border-color:#3a1020}
+.sk-badge.multi{color:#d08020;border-color:#3a2000}
+.sk-badge.aoe{color:#d4a020;border-color:#3a2800}
+.sk-badge.aoe_stun{color:#c06020;border-color:#301800}
+.sk-desc{font-size:11px;color:#888;line-height:1.5;margin-bottom:.3rem}
+.sk-detail{font-size:10px;color:#555;letter-spacing:.05em}
+.sk-cost-row{display:flex;align-items:center;gap:.5rem;margin-top:.4rem}
+.sk-cost{font-size:11px;color:#c8a830}
+.sk-learn-btn{background:transparent;border:1px solid #3a3010;color:#c8a830;font-family:'Share Tech Mono',monospace;font-size:11px!important;padding:.2rem .5rem;cursor:pointer}
+.sk-learn-btn:active{background:#1a1400}
+.sk-learn-btn.cant{border-color:#1a1a1a;color:#333;cursor:default}
+.sk-locked-lv{font-size:10px;color:#333;position:absolute;top:.4rem;right:.5rem}
+.sk-ult-badge{font-size:9px;color:#d4a020;letter-spacing:.1em}
 </style>
 </head>
 <body>
@@ -259,6 +290,15 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
     <button class="db gv" onclick="G.respawnPaid()">💛 골드 부활 (현재 위치)</button>
   </div>
   <div class="dn" id="dcost"></div>
+</div>
+
+
+<!-- 스킬창 모달 -->
+<div class="modal-bg" id="skill-modal">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-title">📖 스킬북 <button class="modal-close" onclick="closeModal('skill-modal')">✕</button></div>
+    <div id="skill-modal-body" class="skill-modal-body"></div>
+  </div>
 </div>
 
 <!-- 장비창 모달 -->
@@ -378,7 +418,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
     <div class="ag">
       <div class="ai"><label>체형</label><select id="sbuild" onchange="CR.upd()"><option>날렵한</option><option>균형</option><option>근육질</option><option>단단한</option></select></div>
       <div class="ai"><label>분위기</label><select id="svibe" onchange="CR.upd()"><option>냉혹한</option><option>신비로운</option><option>야성적인</option><option>귀족적인</option><option>저주받은</option></select></div>
-      <div class="ai"><label>무기</label><select id="swpn" onchange="CR.upd()"><option>대검</option><option>활</option><option>마법서</option><option>도끼</option><option>쌍검</option><option>지팡이</option></select></div>
+      
       <div class="ai"><label>피부</label><select id="sskin"><option>밝은</option><option>중간</option><option>어두운</option><option>창백한</option></select></div>
       <div class="ai"><label>머리</label><select id="shair"><option>검은</option><option>금발</option><option>은발</option><option>붉은</option><option>흰</option></select></div>
       <div class="ai"><label>출신</label><select id="sbg"><option>전사 가문</option><option>마법사 길드</option><option>하층민</option><option>왕족</option><option>유랑자</option></select></div>
@@ -424,7 +464,7 @@ input,select,button{font-size:16px!important;-webkit-appearance:none;font-family
         <div class="rr" style="margin-top:.4rem"><div class="rlr"><span>XP</span><span id="xptx">0/200</span></div><div class="rb"><div class="rf xp" id="xpb" style="width:0%"></div></div></div>
       </div>
       <div class="ls"><div class="lt">STATS</div><div class="sm" id="smini"></div></div>
-      <div class="ls"><div class="lt">SKILLS</div><div class="sc2" id="schips"></div></div>
+      <div class="ls"><div class="lt" style="display:flex;justify-content:space-between;align-items:center">SKILLS <span style="color:#c8a830;cursor:pointer;font-size:10px;border:1px solid #3a2a08;padding:.1rem .4rem" onclick="openSkillModal()">📖 스킬북</span></div><div class="sc2" id="schips"></div></div>
       <div class="ls">
         <div class="lt" style="display:flex;justify-content:space-between;align-items:center">
           🎒 가방
@@ -491,16 +531,29 @@ const SFX = {
     o.connect(g);
     const now = ac.currentTime;
     const configs = {
-      atk:    { type:'sawtooth', freq:[220,180], dur:0.12, vol:0.15 },
-      hit:    { type:'square',   freq:[80,40],   dur:0.08, vol:0.12 },
-      skill:  { type:'sine',     freq:[440,880,660], dur:0.25, vol:0.18 },
-      heal:   { type:'sine',     freq:[523,659,784], dur:0.3,  vol:0.15 },
-      loot:   { type:'triangle', freq:[660,880], dur:0.2,  vol:0.12 },
-      lvup:   { type:'sine',     freq:[523,659,784,1047], dur:0.5, vol:0.2 },
-      dodge:  { type:'sine',     freq:[880,1100,880], dur:0.2, vol:0.13 },
-      die:    { type:'sawtooth', freq:[220,110,55], dur:0.6, vol:0.2 },
-      buy:    { type:'triangle', freq:[440,550], dur:0.18, vol:0.12 },
-      equip:  { type:'sine',     freq:[660,880,1100], dur:0.25, vol:0.15 },
+      atk:      { type:'sawtooth', freq:[220,180],          dur:0.12, vol:0.15 },
+      hit:      { type:'square',   freq:[80,40],            dur:0.08, vol:0.12 },
+      heal:     { type:'sine',     freq:[523,659,784],      dur:0.3,  vol:0.15 },
+      loot:     { type:'triangle', freq:[660,880],          dur:0.2,  vol:0.12 },
+      lvup:     { type:'sine',     freq:[523,659,784,1047], dur:0.5,  vol:0.2  },
+      dodge:    { type:'sine',     freq:[880,1100,880],     dur:0.2,  vol:0.13 },
+      die:      { type:'sawtooth', freq:[220,110,55],       dur:0.6,  vol:0.2  },
+      buy:      { type:'triangle', freq:[440,550],          dur:0.18, vol:0.12 },
+      equip:    { type:'sine',     freq:[660,880,1100],     dur:0.25, vol:0.15 },
+      // 스킬별 고유 사운드
+      sk_slash: { type:'sawtooth', freq:[330,220,180],      dur:0.2,  vol:0.2  }, // 강베기 — 묵직한 칼소리
+      sk_multi: { type:'sawtooth', freq:[440,330,440,330],  dur:0.25, vol:0.18 }, // 연속베기 — 빠른 연타
+      sk_axe:   { type:'square',   freq:[150,100,80],       dur:0.25, vol:0.22 }, // 도끼 — 둔탁함
+      sk_bow:   { type:'triangle', freq:[880,1100,660],     dur:0.18, vol:0.16 }, // 활 — 가볍고 빠름
+      sk_dark:  { type:'sawtooth', freq:[110,80,55,80],     dur:0.3,  vol:0.2  }, // 암흑폭발 — 낮고 묵직
+      sk_drain: { type:'sine',     freq:[220,180,140],      dur:0.35, vol:0.18 }, // 생명흡수 — 기묘함
+      sk_arrow_r:{ type:'triangle',freq:[1100,880,1320],    dur:0.22, vol:0.17 }, // 폭발화살 — 팡!
+      sk_stun:  { type:'square',   freq:[660,440,220],      dur:0.28, vol:0.16 }, // 스턴 — 충격음
+      sk_shield:{ type:'square',   freq:[200,300,200],      dur:0.2,  vol:0.15 }, // 방패 — 탁
+      sk_ult_h: { type:'sawtooth', freq:[220,330,440,550,660,440,220], dur:0.6, vol:0.25 }, // 인간 궁극
+      sk_ult_e: { type:'sine',     freq:[880,1100,1320,1100,880,1320,1760], dur:0.7, vol:0.22 }, // 엘프 궁극
+      sk_ult_d: { type:'square',   freq:[110,80,60,80,110,150,110], dur:0.8, vol:0.28 }, // 드워프 궁극
+      sk_ult_dm:{ type:'sawtooth', freq:[55,80,110,80,55,40,55], dur:0.9, vol:0.3  }, // 마족 궁극
     };
     const c = configs[type] || configs.atk;
     o.type = c.type;
@@ -520,145 +573,42 @@ const SFX = {
 // 데이터: 종족
 // ============================================================
 const RACES = {
-  human: { label:'인간족', lore:'균형 스탯, 빠른 성장', base:{str:5,int:4,agi:6,def:3}, pal:{skin:'#c8a882',hair:'#6b3a1a',cloth:'#3a4a7a',armor:'#7a7a7a',acc:'#d4c840'} },
-  elf:   { label:'엘프',   lore:'고지능·마법 특화',     base:{str:3,int:8,agi:8,def:2},   pal:{skin:'#d4c8a0',hair:'#d4b83c',cloth:'#2a5a3a',armor:'#4a7a4a',acc:'#c0d8ff'} },
-  dwarf: { label:'드워프', lore:'최고 방어·HP',          base:{str:7,int:3,agi:3,def:9},   pal:{skin:'#b8886a',hair:'#8b5a1a',cloth:'#4a3318',armor:'#8a8a8a',acc:'#d4901a'} },
-  demon: { label:'마족',   lore:'암흑 마력, 고위험',     base:{str:6,int:7,agi:5,def:3},  pal:{skin:'#5a1a2a',hair:'#1a0808',cloth:'#280818',armor:'#381838',acc:'#ff4060'} },
+  human: { label:'인간족', lore:'⚔️ 장검사 — 강베기·연속베기·방패막기·궁극:폭풍베기', cls:'장검', base:{str:7,int:5,agi:8,def:4}, pal:{skin:'#c8a882',hair:'#6b3a1a',cloth:'#3a4a7a',armor:'#7a7a7a',acc:'#d4c840'} },
+  elf:   { label:'엘프',   lore:'🏹 궁수 — 속사·속박·폭발화살·궁극:화살비 (집중력 사용)', cls:'활', base:{str:4,int:10,agi:10,def:3},   pal:{skin:'#d4c8a0',hair:'#d4b83c',cloth:'#2a5a3a',armor:'#4a7a4a',acc:'#c0d8ff'} },
+  dwarf: { label:'드워프', lore:'🪓 전사 — 도끼던지기·철벽·대지진·궁극:화산폭발', cls:'도끼', base:{str:6,int:4,agi:4,def:12},   pal:{skin:'#b8886a',hair:'#8b5a1a',cloth:'#4a3318',armor:'#8a8a8a',acc:'#d4901a'} },
+  demon: { label:'마족',   lore:'📖 마법사 — 암흑폭발·생명흡수·공포·궁극:멸망의 저주', cls:'마법서', base:{str:8,int:9,agi:7,def:4},  pal:{skin:'#5a1a2a',hair:'#1a0808',cloth:'#280818',armor:'#381838',acc:'#ff4060'} },
 };
 
 // ============================================================
 // 데이터: 종족+무기별 스킬 (초반 1개, 5렙마다 해금)
 // ============================================================
 const RACE_SKILLS = {
-  human: {
-    '대검': [
-      {id:'slash',  name:'강베기',   mp:40,cd:30000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
-      {id:'shield', name:'방패막기', mp:32, cd:60000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
-      {id:'rally',  name:'전의고취', mp:60,cd:90000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
-    ],
-    '활': [
-      {id:'arrow',  name:'속사',     mp:40,cd:30000, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
-      {id:'trap',   name:'함정설치', mp:48,cd:60000, type:'stun', power:0,   fx:'🪤 함정!',      unlockLv:5},
-      {id:'stealth',name:'은신',     mp:60,cd:90000, type:'def',  power:0,   fx:'🌑 은신!',      unlockLv:10},
-    ],
-    '마법서': [
-      {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
-      {id:'shield', name:'방패막기', mp:32, cd:60000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
-      {id:'rally',  name:'전의고취', mp:60,cd:90000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
-    ],
-    '도끼': [
-      {id:'axe',    name:'도끼던지기',mp:40,cd:30000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
-      {id:'shield', name:'방패막기', mp:32, cd:60000, type:'def',  power:0,   fx:'🛡️ 방패막기!', unlockLv:5},
-      {id:'rally',  name:'전의고취', mp:60,cd:90000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
-    ],
-    '쌍검': [
-      {id:'dual',   name:'연속베기', mp:48,cd:30000, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
-      {id:'evade',  name:'회피기동', mp:32, cd:60000, type:'def',  power:0,   fx:'💨 회피기동!',  unlockLv:5},
-      {id:'rally',  name:'전의고취', mp:60,cd:90000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
-    ],
-    '지팡이': [
-      {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.4,  fx:'🌿 자연치유!',  unlockLv:5},
-      {id:'rally',  name:'전의고취', mp:60,cd:90000, type:'heal', power:.35, fx:'💪 전의고취!',  unlockLv:10},
-    ],
-  },
-  elf: {
-    '활': [
-      {id:'arrow',  name:'폭발화살', mp:48,cd:30000, type:'atk',  power:3.0, fx:'🏹 폭발화살!',  unlockLv:1},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
-    ],
-    '마법서': [
-      {id:'arcane', name:'비전폭발', mp:56,cd:30000, type:'atk',  power:3.2, fx:'✨ 비전폭발!',  unlockLv:1},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
-    ],
-    '지팡이': [
-      {id:'arcane', name:'비전폭발', mp:56,cd:30000, type:'atk',  power:3.2, fx:'✨ 비전폭발!',  unlockLv:1},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:5},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:10},
-    ],
-    '대검': [
-      {id:'slash',  name:'강베기',   mp:40,cd:30000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
-    ],
-    '쌍검': [
-      {id:'dual',   name:'연속베기', mp:48,cd:30000, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
-    ],
-    '도끼': [
-      {id:'axe',    name:'도끼던지기',mp:40,cd:30000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
-      {id:'root',   name:'속박',     mp:40,cd:60000, type:'stun', power:0,   fx:'🌿 속박!',      unlockLv:5},
-      {id:'mend',   name:'자연치유', mp:72,cd:90000, type:'heal', power:.45, fx:'🌿 자연치유!',  unlockLv:10},
-    ],
-  },
-  dwarf: {
-    '도끼': [
-      {id:'axe',    name:'대도끼',   mp:32, cd:30000, type:'atk',  power:2.8, fx:'⚒️ 대도끼!',   unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-    '대검': [
-      {id:'slash',  name:'강베기',   mp:40,cd:30000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-    '쌍검': [
-      {id:'dual',   name:'연속베기', mp:48,cd:30000, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-    '활': [
-      {id:'arrow',  name:'속사',     mp:40,cd:30000, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-    '마법서': [
-      {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-    '지팡이': [
-      {id:'bolt',   name:'번개볼트', mp:56,cd:30000, type:'atk',  power:2.8, fx:'⚡ 번개볼트!',  unlockLv:1},
-      {id:'taunt',  name:'도발',     mp:20, cd:60000, type:'def',  power:0,   fx:'😤 도발!',      unlockLv:5},
-      {id:'iron',   name:'철벽',     mp:60,cd:90000,type:'def',  power:0,   fx:'🔥 철벽!',      unlockLv:10},
-    ],
-  },
-  demon: {
-    '마법서': [
-      {id:'dark',   name:'암흑폭발', mp:60,cd:30000, type:'atk',  power:3.2, fx:'💀 암흑폭발!',  unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-    '지팡이': [
-      {id:'dark',   name:'암흑폭발', mp:60,cd:30000, type:'atk',  power:3.2, fx:'💀 암흑폭발!',  unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-    '대검': [
-      {id:'slash',  name:'강베기',   mp:40,cd:30000, type:'atk',  power:2.5, fx:'⚔️ 강베기!',   unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-    '쌍검': [
-      {id:'dual',   name:'연속베기', mp:48,cd:30000, type:'atk',  power:2.0, fx:'⚔️⚔️ 연속베기!',unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-    '도끼': [
-      {id:'axe',    name:'도끼던지기',mp:40,cd:30000,type:'atk',  power:2.6, fx:'🪓 도끼던지기!',unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-    '활': [
-      {id:'arrow',  name:'속사',     mp:40,cd:30000, type:'atk',  power:2.2, fx:'🏹 속사!',      unlockLv:1},
-      {id:'drain',  name:'생명흡수', mp:36,cd:60000, type:'drain',power:1.8, fx:'🩸 생명흡수!',  unlockLv:5},
-      {id:'fear',   name:'공포',     mp:40,cd:60000, type:'stun', power:0,   fx:'👁️ 공포!',     unlockLv:10},
-    ],
-  },
+  human: [
+    {id:'slash',  name:'강베기',    mp:18, cd:15000,  type:'atk',      power:2.2, snd:'sk_slash',  unlockLv:1,  learnCost:0,    fx:'⚔️ 강베기!',    desc:'장검을 힘껏 내리쳐 STR×2.2의 피해를 입힌다.', detail:'쿨타임 15초 | 공격형 | STR 기반'},
+    {id:'shield', name:'방패막기',  mp:14, cd:25000,  type:'def',      power:0,   snd:'sk_shield', unlockLv:5,  learnCost:300,  fx:'🛡️ 방패막기!',  desc:'방패로 다음 공격을 막아 피해를 70% 감소시킨다.', detail:'쿨타임 25초 | 방어형 | Lv.5 해금'},
+    {id:'dual',   name:'연속베기',  mp:25, cd:20000,  type:'multi',    power:1.5, snd:'sk_multi',  unlockLv:10, learnCost:500,  fx:'⚔️ 연속베기!',  desc:'빠르게 두 번 베어 각각 STR×1.5씩 총 2연타.', detail:'쿨타임 20초 | 연타형 | Lv.10 해금'},
+    {id:'ult_h',  name:'폭풍베기', mp:55, cd:90000,  type:'aoe',      power:2.8, snd:'sk_ult_h',  unlockLv:20, learnCost:0,    fx:'🌪️ 폭풍베기!!', desc:'폭풍처럼 회전하며 구역 내 모든 적에게 STR×2.8 피해. 궁극기.', detail:'쿨타임 90초 | ⚡궁극기 | Lv.20 자동 해금'},
+  ],
+  elf: [
+    {id:'arrow',  name:'속사',      fp:10, cd:8000,   type:'atk',      power:2.0, snd:'sk_bow',    unlockLv:1,  learnCost:0,    fx:'🏹 속사!',       desc:'빠르게 화살을 쏘아 AGI×2.0의 피해. 집중력 소모.', detail:'쿨타임 8초(!) | 공격형 | AGI+INT 기반'},
+    {id:'bind',   name:'속박',      fp:15, cd:20000,  type:'stun',     power:0,   snd:'sk_stun',   unlockLv:5,  learnCost:300,  fx:'🌿 속박!',        desc:'마법 덩굴로 적을 묶어 2회 반격을 막는다.', detail:'쿨타임 20초 | 스턴형 | Lv.5 해금'},
+    {id:'blast',  name:'폭발화살', fp:20, cd:15000,  type:'atk',      power:3.2, snd:'sk_arrow_r',unlockLv:10, learnCost:500,  fx:'💥 폭발화살!',   desc:'마법이 깃든 화살이 폭발하며 INT×3.2 대형 피해.', detail:'쿨타임 15초 | 마법 공격형 | INT 기반 | Lv.10'},
+    {id:'ult_e',  name:'화살비',   fp:40, cd:60000,  type:'aoe',      power:0,   snd:'sk_ult_e',  unlockLv:20, learnCost:0,    fx:'🌧️ 화살비!!',    desc:'하늘에서 수백 발의 화살이 비처럼 쏟아져 전체 적에게 (AGI+INT)×1.5 피해. 궁극기.', detail:'쿨타임 60초 | ⚡궁극기 | Lv.20 자동 해금'},
+  ],
+  dwarf: [
+    {id:'axe',    name:'도끼던지기',mp:16, cd:20000,  type:'atk',      power:2.5, snd:'sk_axe',    unlockLv:1,  learnCost:0,    fx:'🪓 도끼던지기!',  desc:'도끼를 힘껏 던져 STR×2.5의 묵직한 피해를 입힌다.', detail:'쿨타임 20초 | 공격형 | STR 기반'},
+    {id:'iron',   name:'철벽',      mp:12, cd:30000,  type:'def',      power:0,   snd:'sk_shield', unlockLv:5,  learnCost:300,  fx:'🔥 철벽!',        desc:'강철 같은 자세로 다음 피해를 70% 감소시킨다.', detail:'쿨타임 30초 | 방어형 | Lv.5 해금'},
+    {id:'quake',  name:'대지진',    mp:30, cd:35000,  type:'aoe_stun', power:1.8, snd:'sk_axe',    unlockLv:10, learnCost:500,  fx:'🌋 대지진!',      desc:'땅을 강타해 구역 내 전체 적 스턴+STR×1.8 피해.', detail:'쿨타임 35초 | 전체 스턴+공격 | Lv.10'},
+    {id:'ult_d',  name:'화산폭발', mp:65, cd:120000, type:'aoe',      power:4.5, snd:'sk_ult_d',  unlockLv:20, learnCost:0,    fx:'🌋 화산폭발!!',  desc:'대지의 힘을 끌어올려 모든 적에게 STR×4.5 폭발 피해. 궁극기.', detail:'쿨타임 120초 | ⚡궁극기 | Lv.20 자동 해금'},
+  ],
+  demon: [
+    {id:'dark',   name:'암흑폭발', mp:22, cd:12000,  type:'atk',      power:3.0, snd:'sk_dark',   unlockLv:1,  learnCost:0,    fx:'💀 암흑폭발!',   desc:'암흑 마력을 응축해 폭발시킨다. INT×3.0 피해.', detail:'쿨타임 12초 | 공격형 | INT 기반'},
+    {id:'drain',  name:'생명흡수', mp:28, cd:20000,  type:'drain',    power:1.8, snd:'sk_drain',  unlockLv:5,  learnCost:300,  fx:'🩸 생명흡수!',   desc:'적의 생명력을 INT×1.8만큼 빼앗아 HP로 흡수.', detail:'쿨타임 20초 | 흡혈형 | Lv.5 해금'},
+    {id:'fear',   name:'공포',      mp:20, cd:30000,  type:'stun',     power:0,   snd:'sk_stun',   unlockLv:10, learnCost:1000, fx:'👁️ 공포!',       desc:'극한의 공포를 퍼뜨려 구역 내 전체 몬스터를 2회 스턴.', detail:'쿨타임 30초 | 전체 스턴 | Lv.10 해금'},
+    {id:'ult_dm', name:'멸망의 저주',mp:75,cd:120000, type:'aoe',     power:5.0, snd:'sk_ult_dm', unlockLv:20, learnCost:0,    fx:'💀 멸망의 저주!!',desc:'모든 것을 저주로 물들여 INT×5.0의 절멸 피해. 궁극기.', detail:'쿨타임 120초 | ⚡궁극기 | Lv.20 자동 해금'},
+  ],
 };
+
 
 // ============================================================
 // 데이터: 몬스터
@@ -936,7 +886,11 @@ const CR = {
       const d = document.createElement('div');
       d.className = 'rc' + (k==='human'?' sel':'');
       d.dataset.race = k;
-      d.innerHTML = `<canvas class="rp" id="rp-${k}" width="24" height="24"></canvas><span class="rn">${r.label}</span><div class="rl">${r.lore}</div><div class="rs">STR:${r.base.str} INT:${r.base.int} AGI:${r.base.agi} DEF:${r.base.def}</div>`;
+      d.innerHTML = '<canvas class="rp" id="rp-'+k+'" width="24" height="24"></canvas>'+
+        '<span class="rn">'+r.label+'</span>'+
+        '<span style="font-size:10px;color:#c8a830;letter-spacing:.1em">'+r.cls+'</span>'+
+        '<div class="rl">'+r.lore.replace(/[⚔️🏹🪓📖]/g,'').trim()+'</div>'+
+        '<div class="rs">STR:'+r.base.str+' INT:'+r.base.int+' AGI:'+r.base.agi+' DEF:'+r.base.def+'</div>';
       d.onclick = () => this.sel(k);
       g.appendChild(d);
       PIX.draw(document.getElementById('rp-'+k).getContext('2d'), k, 24);
@@ -953,7 +907,7 @@ const CR = {
     PIX.draw(document.getElementById('apc').getContext('2d'), this.race, 24);
     const rb = RACES[this.race].base;
     const vibe = document.getElementById('svibe').value;
-    const wpn = document.getElementById('swpn').value;
+    const wpn = RACES[this.race]?.cls || '장검';
     const d = {
       human: `${vibe} 인간 전사. ${wpn}을 주무기로 황야에서 살아남은 자.`,
       elf:   `${vibe} 엘프. ${wpn} 능숙. 숲의 마법사.`,
@@ -968,15 +922,16 @@ const CR = {
     SFX.init();
     const name = document.getElementById('cname').value.trim() || '이름없는자';
     const r = RACES[this.race];
-    const wpn = document.getElementById('swpn').value;
-    Object.assign(S.char, {name, race:this.race, wpn, ...r.base});
-    S.char.hpMax = 50 + r.base.def*2 + r.base.str;
+    Object.assign(S.char, {name, race:this.race, wpn:r.cls||'장검', fp:r.base.str, fpMax:100, ...r.base});
+    const c_race=this.race||S.char.race;
+    S.char.hpMax = 55 + (c_race==='dwarf'?r.base.def*2:r.base.def*3) + r.base.str*2;
     S.char.hp = S.char.hpMax;
-    S.char.mpMax = 30 + r.base.int*3;
+    S.char.mpMax = 35 + r.base.int*4;
     S.char.mp = S.char.mpMax;
-    const raceSkills = RACE_SKILLS[this.race];
-    const skillList = raceSkills[wpn] || raceSkills[Object.keys(raceSkills)[0]];
-    S.char.skills = skillList.map(s => ({...s, cdLeft:0}));
+    // 엘프 전용 집중력(FP)
+    S.char.fpMax = S.char.race==='elf' ? 100 : 0;
+    S.char.fp    = S.char.fpMax;
+    S.char.skills = RACE_SKILLS[this.race].map(s => ({...s, cdLeft:0, fp:s.fp||0}));
     S.char.inv = [];
     S.char.equip = {head:null, body:null};
     S.char.equipped = {weapon:null,helm:null,chest:null,boots:null,ring:null};
@@ -988,9 +943,7 @@ const CR = {
         Object.assign(S.char, saved.char);
         S.zone = saved.zone || '황야';
         // 스킬은 항상 최신 데이터로 덮어씀 (MP/CD 변경 반영)
-        const rs = RACE_SKILLS[S.char.race];
-        const sl = rs[S.char.wpn] || rs[Object.keys(rs)[0]];
-        S.char.skills = sl.map(s => ({...s, cdLeft:0}));
+        S.char.skills = RACE_SKILLS[S.char.race].map(s => ({...s, cdLeft:0, fp:s.fp||0}));
         scr('sg'); G.init();
         return;
       }
@@ -1202,12 +1155,11 @@ const G = {
   init() {
     const c = S.char;
     // 스킬 항상 최신 RACE_SKILLS로 강제 갱신
-    const _rs = RACE_SKILLS[c.race];
-    const _sl = _rs[c.wpn] || _rs[Object.keys(_rs)[0]];
-    c.skills = _sl.map(s => ({...s, cdLeft:0}));
+    c.skills = RACE_SKILLS[c.race].map(s => ({...s, cdLeft:0, fp:s.fp||0}));
+    if(!c.learnedSkills) c.learnedSkills={0:true};
     document.getElementById('hrace').textContent = RACES[c.race].label;
     document.getElementById('sname').textContent = c.name;
-    document.getElementById('srace').textContent = RACES[c.race].label + ' / ' + c.wpn;
+    document.getElementById('srace').textContent = RACES[c.race].label + ' / ' + (RACES[c.race].cls||c.wpn);
     S.quests = JSON.parse(JSON.stringify([
       {id:'q1',name:'슬라임 토벌',   desc:'슬라임 5마리 처치',  reward:'XP +200, Gold +80',  target:'slime',   need:5, got:0, done:false, xp:200, gold:80},
       {id:'q2',name:'고블린 패잔병', desc:'고블린 3마리 처치',  reward:'XP +150, Gold +60',  target:'goblin',  need:3, got:0, done:false, xp:150, gold:60},
@@ -1228,7 +1180,14 @@ const G = {
   hud() {
     const c = S.char;
     document.getElementById('hptx').textContent = c.hp+'/'+c.hpMax;
-    document.getElementById('mptx').textContent = c.mp+'/'+c.mpMax;
+    // 엘프는 FP 표시
+    if(c.race==='elf') {
+      document.getElementById('mptx').textContent = (c.fp||0)+'/'+c.fpMax+' FP';
+      document.getElementById('mpb').style.width = ((c.fp||0)/c.fpMax*100)+'%';
+      document.getElementById('mpb').style.background = '#40a060';
+    } else {
+      document.getElementById('mptx').textContent = c.mp+'/'+c.mpMax;
+    } // end else (not elf)
     document.getElementById('xptx').textContent = c.xp+'/'+c.xpMax;
     document.getElementById('hpb').style.width = Math.max(0,c.hp/c.hpMax*100)+'%';
     document.getElementById('mpb').style.width = Math.max(0,c.mp/c.mpMax*100)+'%';
@@ -1252,19 +1211,34 @@ const G = {
   rSkill() {
     const c = S.char;
     const maxSkills = 1 + Math.floor((c.lv-1)/5);
+    const isElf = c.race==='elf';
     const chips = document.getElementById('schips');
     chips.innerHTML = c.skills.map((sk,i) => {
       const locked = i >= maxSkills;
-      if(locked) return `<div class="sch locked" title="Lv.${sk.unlockLv} 해금">${sk.name} 🔒</div>`;
-      const cdSecChip = sk.cdLeft>0 ? ' '+Math.ceil(sk.cdLeft/1000)+'s' : '';
-      return `<div class="sch ${sk.cdLeft>0?'on-cd':''}" id="sch-${i}" onclick="G.skill(${i})">${sk.name} <span style="font-size:10px;color:#4060aa">${sk.mp}MP</span>${cdSecChip?`<span style="font-size:9px;color:#666">${cdSecChip}</span>`:''}</div>`;
+      const isUlt = sk.type==='aoe'||sk.type==='aoe_stun';
+      if(locked) return '<div class="sch locked" title="Lv.'+sk.unlockLv+' 해금">'+sk.name+' 🔒<span style="font-size:9px;color:#333"> Lv.'+sk.unlockLv+'</span></div>';
+      const cost = isElf?(sk.fp||0):(sk.mp||0);
+      const costLabel = cost>0?(isElf?cost+'FP':cost+'MP'):'';
+      const cdSec = sk.cdLeft>0?' '+Math.ceil(sk.cdLeft/1000)+'s':'';
+      return '<div class="sch '+(sk.cdLeft>0?'on-cd':'')+(isUlt?' ult-skill':'')+'" id="sch-'+i+'" onclick="G.skill('+i+')">'+
+        (isUlt?'⚡ ':'')+sk.name+
+        (costLabel?'<span style="font-size:10px;color:'+(isElf?'#40a060':'#4060aa')+'"> '+costLabel+'</span>':'')+
+        (cdSec?'<span style="font-size:9px;color:#666">'+cdSec+'</span>':'')+
+        '</div>';
     }).join('');
     const bar = document.getElementById('skill-bar');
     bar.innerHTML = c.skills.map((sk,i) => {
       const locked = i >= maxSkills;
-      if(locked) return `<button class="sk-btn locked" title="Lv.${sk.unlockLv} 해금">${sk.name}<span class="lk-txt">Lv.${sk.unlockLv}</span></button>`;
-      const cdSec = sk.cdLeft>0 ? Math.ceil(sk.cdLeft/1000)+'s' : '';
-      return `<button class="sk-btn ${sk.cdLeft>0?'cd':''}" id="skb-${i}" onclick="G.skill(${i})">${sk.name}<span class="mpc">${sk.mp}MP</span>${cdSec?`<span class="cd-sec">${cdSec}</span>`:''}<div class="cdo" id="cdo-${i}" style="width:0%"></div></button>`;
+      const isUlt = sk.type==='aoe'||sk.type==='aoe_stun';
+      if(locked) return '<button class="sk-btn locked">'+sk.name+'<span class="lk-txt">Lv.'+sk.unlockLv+'</span></button>';
+      const cost = isElf?(sk.fp||0):(sk.mp||0);
+      const costLabel = cost>0?(isElf?cost+'FP':cost+'MP'):'';
+      const cdSec = sk.cdLeft>0?Math.ceil(sk.cdLeft/1000)+'s':'';
+      return '<button class="sk-btn '+(sk.cdLeft>0?'cd':'')+(isUlt?' ult-sk-btn':'')+'" id="skb-'+i+'" onclick="G.skill('+i+')">'+
+        (isUlt?'⚡':'')+sk.name+
+        (costLabel?'<span class="mpc" style="color:'+(isElf?'#40a060':'#4060aa')+'">'+costLabel+'</span>':'')+
+        (cdSec?'<span class="cd-sec">'+cdSec+'</span>':'')+
+        '<div class="cdo" id="cdo-'+i+'" style="width:0%"></div></button>';
     }).join('');
   },
 
@@ -1334,98 +1308,169 @@ const G = {
     if(S.lock) return;
     const c = S.char;
     const maxSkills = 1 + Math.floor((c.lv-1)/5);
-    if(si >= maxSkills) { this.log('Lv.'+c.skills[si].unlockLv+' 이상에서 해금됩니다', 'sys'); return; }
-    const sk = c.skills[si]; if(!sk||sk.cdLeft>0) return;
-    if(c.mp < sk.mp) { this.log('MP 부족!', 'sys'); return; }
-    S.lock = true; c.mp -= sk.mp;
-    this.log(sk.fx, 'skill');
-    SFX.play('skill');
-    // INT가 스킬 위력에 유의미하게 반영
-    const intMult = 1 + (c.int / 30);
-    // 스킬 대상: 살아있는 몬스터 중 랜덤 선택 (자연스럽게)
-    const aliveMonsters = S.monsters.map((m,i)=>({m,i})).filter(x=>!x.m.dead);
-    const target = aliveMonsters.length > 0 ? aliveMonsters[Math.floor(Math.random()*aliveMonsters.length)] : null;
-    const m = target ? target.m : null;
-    const mi = target ? target.i : -1;
+    const sk = c.skills[si];
+    if(!sk) return;
+    if(si >= maxSkills) { this.log('Lv.'+c.skills[si].unlockLv+' 이상에서 해금됩니다','sys'); return; }
+    if(!c.learnedSkills) c.learnedSkills={0:true};
+    if(!c.learnedSkills[si]&&si!==0) { this.log('💰 스킬을 먼저 습득하세요! (스킬북 참고)','sys'); return; }
+    if(sk.cdLeft>0) return;
 
-    if(sk.type==='atk') {
-      const stat = (sk.id==='arrow'||sk.id==='dark'||sk.id==='arcane'||sk.id==='bolt') ? c.int : c.str;
-      const dmg = Math.floor(stat * sk.power * intMult + Math.random()*15);
-      if(m) { m.curHp=Math.max(0,m.curHp-dmg); this.shake(mi); this.pop(mi,dmg,'#c060d0'); }
-      this.log(sk.name+': '+dmg+' 피해! (대상: '+(m?m.name:'없음')+')', 'skill');
-    } else if(sk.type==='drain') {
-      const dmg = Math.floor(c.str * sk.power * intMult + Math.random()*10);
-      if(m) { m.curHp=Math.max(0,m.curHp-dmg); this.shake(mi); this.pop(mi,dmg,'#aa2050'); }
-      c.hp = Math.min(c.hpMax, c.hp+dmg);
-      this.log('생명 '+dmg+' 흡수! HP 회복', 'skill');
-      SFX.play('heal');
-    } else if(sk.type==='heal') {
-      const h = Math.floor(c.hpMax * sk.power * intMult);
-      c.hp = Math.min(c.hpMax, c.hp+h);
-      this.log('HP +'+h+' 회복', 'heal');
-      SFX.play('heal');
-    } else if(sk.type==='def') {
-      c.shieldUp = true;
-      this.log('다음 피해 70% 감소 (방어 준비)', 'inf');
-    } else if(sk.type==='stun') {
-      if(m) { m.stunned = (sk.id==='fear'?3:2); }
-      this.log('적 스턴! '+(m?m.name:'')+(m?' 행동 불가':''), 'skill');
-    } else if(sk.type==='def') {
-      if(sk.id==='iron'||sk.id==='taunt'||sk.id==='shield') { c.shieldUp=true; this.log('다음 피해 70% 감소!','inf'); }
-      else if(sk.id==='stealth'||sk.id==='evade') { c.dodgeBonus+=30; setTimeout(()=>{c.dodgeBonus=Math.max(0,c.dodgeBonus-30);},8000); this.log('회피율 +30% (8초)','inf'); }
+    // FP or MP 체크
+    const isElf = c.race==='elf';
+    const cost = isElf ? (sk.fp||0) : (sk.mp||0);
+    const resource = isElf ? (c.fp||0) : c.mp;
+    if(cost>0 && resource < cost) {
+      this.log(isElf?'집중력 부족! (FP)':'MP 부족!','sys'); return;
     }
 
-    sk.cdLeft = sk.cd; this.startCD(si, sk.cd);
-    if(m && m.curHp<=0) {
-      setTimeout(() => { this.kill(m,mi); S.lock=false; this.rMon(); this.hud(); }, 350);
-    } else if(m && sk.type!=='heal' && sk.type!=='buff') {
-      setTimeout(() => { this.mhit(m,mi); S.lock=false; this.rMon(); this.hud(); }, 400);
-    } else { S.lock=false; this.hud(); }
+    S.lock = true;
+    if(isElf) c.fp = Math.max(0,(c.fp||0)-cost);
+    else c.mp -= cost;
+
+    this.log(sk.fx,'skill');
+    // 스킬별 고유 사운드
+    SFX.play(sk.snd||'skill');
+
+    const intMult = 1 + (c.int/40);
+    const alive = S.monsters.map((m,i)=>({m,i})).filter(x=>!x.m.dead);
+    const tgt = alive.length>0 ? alive[Math.floor(Math.random()*alive.length)] : null;
+    const m = tgt?.m, mi = tgt?.i ?? -1;
+
+    if(sk.type==='atk') {
+      const stat = (c.race==='elf'||sk.id==='dark'||sk.id==='blast') ? c.int : c.str;
+      const dmg = Math.floor(stat * sk.power * intMult + Math.random()*8);
+      if(m){m.curHp=Math.max(0,m.curHp-dmg);this.shake(mi);this.pop(mi,dmg,'#c060d0');}
+      this.log(sk.name+': '+dmg+' 피해 ('+( m?m.name:'대상없음' )+')', 'skill');
+    }
+    else if(sk.type==='multi') {
+      // 2연타
+      const stat = c.str;
+      const d1=Math.floor(stat*sk.power*intMult+Math.random()*6);
+      const d2=Math.floor(stat*sk.power*intMult+Math.random()*6);
+      if(m){
+        m.curHp=Math.max(0,m.curHp-d1);this.shake(mi);this.pop(mi,d1,'#d080a0');
+        setTimeout(()=>{
+          if(!m.dead){m.curHp=Math.max(0,m.curHp-d2);this.shake(mi);this.pop(mi,d2,'#d080a0');this.rMon();}
+        },200);
+      }
+      this.log(sk.name+': '+d1+'+'+d2+' 2연타!','skill');
+    }
+    else if(sk.type==='drain') {
+      const dmg=Math.floor(c.int*sk.power*intMult+Math.random()*8);
+      if(m){m.curHp=Math.max(0,m.curHp-dmg);this.shake(mi);this.pop(mi,dmg,'#aa2050');}
+      c.hp=Math.min(c.hpMax,c.hp+dmg);
+      this.log('생명 '+dmg+' 흡수! HP 회복','skill');
+      SFX.play('heal');
+    }
+    else if(sk.type==='heal') {
+      const h=Math.floor(c.hpMax*sk.power*intMult);
+      c.hp=Math.min(c.hpMax,c.hp+h);
+      this.log('HP +'+h+' 회복','heal');SFX.play('heal');
+    }
+    else if(sk.type==='def') {
+      if(sk.id==='iron'){c.shieldUp=true;c.shieldReflect=true;}
+      else c.shieldUp=true;
+      this.log('다음 피해 70% 감소!','inf');
+    }
+    else if(sk.type==='stun') {
+      // 단일 or 전체
+      if(sk.id==='fear') {
+        S.monsters.filter(x=>!x.dead).forEach(x=>{x.stunned=2;});
+        this.log('👁️ 공포! 전체 몬스터 스턴 2회','skill');
+      } else {
+        if(m){m.stunned=2;}
+        this.log(sk.name+': '+(m?m.name:'')+ ' 스턴!','skill');
+      }
+    }
+    else if(sk.type==='aoe_stun') {
+      // 대지진 — 전체 스턴+데미지
+      const dmg=Math.floor(c.str*sk.power*intMult+Math.random()*10);
+      let total=0;
+      S.monsters.filter(x=>!x.dead).forEach((x,i2)=>{
+        x.m=x;
+        const idx=S.monsters.indexOf(x);
+        x.curHp=Math.max(0,x.curHp-dmg);x.stunned=2;
+        this.shake(idx);this.pop(idx,dmg,'#ff8040');
+        total+=dmg;
+      });
+      this.log('🌋 대지진! 전체 '+dmg+' 피해+스턴','skill');
+    }
+    else if(sk.type==='aoe') {
+      // 궁극기 — 전체 데미지
+      const stat = c.race==='elf' ? Math.floor((c.agi+c.int)*0.8) : (c.race==='demon' ? c.int : c.str);
+      const baseDmg=Math.floor(stat*sk.power*intMult);
+      let total=0, killed=0;
+      S.monsters.filter(x=>!x.dead).forEach(x=>{
+        const idx=S.monsters.indexOf(x);
+        const dmg=baseDmg+Math.floor(Math.random()*20);
+        x.curHp=Math.max(0,x.curHp-dmg);
+        this.shake(idx);this.pop(idx,dmg,'#ffd040');
+        total+=dmg;
+        if(x.curHp<=0){killed++;x.dead=true;c.xp+=x.xp;c.gold+=x.gold;this.questProg(x.id);
+          setTimeout(()=>{x.curHp=x.hpMax;x.dead=false;this.rMon();},12000);}
+      });
+      if(killed>0){this.lvChk();}
+      this.log('⚡ '+sk.name+'! 전체 '+total+' 총 피해 ('+killed+'마리 처치)','skill');
+      // 궁극기 화면 flash
+      const fl=document.createElement('div');fl.className='lvfl';fl.style.background='rgba(255,200,50,.08)';
+      document.body.appendChild(fl);setTimeout(()=>fl.remove(),800);
+    }
+
+    // 몬스터 반격 (aoe는 반격 없음)
+    if(sk.type!=='heal'&&sk.type!=='def'&&sk.type!=='aoe') {
+      if(m&&m.curHp<=0){
+        setTimeout(()=>{this.kill(m,mi);S.lock=false;this.rMon();this.hud();},350);
+      } else if(m){
+        setTimeout(()=>{this.mhit(m,mi);S.lock=false;this.rMon();this.hud();},400);
+      } else {S.lock=false;this.hud();}
+    } else {S.lock=false;this.rMon();this.hud();}
+
+    sk.cdLeft=sk.cd;this.startCD(si,sk.cd);
     this.rSkill();
   },
 
   startCD(idx, cd) {
     const start = Date.now();
-    // 초기 CD 상태 적용
-    const b0=document.getElementById('skb-'+idx), c0=document.getElementById('sch-'+idx);
-    if(b0) b0.classList.add('cd');
-    if(c0) c0.classList.add('on-cd');
-    let lastSec = -1;
-    const tick = () => {
-      const elapsed = Date.now()-start;
+    S.char.skills[idx].cdLeft = cd;
+    // setInterval로 1초마다 정확하게 업데이트
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - start;
       const left = cd - elapsed;
       if(left <= 0) {
+        clearInterval(timer);
         S.char.skills[idx].cdLeft = 0;
-        // 매번 최신 DOM 참조 (rSkill로 재생성됐을 수 있음)
-        const btn=document.getElementById('skb-'+idx), bar=document.getElementById('cdo-'+idx), chip=document.getElementById('sch-'+idx);
-        if(btn){ btn.classList.remove('cd'); const s=btn.querySelector('.cd-sec');if(s)s.textContent=''; }
+        const btn=document.getElementById('skb-'+idx);
+        const bar=document.getElementById('cdo-'+idx);
+        const chip=document.getElementById('sch-'+idx);
+        if(btn){ btn.classList.remove('cd'); const s=btn.querySelector('.cd-sec'); if(s) s.textContent=''; }
         if(bar) bar.style.width='0%';
-        if(chip){ chip.classList.remove('on-cd'); const s=chip.querySelector('.cd-sec-chip');if(s)s.textContent=''; }
+        if(chip){ chip.classList.remove('on-cd'); const s=chip.querySelector('.cd-sec-chip'); if(s) s.textContent=''; }
         return;
       }
       S.char.skills[idx].cdLeft = left;
       const secLeft = Math.ceil(left/1000);
-      if(secLeft !== lastSec) {
-        lastSec = secLeft;
-        // 매번 최신 DOM 참조
-        const btn=document.getElementById('skb-'+idx), bar=document.getElementById('cdo-'+idx), chip=document.getElementById('sch-'+idx);
-        if(bar) bar.style.width = Math.max(0,100-(elapsed/cd*100))+'%';
-        if(btn){
-          btn.classList.add('cd');
-          let s=btn.querySelector('.cd-sec');
-          if(!s){s=document.createElement('span');s.className='cd-sec';btn.appendChild(s);}
-          s.textContent=secLeft+'s';
-        }
-        if(chip){
-          chip.classList.add('on-cd');
-          let s=chip.querySelector('.cd-sec-chip');
-          if(!s){s=document.createElement('span');s.className='cd-sec-chip';s.style.cssText='font-size:9px;color:#666';chip.appendChild(s);}
-          s.textContent=' '+secLeft+'s';
-        }
+      const pct = Math.max(0, 100-(elapsed/cd*100));
+      const btn=document.getElementById('skb-'+idx);
+      const bar=document.getElementById('cdo-'+idx);
+      const chip=document.getElementById('sch-'+idx);
+      if(bar) bar.style.width = pct+'%';
+      if(btn){
+        btn.classList.add('cd');
+        let s=btn.querySelector('.cd-sec');
+        if(!s){ s=document.createElement('span'); s.className='cd-sec'; btn.appendChild(s); }
+        s.textContent = secLeft+'s';
       }
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
+      if(chip){
+        chip.classList.add('on-cd');
+        let s=chip.querySelector('.cd-sec-chip');
+        if(!s){ s=document.createElement('span'); s.className='cd-sec-chip'; s.style.cssText='font-size:9px;color:#666'; chip.appendChild(s); }
+        s.textContent = ' '+secLeft+'s';
+      }
+    }, 1000);
+    // 즉시 첫 업데이트
+    const btn0=document.getElementById('skb-'+idx), chip0=document.getElementById('sch-'+idx);
+    if(btn0){ btn0.classList.add('cd'); let s=btn0.querySelector('.cd-sec'); if(!s){s=document.createElement('span');s.className='cd-sec';btn0.appendChild(s);} s.textContent=Math.ceil(cd/1000)+'s'; }
+    if(chip0){ chip0.classList.add('on-cd'); let s=chip0.querySelector('.cd-sec-chip'); if(!s){s=document.createElement('span');s.className='cd-sec-chip';s.style.cssText='font-size:9px;color:#666';chip0.appendChild(s);} s.textContent=' '+Math.ceil(cd/1000)+'s'; }
   },
 
   mhit(m, i) {
@@ -1523,10 +1568,10 @@ const G = {
       c.xpMax = Math.floor(c.xpMax * 1.4);
       c.lv++;
       // 종족별 레벨업 스탯 차등 (완만한 성장)
-      if(c.race==='human') { c.str+=1; c.int+=1; c.agi+=1; c.def+=1; c.hpMax+=12; c.mpMax+=7; }
-      else if(c.race==='elf') { c.str+=0; c.int+=2; c.agi+=2; c.def+=0; c.hpMax+=8;  c.mpMax+=12; }
-      else if(c.race==='dwarf') { c.str+=2; c.int+=0; c.agi+=0; c.def+=2; c.hpMax+=18; c.mpMax+=4; }
-      else if(c.race==='demon') { c.str+=1; c.int+=2; c.agi+=1; c.def+=1; c.hpMax+=11; c.mpMax+=10; }
+      if(c.race==='human') { c.str+=1; c.int+=1; c.agi+=2; c.def+=1; c.hpMax+=15; c.mpMax+=9; }
+      else if(c.race==='elf') { c.str+=0; c.int+=3; c.agi+=2; c.def+=0; c.hpMax+=10; c.mpMax+=15; }
+      else if(c.race==='dwarf') { c.str+=2; c.int+=0; c.agi+=0; c.def+=3; c.hpMax+=22; c.mpMax+=5; }
+      else if(c.race==='demon') { c.str+=2; c.int+=2; c.agi+=1; c.def+=1; c.hpMax+=14; c.mpMax+=12; }
       c.hp = c.hpMax; c.mp = c.mpMax;
       this.log('★ 레벨업! Lv.'+c.lv+' — 스탯 상승', 'inf');
       SFX.play('lvup');
@@ -1565,6 +1610,9 @@ const G = {
     const regenMP = Math.floor(12 * S.char.regenMult);
     S.char.hp = Math.min(S.char.hpMax, S.char.hp+regenHP);
     S.char.mp = Math.min(S.char.mpMax, S.char.mp+regenMP);
+    // 엘프 집중력 빠르게 충전 (3초마다 +12)
+    if(S.char.race==='elf' && S.char.fpMax>0)
+      S.char.fp = Math.min(S.char.fpMax, (S.char.fp||0)+12);
     this.hud();
   },
 
@@ -2149,6 +2197,138 @@ function getEffDesc(eff, val) {
 // ============================================================
 // 유틸리티
 // ============================================================
+
+// ── 스킬 도트 아이콘 ──
+function drawSkillIcon(canvas, skillId, race) {
+  const ctx=canvas.getContext('2d'),sz=canvas.width;
+  ctx.fillStyle='#020202';ctx.fillRect(0,0,sz,sz);
+  const s=sz/16;
+  const px=(x,y,c,w=1,h=1)=>{ctx.fillStyle=c;ctx.fillRect(x*s,y*s,w*s,h*s);};
+  const col={human:'#4a6a9a',elf:'#4a8a4a',dwarf:'#8a6a2a',demon:'#8a2a4a'}[race]||'#4a6a9a';
+  if(skillId==='slash'){
+    px(3,2,'#c8c8c8',2,2);px(5,4,'#aaaaaa',6,2);px(11,6,'#888',3,2);
+    px(1,13,'#8b6030',3,3);px(4,12,'#a07040',1,4);px(4,3,'#fff',1,1);px(7,6,'#fff',1,1);
+  } else if(skillId==='dual'){
+    px(2,2,'#c8c8c8',2,2);px(4,4,'#aaaaaa',5,2);px(9,6,'#888',3,2);px(3,3,'#fff',1,1);
+    px(7,1,'#c8c8c8',2,2);px(9,3,'#aaaaaa',4,2);px(8,2,'#fff',1,1);
+    px(1,13,'#8b6030',3,3);
+  } else if(skillId==='shield'){
+    px(4,2,col,8,1);px(3,3,col,10,8);px(4,11,col,8,2);px(6,13,col,4,1);
+    px(5,3,'#c8c8c8',6,6);px(7,5,'#e8e8e8',2,2);px(7,4,col,2,1);px(6,6,col,4,1);
+    px(4,2,'#fff',1,1);
+  } else if(skillId==='arrow'){
+    px(11,2,'#c8c8c8',4,1);px(11,3,'#888',1,1);px(14,3,'#888',1,1);
+    px(2,12,'#8b6030',2,2);px(4,11,'#a07040',8,1);px(4,13,'#a07040',8,1);
+    px(5,10,'#8b6030',6,5);px(12,3,'#fff',1,1);
+  } else if(skillId==='bind'){
+    px(3,8,'#2a7a2a',10,2);px(6,5,'#2a7a2a',4,2);px(6,11,'#2a7a2a',4,2);
+    px(2,7,'#1a5a1a',2,4);px(12,7,'#1a5a1a',2,4);
+    px(7,1,'#ffff50',2,1);px(6,2,'#ffff50',4,1);px(7,3,'#ffff50',2,1);
+    px(7,6,'#50c050',2,1);px(7,10,'#50c050',2,1);
+  } else if(skillId==='blast'){
+    px(3,8,'#a07040',8,1);px(3,9,'#8b6030',8,1);
+    px(8,4,'#ffcc00',4,4);px(9,3,'#ff6600',4,5);px(10,5,'#fff',2,2);
+    px(8,9,'#ff4400',4,3);px(7,11,'#ff8800',5,2);px(10,1,'#ff8020',4,1);
+  } else if(skillId==='axe'){
+    px(9,1,'#888',5,7);px(9,1,'#aaa',3,5);px(7,6,'#888',2,2);
+    px(8,3,'#fff',1,2);px(6,8,'#8b6030',2,8);px(7,8,'#a07040',2,8);
+  } else if(skillId==='iron'){
+    px(3,2,col,10,12);px(4,1,col,8,1);px(4,14,col,8,1);
+    px(5,3,'#888',6,8);px(7,5,'#aaa',2,4);
+    px(3,7,'#c0c0c0',2,2);px(11,7,'#c0c0c0',2,2);px(4,1,'#fff',2,1);
+  } else if(skillId==='quake'){
+    px(0,11,'#8b6030',16,4);px(0,10,'#6b4010',16,2);
+    px(5,5,'#ff8020',3,6);px(8,3,'#ffaa00',2,8);px(11,5,'#ff6000',3,5);
+    px(3,8,'#ffff00',1,2);px(12,8,'#ffff00',1,2);px(7,2,'#fff',2,2);
+  } else if(skillId==='dark'){
+    px(5,5,'#5a0a5a',6,6);px(3,7,'#3a0a3a',10,2);px(7,3,'#3a0a3a',2,10);
+    px(6,6,'#aa20aa',4,4);px(7,7,'#cc40cc',2,2);
+    px(2,2,'#8a00aa',2,2);px(12,2,'#8a00aa',2,2);px(2,12,'#8a00aa',2,2);px(12,12,'#8a00aa',2,2);
+    px(7,0,'#ff80ff',2,1);px(0,7,'#ff80ff',1,2);px(15,7,'#ff80ff',1,2);px(7,15,'#ff80ff',2,1);
+  } else if(skillId==='drain'){
+    px(3,4,'#aa2040',4,3);px(9,4,'#aa2040',4,3);px(2,5,'#aa2040',12,6);
+    px(3,11,'#aa2040',10,3);px(5,13,'#aa2040',6,2);px(7,14,'#aa2040',2,1);
+    px(6,5,'#ff4060',4,6);px(7,6,'#ff6080',2,4);
+    px(7,0,'#50d050',2,4);px(6,1,'#50d050',4,2);px(7,0,'#80ff80',2,1);
+  } else if(skillId==='fear'){
+    px(2,6,'#aa0000',5,4);px(9,6,'#aa0000',5,4);
+    px(3,7,'#ff0000',3,2);px(10,7,'#ff0000',3,2);
+    px(4,7,'#fff',1,1);px(11,7,'#fff',1,1);px(4,8,'#000',1,1);px(11,8,'#000',1,1);
+    px(0,5,'#5a0000',1,6);px(15,5,'#5a0000',1,6);
+  } else if(skillId==='ult_h'){
+    const cx=7,cy=7;
+    for(let a=0;a<8;a++){const bx=Math.round(cx+5*Math.cos(a*Math.PI/4)),by=Math.round(cy+5*Math.sin(a*Math.PI/4));if(bx>=0&&bx<16&&by>=0&&by<16)px(bx,by,'#ffcc00',2,2);}
+    px(cx,cy,'#fff',2,2);px(cx-1,cy,'#ffdd88',1,2);px(cx+2,cy,'#ffdd88',1,2);
+    px(cx,cy-1,'#ffdd88',2,1);px(cx,cy+2,'#ffdd88',2,1);
+    px(3,3,'#ff8800',2,2);px(11,3,'#ff8800',2,2);px(3,11,'#ff8800',2,2);px(11,11,'#ff8800',2,2);
+  } else if(skillId==='ult_e'){
+    for(let i=0;i<8;i++){const x=(i*2)%16,y=Math.floor(i/8)*3;px(x,y+i%3,'#c8c8c8',1,4);px(x,y+i%3+1,'#88aaff',1,2);}
+    px(2,13,'#4a8a4a',12,2);px(0,12,'#2a5a2a',16,2);
+    px(3,1,'#fff',1,1);px(7,0,'#fff',1,1);px(11,2,'#fff',1,1);
+  } else if(skillId==='ult_d'){
+    px(5,14,'#8b6030',6,2);px(4,12,'#aa2020',8,3);px(3,9,'#cc4020',10,4);
+    px(5,6,'#ff6600',6,4);px(6,3,'#ff8800',4,4);px(7,1,'#ffaa00',2,3);
+    px(7,0,'#ffff80',2,2);px(4,5,'#ff4400',2,3);px(10,5,'#ff4400',2,3);px(6,2,'#fff',4,1);
+  } else if(skillId==='ult_dm'){
+    px(5,6,'#000',6,4);px(3,5,'#000',10,6);
+    px(4,6,'#5a0080',8,4);px(6,5,'#8a00c0',4,6);px(7,6,'#aa20e0',2,4);
+    px(0,0,'#3a0050',3,3);px(13,0,'#3a0050',3,3);px(0,13,'#3a0050',3,3);px(13,13,'#3a0050',3,3);
+    px(7,0,'#ff80ff',2,1);px(7,15,'#ff80ff',2,1);px(0,7,'#ff80ff',1,2);px(15,7,'#ff80ff',1,2);
+    px(7,7,'#fff',2,2);
+  } else {
+    px(4,4,col,8,8);px(6,6,'#fff',4,4);px(7,7,'#f0f0f0',2,2);
+  }
+}
+
+// ── 스킬창 열기 ──
+function openSkillModal() {
+  const c=S.char;
+  if(!c.learnedSkills) c.learnedSkills={0:true};
+  const skills=RACE_SKILLS[c.race];
+  const body=document.getElementById('skill-modal-body');
+  body.innerHTML='';
+  const typeLabel={atk:'공격',def:'방어',stun:'스턴',drain:'흡혈',multi:'연타',aoe:'궁극기⚡',aoe_stun:'전체스턴'};
+  const isElf=c.race==='elf';
+  skills.forEach((sk,i)=>{
+    const isBase=i===0, isUlt=i===3;
+    const learned=isBase||c.learnedSkills[i];
+    const lvOk=c.lv>=sk.unlockLv;
+    const cost=sk.learnCost||0;
+    const card=document.createElement('div');
+    card.className='sk-card'+(learned?' unlocked':'')+(isUlt?' ult':'');
+    const cv=document.createElement('canvas');
+    cv.className='sk-canvas';cv.width=48;cv.height=48;cv.style.flexShrink='0';
+    card.appendChild(cv);
+    const resLabel=isElf?(sk.fp||0)+'FP':(sk.mp||0)+'MP';
+    const cdSec=Math.round((sk.cd||0)/1000);
+    let statusHtml='';
+    if(isBase) statusHtml='<span style="color:#4a8a4a;font-size:10px">✓ 기본 스킬</span>';
+    else if(isUlt) statusHtml=learned?'<span style="color:#d4a020;font-size:10px">✓ 궁극기 보유</span>':c.lv>=20?'<button class="sk-learn-btn" onclick="learnSkill('+i+',0)">✓ Lv.20! 무료 해금</button>':'<span style="font-size:10px;color:#555">Lv.20 달성 시 자동 해금</span>';
+    else if(learned) statusHtml='<span style="color:#4a8a4a;font-size:10px">✓ 습득 완료</span>';
+    else if(lvOk) statusHtml='<button class="sk-learn-btn '+(c.gold<cost?'cant':'')+'" onclick="learnSkill('+i+','+cost+')">'+(c.gold>=cost?'습득 '+cost+'G':'골드 부족 ('+cost+'G)')+'</button>';
+    else statusHtml='<span style="font-size:10px;color:#333">Lv.'+sk.unlockLv+' 이상 필요</span>';
+    const info=document.createElement('div');
+    info.className='sk-info';
+    info.innerHTML='<div class="sk-name-row"><span class="sk-name">'+(isUlt?'⚡ ':'')+sk.name+'</span><span class="sk-badge '+sk.type+'">'+(typeLabel[sk.type]||sk.type)+'</span></div>'+
+      '<div class="sk-desc">'+sk.desc+'</div>'+
+      '<div class="sk-detail">'+sk.detail+' | '+resLabel+' | CD '+cdSec+'s</div>'+
+      '<div class="sk-cost-row">'+statusHtml+'</div>';
+    card.appendChild(info);
+    body.appendChild(card);
+    setTimeout(()=>drawSkillIcon(cv,sk.id,c.race),10);
+  });
+  openModal('skill-modal');
+}
+function learnSkill(idx,cost) {
+  const c=S.char;
+  if(!c.learnedSkills) c.learnedSkills={0:true};
+  if(c.learnedSkills[idx]) return;
+  if(cost>0&&c.gold<cost){G.log('골드 부족!','sys');return;}
+  c.gold-=cost; c.learnedSkills[idx]=true;
+  G.log('🌟 스킬 습득: '+RACE_SKILLS[c.race][idx].name+'!','skill');
+  SFX.play('equip'); G.hud(); openSkillModal();
+}
+
 function openModal(id) { document.getElementById(id).classList.add('on'); }
 function closeModal(id) { document.getElementById(id).classList.remove('on'); }
 function mobTab(p, btn) {
