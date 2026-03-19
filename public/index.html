@@ -987,6 +987,10 @@ const CR = {
       if(confirm('저장된 게임이 있습니다. 불러올까요?')) {
         Object.assign(S.char, saved.char);
         S.zone = saved.zone || '황야';
+        // 스킬은 항상 최신 데이터로 덮어씀 (MP/CD 변경 반영)
+        const rs = RACE_SKILLS[S.char.race];
+        const sl = rs[S.char.wpn] || rs[Object.keys(rs)[0]];
+        S.char.skills = sl.map(s => ({...s, cdLeft:0}));
         scr('sg'); G.init();
         return;
       }
@@ -1197,6 +1201,10 @@ const G = {
   fTick: 0,
   init() {
     const c = S.char;
+    // 스킬 항상 최신 RACE_SKILLS로 강제 갱신
+    const _rs = RACE_SKILLS[c.race];
+    const _sl = _rs[c.wpn] || _rs[Object.keys(_rs)[0]];
+    c.skills = _sl.map(s => ({...s, cdLeft:0}));
     document.getElementById('hrace').textContent = RACES[c.race].label;
     document.getElementById('sname').textContent = c.name;
     document.getElementById('srace').textContent = RACES[c.race].label + ' / ' + c.wpn;
@@ -1381,17 +1389,25 @@ const G = {
     const chip = document.getElementById('sch-'+idx);
     if(btn) btn.classList.add('cd');
     if(chip) chip.classList.add('on-cd');
+    let lastSec = -1;
     const tick = () => {
       const el = Date.now()-start, pct = Math.max(0,100-(el/cd*100));
       if(bar) bar.style.width = pct+'%';
       if(el >= cd) {
         S.char.skills[idx].cdLeft = 0;
-        if(btn) btn.classList.remove('cd');
+        if(btn){ btn.classList.remove('cd'); const sec=btn.querySelector('.cd-sec'); if(sec) sec.remove(); }
         if(bar) bar.style.width = '0%';
-        if(chip) chip.classList.remove('on-cd');
+        if(chip){ chip.classList.remove('on-cd'); const sec=chip.querySelector('.cd-sec-chip'); if(sec) sec.remove(); }
         return;
       }
       S.char.skills[idx].cdLeft = cd-el;
+      // 초 단위로만 텍스트 업데이트 (매 프레임 DOM 조작 방지)
+      const secLeft = Math.ceil((cd-el)/1000);
+      if(secLeft !== lastSec) {
+        lastSec = secLeft;
+        if(btn){ let sec=btn.querySelector('.cd-sec'); if(!sec){sec=document.createElement('span');sec.className='cd-sec';btn.appendChild(sec);}; sec.textContent=secLeft+'s'; }
+        if(chip){ let sec=chip.querySelector('.cd-sec-chip'); if(!sec){sec=document.createElement('span');sec.className='cd-sec-chip';sec.style.cssText='font-size:9px;color:#666';chip.appendChild(sec);}; sec.textContent=' '+secLeft+'s'; }
+      }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -1488,11 +1504,11 @@ const G = {
       c.xp -= c.xpMax;
       c.xpMax = Math.floor(c.xpMax * 1.4);
       c.lv++;
-      // 종족별 레벨업 스탯 차등
-      if(c.race==='human') { c.str+=3; c.int+=2; c.agi+=3; c.def+=2; c.hpMax+=30; c.mpMax+=18; }
-      else if(c.race==='elf') { c.str+=1; c.int+=4; c.agi+=4; c.def+=1; c.hpMax+=20; c.mpMax+=28; }
-      else if(c.race==='dwarf') { c.str+=4; c.int+=1; c.agi+=1; c.def+=5; c.hpMax+=45; c.mpMax+=10; }
-      else if(c.race==='demon') { c.str+=3; c.int+=4; c.agi+=2; c.def+=2; c.hpMax+=28; c.mpMax+=25; }
+      // 종족별 레벨업 스탯 차등 (완만한 성장)
+      if(c.race==='human') { c.str+=1; c.int+=1; c.agi+=1; c.def+=1; c.hpMax+=12; c.mpMax+=7; }
+      else if(c.race==='elf') { c.str+=0; c.int+=2; c.agi+=2; c.def+=0; c.hpMax+=8;  c.mpMax+=12; }
+      else if(c.race==='dwarf') { c.str+=2; c.int+=0; c.agi+=0; c.def+=2; c.hpMax+=18; c.mpMax+=4; }
+      else if(c.race==='demon') { c.str+=1; c.int+=2; c.agi+=1; c.def+=1; c.hpMax+=11; c.mpMax+=10; }
       c.hp = c.hpMax; c.mp = c.mpMax;
       this.log('★ 레벨업! Lv.'+c.lv+' — 스탯 상승', 'inf');
       SFX.play('lvup');
